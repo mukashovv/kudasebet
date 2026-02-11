@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Куда себет — онлайн‑сервис доставки подарочных корзин. Добавьте в корзину и закажите через WhatsApp.">
+    <title>Куда себет — подарочные корзины</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" rel="stylesheet">
+    <link rel="icon" href="https://framerusercontent.com/images/qPEgZC7jwWSxqEYT17wbDPXbAs.svg" type="image/svg+xml">
+    <style>
+        :root {
+            --cream: #ffffff;
+            --ink: #e84f2f;
+            --muted: #e84f2f;
+            --accent: #ffb86b;
+            --accent-2: #2ec4b6;
+            --card: #ffffff;
+            --stroke: #e7e1d9;
+            --shadow: 0 20px 50px rgba(21, 21, 21, 0.12);
+            --radius: 26px;
+            --font-title: "Inter Display", "Inter", "Helvetica Neue", Arial, sans-serif;
+            --font-body: "Inter Display", "Inter", "Helvetica Neue", Arial, sans-serif;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: var(--font-body);
+            background: var(--cream);
+            color: var(--ink);
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .container {
+            width: min(1200px, 92vw);
+            margin: 0 auto;
+        }
+        .topbar {
+            padding: 28px 0 10px;
+        }
+        .topbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            color: var(--muted);
+        }
+        .cart-fab {
+            position: fixed;
+            right: 24px;
+            top: 24px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 1px solid #ede7df;
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12);
+            display: grid;
+            place-items: center;
+            color: #111;
+            text-decoration: none;
+            z-index: 80;
+            display: none;
+        }
+        .cart-drawer {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            z-index: 90;
+        }
+        .cart-drawer.is-open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .cart-drawer__panel {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: min(420px, 92vw);
+            height: 100%;
+            background: #ffffff;
+            padding: 28px;
+            box-shadow: -12px 0 30px rgba(0, 0, 0, 0.12);
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 18px;
+            align-content: start;
+        }
+        .cart-drawer__title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111;
+        }
+        .cart-drawer__close {
+            position: absolute;
+            top: 22px;
+            right: 22px;
+            width: 22px;
+            height: 22px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        .cart-drawer__close::before,
+        .cart-drawer__close::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: #111;
+            left: 0;
+            top: 50%;
+            margin-top: -1px;
+        }
+        .cart-drawer__close::before { transform: rotate(45deg); }
+        .cart-drawer__close::after { transform: rotate(-45deg); }
+        .cart-drawer__list {
+            display: grid;
+            gap: 14px;
+            overflow: auto;
+            padding-right: 6px;
+            align-content: start;
+        }
+        .cart-drawer__item {
+            display: grid;
+            grid-template-columns: 64px 1fr auto;
+            gap: 12px;
+            align-items: center;
+            border-bottom: 1px solid #eee5dd;
+            padding-bottom: 12px;
+        }
+        .cart-drawer__controls {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .cart-drawer__btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            color: #111;
+        }
+        .cart-drawer__thumb {
+            width: 64px;
+            height: 64px;
+            border-radius: 10px;
+            background: #f4efe9 center/cover no-repeat;
+        }
+        .cart-drawer__name {
+            font-size: 14px;
+            color: #111;
+        }
+        .cart-drawer__qty {
+            font-size: 13px;
+            color: #111;
+        }
+        .cart-drawer__total {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111;
+            text-align: right;
+        }
+        .cart-drawer__checkout {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 999px;
+            border: none;
+            background: #111;
+            color: #fff;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+        .cart-fab__count {
+            position: absolute;
+            right: -4px;
+            bottom: -4px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ff3b30;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            display: grid;
+            place-items: center;
+        }
+        .support-trigger {
+            color: var(--ink);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        .support-panel {
+            position: fixed;
+            left: 0;
+            top: 90px;
+            width: min(300px, 90vw);
+            background: #ffffff;
+            color: var(--ink);
+            border-radius: 0;
+            padding: 16px 18px;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(8px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 60;
+        }
+        .support-panel.is-open {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        .support-panel a {
+            color: var(--ink);
+            font-weight: 700;
+            text-decoration: none;
+            position: relative;
+            display: inline-flex;
+            gap: 8px;
+        }
+        .support-panel a:hover,
+        .support-panel a:focus-visible {
+            text-decoration: none;
+        }
+        .support-panel a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 100%;
+            height: 1px;
+            background: var(--ink);
+            transform: scaleX(0);
+            transform-origin: left center;
+            transition: transform 0.35s ease;
+        }
+        .support-panel a:hover::after,
+        .support-panel a:focus-visible::after {
+            transform: scaleX(1);
+        }
+        .support-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 18px;
+            height: 18px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        .support-close::before,
+        .support-close::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: var(--ink);
+            left: 0;
+            top: 50%;
+            margin-top: -1px;
+        }
+        .support-close::before { transform: rotate(45deg); }
+        .support-close::after { transform: rotate(-45deg); }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: var(--font-title);
+            font-size: 20px;
+            color: var(--ink);
+            text-decoration: none;
+        }
+        .brand__name {
+            font-size: 24px;
+            letter-spacing: 0.5px;
+            text-transform: lowercase;
+        }
+        .brand__snow {
+            width: 18px;
+            height: 18px;
+            margin-left: 6px;
+            display: inline-block;
+            background: url("https://framerusercontent.com/images/qPEgZC7jwWSxqEYT17wbDPXbAs.svg") center/contain no-repeat;
+        }
+        .brand__mark {
+            width: 46px;
+            height: 46px;
+            border-radius: 0;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #fff;
+            font-weight: 700;
+        }
+        .hero {
+            padding: 24px 0 40px;
+        }
+        .hero-card {
+            border-radius: 0;
+            border: none;
+            padding: 32px 0;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+            align-items: center;
+        }
+        .hero-card h1 {
+            font-family: var(--font-title);
+            font-size: clamp(38px, 7vw, 78px);
+            line-height: 1.02;
+            margin-bottom: 12px;
+        }
+        .hero-card p {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+        .hero-card__note {
+            font-size: clamp(14px, 2vw, 18px);
+            text-transform: none;
+        }
+        .hero-pills {
+            margin-top: 18px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            grid-column: 1 / -1;
+        }
+        .pill {
+            padding: 8px 14px;
+            border-radius: 0;
+            background: rgba(255, 184, 107, 0.2);
+            font-size: 12px;
+        }
+        .section {
+            padding: 30px 0;
+        }
+        .section-title {
+            font-family: var(--font-title);
+            font-size: 22px;
+            margin-bottom: 16px;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: minmax(0, 1.6fr) minmax(0, 0.6fr);
+            gap: 24px;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+        }
+        .product-card {
+            background: transparent;
+            border-radius: 28px;
+            border: none;
+            padding: 10px 10px 16px;
+            box-shadow: none;
+            display: grid;
+            gap: 12px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .product-card__image {
+            height: 300px;
+            border-radius: 26px;
+            background: #f4efe9;
+            display: grid;
+            place-items: center;
+            font-size: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .product-card__slider {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            transition: transform 0.35s ease;
+        }
+        .product-card__slide {
+            flex: 0 0 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+        .slider-dots {
+            position: absolute;
+            left: 50%;
+            bottom: 10px;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .slider-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #d7cfc6;
+        }
+        .slider-dot.is-active {
+            width: 8px;
+            height: 8px;
+            background: var(--ink);
+        }
+        .product-card__tag {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 34px;
+            border-radius: 4px;
+            border: 1px solid var(--ink);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(246, 242, 236, 0.95);
+        }
+        .product-card__category {
+            color: #8b847c;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .product-card__image--s {
+            background: url("assets/img/cards/kuda_sebet_s-removebg-preview.png") center/cover no-repeat;
+        }
+        .product-card__image--m {
+            background: url("assets/img/cards/kuda_sebet_s-removebg-preview.png") center/cover no-repeat;
+        }
+        .product-card__image--vip {
+            background: url("assets/img/cards/kuda_sebet_s-removebg-preview.png") center/cover no-repeat;
+        }
+        .product-card h3 {
+            font-size: 20px;
+            font-family: var(--font-title);
+            letter-spacing: 1px;
+        }
+        .product-card p {
+            color: #8b847c;
+            font-size: 13px;
+            letter-spacing: 0.3px;
+            text-transform: none;
+        }
+        .price {
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--ink);
+        }
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            background: var(--ink);
+            color: #fff;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .button--accent {
+            background: #f26a4b;
+            color: #fff;
+        }
+        .button--accent:hover,
+        .button--accent:focus-visible {
+            filter: brightness(0.98);
+        }
+        .product-card .button {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 999px;
+        }
+        .cart {
+            background: var(--card);
+            border-radius: 6px;
+            border: 1px solid var(--stroke);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: grid;
+            gap: 14px;
+            height: fit-content;
+            position: sticky;
+            top: 24px;
+        }
+        .cart h3 {
+            font-family: var(--font-title);
+            font-size: 18px;
+        }
+        .cart-list {
+            display: grid;
+            gap: 10px;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            font-size: 13px;
+        }
+        .cart-item button {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+        }
+        .cart-total {
+            font-weight: 700;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+        }
+        .info-card {
+            background: transparent;
+            border-radius: 0;
+            border: none;
+            padding: 0;
+            box-shadow: none;
+        }
+        .info-card h4 {
+            font-family: var(--font-title);
+            margin-bottom: 10px;
+        }
+        .info-card p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+        .policy {
+            background: transparent;
+            border-radius: 0;
+            border: none;
+            padding: 0;
+            box-shadow: none;
+        }
+        .policy p {
+            color: var(--muted);
+            font-size: 12.5px;
+            margin-bottom: 10px;
+        }
+        .footer {
+            padding: 40px 0 60px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+        }
+        @media (max-width: 980px) {
+            .hero-card {
+                grid-template-columns: 1fr;
+            }
+            .products {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 900px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            .cart-fab {
+                display: grid;
+                top: auto;
+                bottom: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="container">
+            <a class="brand" href="/">
+                <span class="brand__name">куда себет</span>
+                <span class="brand__snow" aria-hidden="true"></span>
+            </a>
+            <div class="topbar-actions">
+                <span>10:00–20:00</span>
+                <span class="support-trigger" id="supportTrigger">служба поддержки</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-card">
+                    <div>
+                        <h1>Жаңы, күнүмдүк, маңыздуу</h1>
+                    </div>
+                    <div>
+                        <p class="hero-card__note">Ширин суусундуктар, таза жемиштер жана конфеталар камтылган себеттер — күн сайын эртең мененки саат 9дан кечки 8ге чейин берилет. Алдын ала буйрутма аркылуу. Дүйшөмбү күн - тыныгуу</p>
+                    </div>
+                    <div class="hero-pills">
+                        <span class="pill">Доставка день‑в‑день</span>
+                        <span class="pill">Проверенные поставщики</span>
+                        <span class="pill">Фото перед отправкой</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">Выберите корзины</h2>
+                <div class="products">
+                    <div class="product-grid" id="productGrid">
+                        <article class="product-card" data-slug="sebet-s" data-name="Куда Себет S" data-price="4790" data-desc="Корзина S — это маленький мир сладостей, подобранных с любовью. Каждый элемент выбран так, чтобы порадовать самых близких любителей вкусного." data-composition="«Merci», «Toblerone» mini, сок яблоко-груша 0,25 мл, виноград «Дамские пальчики», фрукт «Сердце дракона», гранат ~600 г, манго ~500 г." data-images="assets/img/cards/kuda_sebet_s-removebg-preview.png,assets/img/cards/kuda_sebet_s-removebg-preview.png,assets/img/cards/kuda_sebet_s-removebg-preview.png">
+                            <div class="product-card__image">
+                                <div class="product-card__slider"></div>
+                                <span class="product-card__tag">S</span>
+                                <div class="slider-dots"></div>
+                            </div>
+                            <div class="product-card__category">Себеттер</div>
+                            <h3>Куда Себет S</h3>
+                            <p>Корзина S — это маленький мир сладостей, подобранных с любовью.</p>
+                            <div class="price">4 790 сом</div>
+                            <button class="button button--accent" type="button">Добавить</button>
+                        </article>
+                        <article class="product-card" data-slug="sebet-m" data-name="Куда Себет M" data-price="6990" data-desc="Подарочная корзина, наполненная свежими фруктами и сладостями. Внутри — сочный ананас, манго, гранат, маракуйя, виноград «Дамские пальчики», экзотический «Сердце дракона», печенье в банке и натуральный сок Yan. Идеальный подарок для любимых и близких." data-composition="Фрукт «Сердце дракона», гранат, манго, ананас, печенье в банке, маракуйя, сок Yan «Виноград», сеточка под продукты, виноград «Дамские пальчики»." data-images="assets/img/cards/kuda_sebet_s-removebg-preview.png,assets/img/cards/kuda_sebet_s-removebg-preview.png,assets/img/cards/kuda_sebet_s-removebg-preview.png">
+                            <div class="product-card__image">
+                                <div class="product-card__slider"></div>
+                                <span class="product-card__tag">M</span>
+                                <div class="slider-dots"></div>
+                            </div>
+                            <div class="product-card__category">Себеттер</div>
+                            <h3>Куда Себет M</h3>
+                            <p>Подарочная корзина со свежими фруктами, сладостями и соком Yan.</p>
+                            <div class="price">6 990 сом</div>
+                            <button class="button button--accent" type="button">Добавить</button>
+                        </article>
+                        <article class="product-card" data-slug="sebet-vip" data-name="Куда Себет Vip" data-price="13790" data-desc="Стильная премиальная корзина, созданная для особых случаев. Вместительная, прочная и эстетичная — идеально подчёркивает статус и ценность подарка." data-composition="Виноград «Дамские пальчики», фрукт «Сердце дракона», гранат, манго, ананас, печенье в банке, маракуйя, сок Yan «Яблоко–Груша», сеточка под продукты, шоколад «Toblerone», Raffaello, Ferrero Rocher, большая шоколадка Merci, корзина." data-images="assets/img/cards/kuda_sebet_s-removebg-preview.png,assets/img/cards/kuda_sebet_s-removebg-preview.png,assets/img/cards/kuda_sebet_s-removebg-preview.png">
+                            <div class="product-card__image">
+                                <div class="product-card__slider"></div>
+                                <span class="product-card__tag">Vip</span>
+                                <div class="slider-dots"></div>
+                            </div>
+                            <div class="product-card__category">Бэлектер</div>
+                            <h3>Куда Себет Vip</h3>
+                            <p>Премиальная корзина для особых случаев и статуса подарка.</p>
+                            <div class="price">13 790 сом</div>
+                            <button class="button button--accent" type="button">Добавить</button>
+                        </article>
+                    </div>
+                    <aside class="cart" id="cart">
+                        <h3>Корзина</h3>
+                        <div class="cart-list" id="cartList">Корзина пуста</div>
+                        <div class="cart-total" id="cartTotal">Итого: 0 сом</div>
+                        <button class="button" type="button" id="orderBtn">Заказать в WhatsApp</button>
+                        <button class="button button--accent" type="button" id="clearBtn">Очистить</button>
+                    </aside>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h4>Способы доставки</h4>
+                        <p>Доставка курьером по городу, самовывоз из пункта выдачи или точечная доставка ко времени. В день отправки пришлем фото корзины.</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Способы оплаты</h4>
+                        <p>Онлайн‑оплата картой, перевод по номеру телефона, безналичный счет для компаний. Чек и подтверждение приходят сразу.</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>Безопасность заказа</h4>
+                        <p>Каждая корзина упаковывается вручную и фиксируется для перевозки. Контроль качества перед отправкой.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="policy">
+                    <h2 class="section-title">Политика конфиденциальности</h2>
+                    <p>1. Мы собираем минимально необходимые данные: имя, номер телефона, адрес доставки, состав заказа и способ оплаты.</p>
+                    <p>2. Данные используются только для обработки заказа, доставки, обратной связи и возврата средств при необходимости.</p>
+                    <p>3. Мы не передаем данные третьим лицам, кроме служб доставки и платежных провайдеров.</p>
+                    <p>4. Данные хранятся ограниченный срок и защищены техническими и организационными мерами.</p>
+                    <p>5. Для запроса удаления данных напишите на support@mukashov.com.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            Куда себет — заботливая доставка подарков.
+        </div>
+    </footer>
+
+    <a class="cart-fab" href="#cart" aria-label="Корзина">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="cart-fab__count" id="cartFabCount">0</span>
+    </a>
+
+    <div class="cart-drawer" id="cartDrawer" aria-hidden="true">
+        <div class="cart-drawer__panel">
+            <button class="cart-drawer__close" type="button" aria-label="Закрыть"></button>
+            <div class="cart-drawer__title">Ваш заказ</div>
+            <div class="cart-drawer__list" id="cartDrawerList"></div>
+            <div>
+                <div class="cart-drawer__total" id="cartDrawerTotal">Сумма: 0 сом</div>
+                <button class="cart-drawer__checkout" type="button" id="cartDrawerCheckout">Оформить через Whatsapp</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="support-panel" id="supportPanel" aria-hidden="true">
+        <button class="support-close" type="button" aria-label="Закрыть"></button>
+        <p>Свяжитесь с поддержкой:</p>
+        <p><a href="tel:996509130090"><i class="fas fa-phone"></i> +996 509 130 090</a></p>
+        <p><a href="https://wa.me/996509130090" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> написать в whatsapp</a></p>
+    </div>
+
+    <script>
+        const CART_KEY = "kuda_sebet_cart_v1";
+        const thumbByName = {
+            "Куда Себет S": "assets/img/cards/kuda_sebet_s-removebg-preview.png",
+            "Куда Себет M": "assets/img/cards/kuda_sebet_s-removebg-preview.png",
+            "Куда Себет Vip": "assets/img/cards/kuda_sebet_s-removebg-preview.png"
+        };
+        const cart = new Map();
+        const cartList = document.getElementById("cartList");
+        const cartTotal = document.getElementById("cartTotal");
+        const orderBtn = document.getElementById("orderBtn");
+        const clearBtn = document.getElementById("clearBtn");
+        const productGrid = document.getElementById("productGrid");
+        const cartFabCount = document.getElementById("cartFabCount");
+        const cartDrawer = document.getElementById("cartDrawer");
+        const cartDrawerList = document.getElementById("cartDrawerList");
+        const cartDrawerTotal = document.getElementById("cartDrawerTotal");
+        const cartDrawerCheckout = document.getElementById("cartDrawerCheckout");
+        const cartDrawerClose = document.querySelector(".cart-drawer__close");
+
+        const saveCart = () => {
+            const data = Array.from(cart.entries()).map(([name, item]) => ({
+                name,
+                price: item.price,
+                qty: item.qty
+            }));
+            localStorage.setItem(CART_KEY, JSON.stringify(data));
+        };
+
+        const loadCart = () => {
+            try {
+                const raw = localStorage.getItem(CART_KEY);
+                if (!raw) return;
+                const data = JSON.parse(raw);
+                data.forEach((item) => {
+                    if (item && item.name) {
+                        cart.set(item.name, { price: Number(item.price), qty: Number(item.qty) || 1 });
+                    }
+                });
+            } catch (e) {
+                localStorage.removeItem(CART_KEY);
+            }
+        };
+
+        const renderCart = () => {
+            if (cart.size === 0) {
+                cartList.textContent = "Корзина пуста";
+                cartTotal.textContent = "Итого: 0 сом";
+                if (cartFabCount) cartFabCount.textContent = "0";
+                if (cartDrawerList) cartDrawerList.textContent = "Корзина пуста";
+                if (cartDrawerTotal) cartDrawerTotal.textContent = "Сумма: 0 сом";
+                return;
+            }
+            cartList.innerHTML = "";
+            let total = 0;
+            let count = 0;
+            if (cartDrawerList) cartDrawerList.innerHTML = "";
+            cart.forEach((item, name) => {
+                total += item.price * item.qty;
+                count += item.qty;
+                const row = document.createElement("div");
+                row.className = "cart-item";
+                row.innerHTML = `
+                    <span>${name} × ${item.qty}</span>
+                    <span>${item.price * item.qty} сом <button data-remove="${name}">✕</button></span>
+                `;
+                cartList.appendChild(row);
+                if (cartDrawerList) {
+                    const drawerRow = document.createElement("div");
+                    drawerRow.className = "cart-drawer__item";
+                    drawerRow.innerHTML = `
+                        <div class="cart-drawer__thumb" style="background-image:url('${thumbByName[name] || "assets/img/cards/kuda_sebet_s-removebg-preview.png"}')"></div>
+                        <div>
+                            <div class="cart-drawer__name">${name}</div>
+                            <div class="cart-drawer__controls">
+                                <button class="cart-drawer__btn" data-action="dec" data-name="${name}">−</button>
+                                <div class="cart-drawer__qty">${item.qty}</div>
+                                <button class="cart-drawer__btn" data-action="inc" data-name="${name}">+</button>
+                            </div>
+                        </div>
+                        <div class="cart-drawer__qty">${item.price * item.qty} сом</div>
+                    `;
+                    cartDrawerList.appendChild(drawerRow);
+                }
+            });
+            cartTotal.textContent = `Итого: ${total} сом`;
+            if (cartFabCount) cartFabCount.textContent = String(count);
+            if (cartDrawerTotal) cartDrawerTotal.textContent = `Сумма: ${total} сом`;
+        };
+
+
+        const productCards = Array.from(document.querySelectorAll(".product-card"));
+
+        productCards.forEach((card) => {
+            const imageBox = card.querySelector(".product-card__image");
+            const slider = card.querySelector(".product-card__slider");
+            const dots = card.querySelector(".slider-dots");
+            const images = (card.dataset.images || "").split(",").map((s) => s.trim()).filter(Boolean);
+            if (!imageBox || !slider || images.length === 0) return;
+            let index = 0;
+            let lastX = 0;
+            let lastSwitch = 0;
+
+            slider.innerHTML = images
+                .map((src) => `<div class="product-card__slide" style="background-image:url('${src}')"></div>`)
+                .join("");
+
+            if (dots) {
+                dots.innerHTML = images
+                    .map((_, i) => `<span class="slider-dot${i === 0 ? " is-active" : ""}"></span>`)
+                    .join("");
+            }
+
+            const updateSlider = () => {
+                slider.style.transform = `translateX(-${index * 100}%)`;
+                if (dots) {
+                    Array.from(dots.children).forEach((dot, i) => {
+                        dot.classList.toggle("is-active", i === index);
+                    });
+                }
+            };
+
+            imageBox.addEventListener("mousemove", (event) => {
+                const now = Date.now();
+                if (now - lastSwitch < 180) return;
+                const direction = event.clientX - lastX;
+                if (Math.abs(direction) < 12) return;
+                if (direction > 0) {
+                    index = Math.min(images.length - 1, index + 1);
+                } else {
+                    index = Math.max(0, index - 1);
+                }
+                updateSlider();
+                lastSwitch = now;
+                lastX = event.clientX;
+            });
+
+            imageBox.addEventListener("mouseenter", (event) => {
+                lastX = event.clientX;
+            });
+        });
+
+        productGrid.addEventListener("click", (event) => {
+            const card = event.target.closest(".product-card");
+            if (!card) return;
+            const isAdd = event.target.closest(".button--accent");
+            if (isAdd) {
+                const name = card.dataset.name;
+                const price = Number(card.dataset.price);
+                const existing = cart.get(name) || { price, qty: 0 };
+                cart.set(name, { price, qty: existing.qty + 1 });
+                renderCart();
+                saveCart();
+                return;
+            }
+            const slug = card.dataset.slug;
+            if (slug) {
+                window.location.href = `product.html?item=${encodeURIComponent(slug)}`;
+            }
+        });
+
+        cartList.addEventListener("click", (event) => {
+            const remove = event.target.getAttribute("data-remove");
+            if (!remove) return;
+            cart.delete(remove);
+            renderCart();
+            saveCart();
+        });
+
+        clearBtn.addEventListener("click", () => {
+            cart.clear();
+            renderCart();
+            saveCart();
+        });
+
+        orderBtn.addEventListener("click", () => {
+            if (cart.size === 0) {
+                alert("Добавьте хотя бы одну корзину");
+                return;
+            }
+            let message = "Здравствуйте! Хочу заказать подарочные корзины:%0A";
+            let total = 0;
+            cart.forEach((item, name) => {
+                message += `• ${name} × ${item.qty} — ${item.price * item.qty} сом%0A`;
+                total += item.price * item.qty;
+            });
+            message += `Итого: ${total} сом`;
+            const url = `https://wa.me/996709139603?text=${message}`;
+            window.open(url, "_blank");
+        });
+
+        if (cartDrawerCheckout) {
+            cartDrawerCheckout.addEventListener("click", () => {
+                orderBtn.click();
+            });
+        }
+
+        if (cartDrawerList) {
+            cartDrawerList.addEventListener("click", (event) => {
+                const btn = event.target.closest(".cart-drawer__btn");
+                if (!btn) return;
+                const name = btn.dataset.name;
+                const action = btn.dataset.action;
+                const item = cart.get(name);
+                if (!item) return;
+                if (action === "inc") item.qty += 1;
+                if (action === "dec") item.qty -= 1;
+                if (item.qty <= 0) cart.delete(name);
+                renderCart();
+                saveCart();
+            });
+        }
+
+        const openDrawer = () => {
+            if (!cartDrawer) return;
+            cartDrawer.classList.add("is-open");
+            cartDrawer.setAttribute("aria-hidden", "false");
+        };
+        const closeDrawer = () => {
+            if (!cartDrawer) return;
+            cartDrawer.classList.remove("is-open");
+            cartDrawer.setAttribute("aria-hidden", "true");
+        };
+
+        if (cartFabCount && cartDrawer) {
+            const cartFab = document.querySelector(".cart-fab");
+            if (cartFab) {
+                cartFab.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    openDrawer();
+                });
+            }
+            if (cartDrawerClose) {
+                cartDrawerClose.addEventListener("click", closeDrawer);
+            }
+            cartDrawer.addEventListener("click", (event) => {
+                if (event.target === cartDrawer) closeDrawer();
+            });
+        }
+
+        loadCart();
+        renderCart();
+
+        const supportTrigger = document.getElementById("supportTrigger");
+        const supportPanel = document.getElementById("supportPanel");
+        const supportClose = document.querySelector(".support-close");
+        const positionSupport = () => {
+            const anchor = document.querySelector(".products") || document.querySelector(".hero-card") || document.querySelector(".container");
+            if (!anchor) return;
+            const rect = anchor.getBoundingClientRect();
+            const width = supportPanel.offsetWidth || 300;
+            const left = Math.max(16, rect.right - width);
+            supportPanel.style.left = `${left}px`;
+        };
+        const toggleSupport = () => {
+            positionSupport();
+            supportPanel.classList.toggle("is-open");
+            supportPanel.setAttribute("aria-hidden", String(!supportPanel.classList.contains("is-open")));
+        };
+        if (supportTrigger && supportPanel) {
+            supportTrigger.addEventListener("click", (event) => {
+                event.stopPropagation();
+                toggleSupport();
+            });
+            if (supportClose) {
+                supportClose.addEventListener("click", (event) => {
+                    event.stopPropagation();
+                    supportPanel.classList.remove("is-open");
+                    supportPanel.setAttribute("aria-hidden", "true");
+                });
+            }
+            document.addEventListener("click", (event) => {
+                if (!supportPanel.contains(event.target) && event.target !== supportTrigger) {
+                    supportPanel.classList.remove("is-open");
+                    supportPanel.setAttribute("aria-hidden", "true");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
