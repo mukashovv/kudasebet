@@ -1,5 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="335" height="335" viewBox="0 0 335 335" role="img" aria-label="Куда Себет">
-  <rect width="335" height="335" fill="#FF6900"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="335" height="335" viewBox="0 0 335 335">
+  <rect width="335" height="335" rx="93" ry="93" fill="#FF6900"/>
+
   <g fill="#FFFFFF" transform="translate(167.5 167.5)">
     <polygon points="-8,0 8,0 24,-122 -24,-122"/>
     <polygon points="-8,0 8,0 24,-122 -24,-122" transform="rotate(60)"/>
