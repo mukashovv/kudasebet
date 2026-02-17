@@ -5,12 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="description" content="Куда себет — карточка товара">
+    <meta name="theme-color" content="#ff6900">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Куда Себет">
     <title>Куда себет — товар</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" rel="stylesheet">
+    <link rel="manifest" href="./site.webmanifest">
     <link rel="icon" href="https://framerusercontent.com/images/qPEgZC7jwWSxqEYT17wbDPXbAs.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="https://framerusercontent.com/images/qPEgZC7jwWSxqEYT17wbDPXbAs.svg">
     <style>
         :root {
             --bg: #ffffff;
@@ -23,6 +29,12 @@
             --font-body: "Inter Display", "Inter", "Helvetica Neue", Arial, sans-serif;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        html,
+        body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
         body {
             font-family: var(--font-body);
             background: var(--bg);
@@ -154,8 +166,8 @@
             position: fixed;
             right: 24px;
             top: 18px;
-            width: 60px;
-            height: 60px;
+            width: 54px;
+            height: 54px;
             border-radius: 50%;
             background: #fff;
             border: 1px solid #ede7df;
@@ -180,12 +192,12 @@
             position: absolute;
             right: -2px;
             bottom: -2px;
-            width: 22px;
-            height: 22px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             background: #ff3b30;
             color: #fff;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             display: grid;
             place-items: center;
@@ -311,10 +323,63 @@
             text-align: left;
             padding: 0;
             font-family: inherit;
+            position: relative;
+        }
+        .recommend-card--soon {
+            cursor: default;
+        }
+        .recommend-card--soon::after {
+            content: "Скоро";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 3;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(32, 32, 32, 0.8);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: 0.2px;
+            text-transform: uppercase;
+        }
+        .recommend-card--soon .recommend-card__image {
+            opacity: 1;
+            filter: saturate(0.86) brightness(1.08);
+        }
+        .recommend-card--soon .recommend-card__image::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0.44) 100%);
+            pointer-events: none;
+        }
+        .recommend-card--soon h3,
+        .recommend-card--soon .recommend-card__desc,
+        .recommend-card--soon .recommend-card__price {
+            color: #777f8a;
+        }
+        .recommend-card--soon .button {
+            background: #f3eee8;
+            color: #827566;
+            border: 1px solid #ddd3c7;
+            box-shadow: none;
+            text-shadow: none;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        .recommend-card--soon .button:hover,
+        .recommend-card--soon .button:focus-visible {
+            transform: none;
+            box-shadow: none;
+            filter: none;
         }
         .recommend-card__image {
             height: 220px;
             background: #fff center/contain no-repeat;
+            position: relative;
+            overflow: hidden;
         }
         .recommend-card h3 {
             font-size: 24px;
@@ -333,16 +398,20 @@
             align-items: center;
             justify-content: space-between;
             gap: 10px;
+            flex-wrap: wrap;
         }
         .recommend-card__price {
             font-size: 16px;
             font-weight: 500;
             color: #141414;
+            flex: 1 1 auto;
+            min-width: 0;
         }
         .recommend-card .button {
-            min-width: 132px;
+            min-width: 112px;
             padding: 10px 16px;
             font-size: 14px;
+            margin-left: auto;
         }
         .footer {
             padding: 30px 0 42px;
@@ -723,7 +792,7 @@
         }
         @media (max-width: 680px) {
             .container {
-                width: calc(100vw - 20px);
+                width: calc(100% - 20px);
             }
             .topbar .container {
                 flex-direction: column;
@@ -756,10 +825,21 @@
                 background-size: contain;
             }
             .cart-fab {
-                width: 52px;
-                height: 52px;
-                right: 14px;
-                top: 14px;
+                width: 44px;
+                height: 44px;
+                right: 12px;
+                bottom: 12px;
+                top: auto;
+            }
+            .cart-fab i {
+                font-size: 16px;
+            }
+            .cart-fab__count {
+                width: 18px;
+                height: 18px;
+                font-size: 10px;
+                right: -3px;
+                bottom: -3px;
             }
             .footer .container {
                 grid-template-columns: 1fr;
@@ -921,14 +1001,27 @@
                 desc: "Премиальная корзина с расширенным составом и эффектной презентацией.",
                 composition: "Фрукты, Ferrero Rocher, Raffaello, Toblerone, Merci, сок Yan и фирменная корзина.",
                 images: [SHARED_IMAGE, SHARED_IMAGE, SHARED_IMAGE]
+            },
+            "sebet-combo": {
+                name: "Куда Себет Комбо 3x1",
+                price: 16990,
+                desc: "Большая праздничная корзина с богатым составом для семейных торжеств и важных событий.",
+                composition: "Расширенный набор фруктов, сладостей, напитков и фирменная корзина большого объема.",
+                images: [SHARED_IMAGE, SHARED_IMAGE, SHARED_IMAGE]
             }
         };
+        const ACTIVE_PRODUCT_NAMES = new Set([
+            "Куда Себет S",
+            "Куда Себет M",
+            "Куда Себет Vip",
+            "Куда Себет Комбо 3x1"
+        ]);
 
         const recommendItems = [
             { slug: "sebet-s", name: "Куда Себет S", price: 4790, desc: "Компактный бокс на каждый день." },
             { slug: "sebet-m", name: "Куда Себет M", price: 6990, desc: "Оптимальный формат для семьи." },
             { slug: "sebet-vip", name: "Куда Себет Vip", price: 13790, desc: "Премиальная праздничная сборка." },
-            { slug: "sebet-vip", name: "Куда Себет XL", price: 16990, desc: "Максимальный размер и состав." },
+            { slug: "sebet-combo", name: "Куда Себет Комбо 3x1", price: 16990, desc: "Максимальный размер и состав." },
             { slug: "sebet-s", name: "Кыргыз Box Традиция", price: 5890, desc: "Локальный стиль и вкус." },
             { slug: "sebet-m", name: "Майрам Box Family", price: 7990, desc: "Для семейного праздника." },
             { slug: "sebet-m", name: "Love Story Box", price: 8990, desc: "Романтическая тематическая сборка." },
@@ -1220,17 +1313,20 @@
         });
 
         recommendGrid.innerHTML = recommendItems
-            .map((item) => `
-                <article class="recommend-card" data-slug="${item.slug}" data-name="${item.name}" data-price="${item.price}">
+            .map((item) => {
+                const isActive = ACTIVE_PRODUCT_NAMES.has(item.name);
+                return `
+                <article class="recommend-card${isActive ? "" : " recommend-card--soon"}" data-slug="${item.slug}" data-name="${item.name}" data-price="${item.price}"${isActive ? "" : " aria-disabled=\"true\""}>
                     <div class="recommend-card__image" style="background-image:url('${SHARED_IMAGE}')"></div>
                     <h3>${item.name}</h3>
                     <p class="recommend-card__desc">${item.desc}</p>
                     <div class="recommend-card__bottom">
-                        <div class="recommend-card__price">${formatSom(item.price)}</div>
-                        <button class="button button--accent button--cta" type="button">Выбрать</button>
+                        <div class="recommend-card__price">${isActive ? formatSom(item.price) : "Скоро"}</div>
+                        <button class="button button--accent button--cta" type="button"${isActive ? "" : " disabled aria-disabled=\"true\" tabindex=\"-1\""}>${isActive ? "Выбрать" : "Скоро"}</button>
                     </div>
                 </article>
-            `)
+            `;
+            })
             .join("");
 
         const loadCart = () => {
@@ -1312,6 +1408,7 @@
         recommendGrid.addEventListener("click", (event) => {
             const card = event.target.closest(".recommend-card");
             if (!card) return;
+            if (card.classList.contains("recommend-card--soon")) return;
             const isButton = event.target.closest("button");
             const name = card.dataset.name;
             const price = Number(card.dataset.price || 0);

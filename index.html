@@ -5,12 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="description" content="Куда себет — онлайн‑сервис доставки подарочных корзин. Добавьте в корзину и закажите через WhatsApp.">
+    <meta name="theme-color" content="#ff6900">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Куда Себет">
     <title>Куда себет — подарочные корзины</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" rel="stylesheet">
+    <link rel="manifest" href="./site.webmanifest">
     <link rel="icon" href="https://framerusercontent.com/images/qPEgZC7jwWSxqEYT17wbDPXbAs.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="https://framerusercontent.com/images/qPEgZC7jwWSxqEYT17wbDPXbAs.svg">
     <style>
         :root {
             --cream: #ffffff;
@@ -29,6 +35,12 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+        html,
+        body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
         }
         body {
             font-family: var(--font-body);
@@ -201,8 +213,8 @@
             position: fixed;
             right: 24px;
             top: 20px;
-            width: 64px;
-            height: 64px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             background: #ffffff;
             border: 1px solid #ede7df;
@@ -423,12 +435,12 @@
             position: absolute;
             right: -4px;
             bottom: -4px;
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             background: #ff3b30;
             color: #fff;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             display: grid;
             place-items: center;
@@ -661,7 +673,7 @@
             left: 12px;
             right: 12px;
             bottom: 12px;
-            z-index: 1;
+            z-index: 2;
             font-size: 14px;
             line-height: 1.05;
             font-weight: 700;
@@ -786,6 +798,42 @@
             inset: 0;
             background: linear-gradient(to top, rgba(0, 0, 0, 0.32), rgba(0, 0, 0, 0.06) 50%, rgba(0, 0, 0, 0.18));
         }
+        .story-modal__content {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            display: grid;
+            align-content: center;
+            justify-items: center;
+            gap: 14px;
+            text-align: center;
+            color: #fff;
+            padding: 74px 18px 18px;
+        }
+        .story-modal__text {
+            font-size: 17px;
+            line-height: 1.35;
+            font-weight: 600;
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+            max-width: 320px;
+        }
+        .story-modal__cta {
+            border: none;
+            border-radius: 999px;
+            background: #ff7d1a;
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            padding: 10px 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .story-modal__cta:hover,
+        .story-modal__cta:focus-visible {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.24);
+        }
         .story-modal__close {
             position: absolute;
             top: 14px;
@@ -797,7 +845,7 @@
             background: rgba(0, 0, 0, 0.45);
             color: #fff;
             cursor: pointer;
-            z-index: 2;
+            z-index: 6;
             font-size: 20px;
             line-height: 1;
         }
@@ -814,7 +862,7 @@
             font-size: 24px;
             line-height: 1;
             cursor: pointer;
-            z-index: 2;
+            z-index: 6;
             display: grid;
             place-items: center;
         }
@@ -848,16 +896,69 @@
             border: none;
             padding: 0;
             display: grid;
-            gap: 12px;
-            grid-template-columns: 1fr;
+            gap: 12px 14px;
+            grid-template-columns: minmax(0, 1fr) auto;
             grid-template-areas:
-                "image"
-                "title"
-                "desc"
-                "bottom";
+                "image image"
+                "title title"
+                "desc desc"
+                "price action";
             align-items: start;
             cursor: pointer;
             text-align: left;
+            position: relative;
+        }
+        .product-card--soon {
+            cursor: default;
+        }
+        .product-card--soon::after {
+            content: "Скоро";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 4;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(32, 32, 32, 0.8);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: 0.2px;
+            text-transform: uppercase;
+        }
+        .product-card--soon .product-card__image {
+            opacity: 1;
+            filter: saturate(0.86) brightness(1.08);
+        }
+        .product-card--soon .product-card__image::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0.44) 100%);
+            pointer-events: none;
+        }
+        .product-card--soon h3,
+        .product-card--soon p,
+        .product-card--soon .price {
+            color: #777f8a;
+        }
+        .product-card--soon .button {
+            background: #f3eee8;
+            color: #827566;
+            border: 1px solid #ddd3c7;
+            box-shadow: none;
+            text-shadow: none;
+            transform: none;
+            filter: none;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        .product-card--soon .button:hover,
+        .product-card--soon .button:focus-visible {
+            transform: none;
+            box-shadow: none;
+            filter: none;
         }
         .product-card__image {
             grid-area: image;
@@ -935,13 +1036,14 @@
             letter-spacing: 0;
             text-transform: none;
         }
-        .price {
-            grid-area: bottom;
+        .product-card .price {
+            grid-area: price;
             justify-self: start;
             align-self: center;
             font-weight: 500;
             font-size: clamp(14px, 1.02vw, 20px);
             color: #121212;
+            white-space: nowrap;
         }
         .button {
             display: inline-flex;
@@ -983,8 +1085,9 @@
             box-shadow: 0 7px 14px rgba(228, 92, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.35);
         }
         .product-card .button {
-            grid-area: bottom;
+            grid-area: action;
             justify-self: end;
+            align-self: center;
             width: auto;
             min-width: 138px;
             padding: 10px 18px;
@@ -1286,7 +1389,7 @@
         }
         @media (max-width: 900px) {
             .container {
-                width: calc(100vw - 20px);
+                width: calc(100% - 20px);
             }
             .brand__name {
                 font-size: 28px;
@@ -1317,10 +1420,10 @@
                 font-size: 18px;
             }
             .stories-nav--prev {
-                left: -10px;
+                left: 2px;
             }
             .stories-nav--next {
-                right: -10px;
+                right: 2px;
             }
             .story-card {
                 width: 126px;
@@ -1331,6 +1434,9 @@
                 left: 10px;
                 right: 10px;
                 bottom: 10px;
+            }
+            .story-modal__text {
+                font-size: 15px;
             }
             .popular-grid {
                 grid-template-columns: 1fr;
@@ -1351,18 +1457,24 @@
                     "image"
                     "title"
                     "desc"
-                    "bottom";
+                    "price"
+                    "action";
+                gap: 10px;
                 padding: 0;
             }
             .product-card__image {
                 height: 220px;
             }
+            .product-card .price {
+                justify-self: start;
+            }
             .product-card .button {
-                justify-self: end;
-                min-width: 132px;
-                width: auto;
-                font-size: 18px;
-                padding: 10px 18px;
+                justify-self: start;
+                min-width: 0;
+                width: fit-content;
+                max-width: 100%;
+                font-size: 14px;
+                padding: 9px 14px;
             }
             .product-card__slide {
                 background-size: contain;
@@ -1375,10 +1487,21 @@
                 justify-content: flex-start;
             }
             .cart-fab {
-                top: 16px;
-                right: 16px;
-                width: 56px;
-                height: 56px;
+                top: auto;
+                right: 12px;
+                bottom: 14px;
+                width: 46px;
+                height: 46px;
+            }
+            .cart-fab i {
+                font-size: 16px;
+            }
+            .cart-fab__count {
+                width: 18px;
+                height: 18px;
+                font-size: 10px;
+                right: -3px;
+                bottom: -3px;
             }
         }
     </style>
@@ -1437,28 +1560,28 @@
                 <div class="stories-strip">
                     <button class="stories-nav stories-nav--prev is-hidden" type="button" id="storiesPrevBtn" aria-label="Предыдущие сториз">‹</button>
                     <div class="stories-row" id="storiesRow">
-                        <button class="story-card story-card--about" type="button">
+                        <button class="story-card story-card--about" type="button" data-story-text="Собираем стильные подарочные корзины в Бишкеке и доставляем с заботой." data-story-target="#section-sebetter">
                             <span class="story-card__title">О нас</span>
                         </button>
-                        <button class="story-card story-card--feb23" type="button">
+                        <button class="story-card story-card--feb23" type="button" data-story-text="Готовые подарки к 23 февраля для пап, друзей и коллег." data-story-target="#section-mayramdar">
                             <span class="story-card__title">23 февраля!</span>
                         </button>
-                        <button class="story-card story-card--mar8" type="button">
+                        <button class="story-card story-card--mar8" type="button" data-story-text="Нежные наборы к 8 марта для мам, любимых и коллег." data-story-target="#section-mayramdar">
                             <span class="story-card__title">Подарки на 8 марта!</span>
                         </button>
-                        <button class="story-card story-card--combo" type="button">
+                        <button class="story-card story-card--combo" type="button" data-story-text="Комбо-наборы с фруктами и сладостями в выгодном формате." data-story-target="#section-tematik-box">
                             <span class="story-card__title">Куда Себет Комбо</span>
                         </button>
-                        <button class="story-card story-card--hit" type="button">
+                        <button class="story-card story-card--hit" type="button" data-story-text="Хиты продаж, которые чаще всего выбирают для подарка." data-story-target="#section-sebetter">
                             <span class="story-card__title">Себет Хит!</span>
                         </button>
-                        <button class="story-card story-card--kyrgyz" type="button">
+                        <button class="story-card story-card--kyrgyz" type="button" data-story-text="Кыргыз бокс с национальным акцентом и щедрым наполнением." data-story-target="#section-kyrgyz-box">
                             <span class="story-card__title">Кыргыз бокс</span>
                         </button>
-                        <button class="story-card story-card--custom" type="button">
+                        <button class="story-card story-card--custom" type="button" data-story-text="Соберите корзину под свой вкус: только то, что нравится вам." data-story-target="#section-ozun-chogult">
                             <span class="story-card__title">Өзүн чогулт!</span>
                         </button>
-                        <button class="story-card story-card--delivery" type="button">
+                        <button class="story-card story-card--delivery" type="button" data-story-text="Условия доставки, оплаты и безопасности заказа в одном разделе." data-story-target="#section-info">
                             <span class="story-card__title">Доставка</span>
                         </button>
                     </div>
@@ -1540,14 +1663,14 @@
                             <div class="price">13 790 сом</div>
                             <button class="button button--accent button--cta" type="button">В корзину</button>
                         </article>
-                        <article class="product-card" data-slug="sebet-vip" data-name="Куда Себет XL" data-price="16990" data-desc="Большая праздничная корзина с богатым составом для семейных торжеств и важных событий." data-composition="Расширенный набор фруктов, сладостей, напитков и фирменная корзина большого объема." data-images="assets/img/cards/kuda_sebet_s-removebg-preview_square.png,assets/img/cards/kuda_sebet_s-removebg-preview_square.png,assets/img/cards/kuda_sebet_s-removebg-preview_square.png">
+                        <article class="product-card" data-slug="sebet-combo" data-name="Куда Себет Комбо 3x1" data-price="16990" data-desc="Большая праздничная корзина с богатым составом для семейных торжеств и важных событий." data-composition="Расширенный набор фруктов, сладостей, напитков и фирменная корзина большого объема." data-images="assets/img/cards/kuda_sebet_s-removebg-preview_square.png,assets/img/cards/kuda_sebet_s-removebg-preview_square.png,assets/img/cards/kuda_sebet_s-removebg-preview_square.png">
                             <div class="product-card__image">
                                 <div class="product-card__slider"></div>
                                 <span class="product-card__tag">XL</span>
                                 <div class="slider-dots"></div>
                             </div>
                             <div class="product-card__category">Себеттер</div>
-                            <h3>Куда Себет XL</h3>
+                            <h3>Куда Себет Комбо 3x1</h3>
                             <p>Максимальный размер набора для больших поздравлений и щедрых подарков.</p>
                             <div class="price">16 990 сом</div>
                             <button class="button button--accent button--cta" type="button">В корзину</button>
@@ -1988,7 +2111,7 @@
             </div>
         </section>
 
-        <section class="section">
+        <section class="section" id="section-info">
             <div class="container">
                 <div class="info-menu" aria-label="Информация">
                     <button class="info-menu__item" type="button" data-info-modal="delivery">Способы доставки</button>
@@ -2075,6 +2198,10 @@
             <button class="story-modal__nav story-modal__nav--next" type="button" id="storyModalNext" aria-label="Следующая история">›</button>
             <div class="story-modal__image" id="storyModalImage">
                 <div class="story-modal__shade"></div>
+                <div class="story-modal__content">
+                    <div class="story-modal__text" id="storyModalText"></div>
+                    <a class="story-modal__cta" id="storyModalCta" href="#section-sebetter">Перейти</a>
+                </div>
             </div>
         </div>
     </div>
@@ -2087,8 +2214,15 @@
         const thumbByName = {
             "Куда Себет S": FALLBACK_IMAGE,
             "Куда Себет M": FALLBACK_IMAGE,
-            "Куда Себет Vip": FALLBACK_IMAGE
+            "Куда Себет Vip": FALLBACK_IMAGE,
+            "Куда Себет Комбо 3x1": FALLBACK_IMAGE
         };
+        const ACTIVE_PRODUCT_NAMES = new Set([
+            "Куда Себет S",
+            "Куда Себет M",
+            "Куда Себет Vip",
+            "Куда Себет Комбо 3x1"
+        ]);
         const cart = new Map();
         const cartList = document.getElementById("cartList");
         const cartTotal = document.getElementById("cartTotal");
@@ -2116,6 +2250,8 @@
         const storyModal = document.getElementById("storyModal");
         const storyModalImage = document.getElementById("storyModalImage");
         const storyModalTimerFill = document.getElementById("storyModalTimerFill");
+        const storyModalText = document.getElementById("storyModalText");
+        const storyModalCta = document.getElementById("storyModalCta");
         const storyModalClose = document.querySelector(".story-modal__close");
         const storyModalPrev = document.getElementById("storyModalPrev");
         const storyModalNext = document.getElementById("storyModalNext");
@@ -2398,6 +2534,21 @@
         const productCards = Array.from(document.querySelectorAll(".product-card"));
 
         productCards.forEach((card) => {
+            const productName = card.dataset.name || "";
+            const isActiveProduct = ACTIVE_PRODUCT_NAMES.has(productName);
+            if (!isActiveProduct) {
+                card.classList.add("product-card--soon");
+                card.setAttribute("aria-disabled", "true");
+                const priceNode = card.querySelector(".price");
+                if (priceNode) priceNode.textContent = "Скоро";
+                const addButton = card.querySelector(".button--cta");
+                if (addButton) {
+                    addButton.textContent = "Скоро";
+                    addButton.disabled = true;
+                    addButton.setAttribute("aria-disabled", "true");
+                    addButton.setAttribute("tabindex", "-1");
+                }
+            }
             const imageBox = card.querySelector(".product-card__image");
             const slider = card.querySelector(".product-card__slider");
             const dots = card.querySelector(".slider-dots");
@@ -2458,6 +2609,7 @@
             grid.addEventListener("click", (event) => {
                 const card = event.target.closest(".product-card");
                 if (!card || !grid.contains(card)) return;
+                if (card.classList.contains("product-card--soon")) return;
                 const isAdd = event.target.closest(".button--accent");
                 if (isAdd) {
                     const name = card.dataset.name;
@@ -2477,6 +2629,7 @@
             popularGrid.addEventListener("click", (event) => {
                 const card = event.target.closest(".popular-card");
                 if (!card) return;
+                if (!ACTIVE_PRODUCT_NAMES.has(card.dataset.name || "")) return;
                 const addBtn = event.target.closest(".popular-card__add");
                 if (addBtn) {
                     const name = card.dataset.name || "";
@@ -2496,6 +2649,7 @@
                 if (event.target.closest(".popular-card__add")) return;
                 const card = event.target.closest(".popular-card");
                 if (!card) return;
+                if (!ACTIVE_PRODUCT_NAMES.has(card.dataset.name || "")) return;
                 event.preventDefault();
                 openProductBySlug(card.dataset.slug);
             });
@@ -2674,6 +2828,13 @@
             document.body.style.overflow = "";
         };
 
+        const openStoryTarget = (targetSelector) => {
+            if (!targetSelector || !targetSelector.startsWith("#")) return;
+            const target = document.querySelector(targetSelector);
+            if (!target) return;
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+        };
+
         const openStoryByIndex = (index) => {
             if (!storyModal || !storyModalImage || storyCards.length === 0) return;
             if (index < 0 || index >= storyCards.length) {
@@ -2685,6 +2846,15 @@
             activeStoryIndex = index;
             card.classList.add("is-viewed");
             const storyBackground = card.dataset.storyBg || getComputedStyle(card).backgroundImage || "";
+            const storyText = card.dataset.storyText || "";
+            const storyTarget = card.dataset.storyTarget || "#section-sebetter";
+            if (storyModalText) {
+                storyModalText.textContent = storyText;
+            }
+            if (storyModalCta) {
+                storyModalCta.setAttribute("href", storyTarget);
+                storyModalCta.dataset.target = storyTarget;
+            }
             storyModalImage.style.backgroundImage = storyBackground === "none" ? "" : storyBackground;
             storyModal.classList.add("is-open");
             storyModal.setAttribute("aria-hidden", "false");
@@ -2727,6 +2897,16 @@
         }
         if (storyModalNext) {
             storyModalNext.addEventListener("click", openNextStory);
+        }
+        if (storyModalCta) {
+            storyModalCta.addEventListener("click", (event) => {
+                event.preventDefault();
+                const targetSelector = storyModalCta.dataset.target || storyModalCta.getAttribute("href") || "";
+                closeStoryModal();
+                window.setTimeout(() => {
+                    openStoryTarget(targetSelector);
+                }, 40);
+            });
         }
         if (storyModal) {
             storyModal.addEventListener("click", (event) => {

@@ -1,0 +1,17 @@
+{
+  "name": "Куда Себет",
+  "short_name": "Куда Себет",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ff6900",
+  "icons": [
+    {
+      "src": "https://framerusercontent.com/images/qPEgZC7jwWSxqEYT17wbDPXbAs.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
