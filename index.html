@@ -615,27 +615,23 @@
         }
         .story-card--about {
             background-image:
-                radial-gradient(circle at 18% 22%, rgba(255, 243, 215, 0.78) 0, rgba(255, 243, 215, 0) 32%),
-                radial-gradient(circle at 80% 14%, rgba(255, 170, 88, 0.44) 0, rgba(255, 170, 88, 0) 40%),
-                linear-gradient(138deg, #ff7d2f 0%, #ff5f34 46%, #f04833 100%);
+                linear-gradient(138deg, rgba(53, 35, 22, 0.22), rgba(53, 35, 22, 0.22)),
+                url("assets/img/stories/story-about.webp");
         }
         .story-card--feb23 {
             background-image:
-                radial-gradient(circle at 82% 24%, rgba(250, 228, 172, 0.52) 0, rgba(250, 228, 172, 0) 36%),
-                repeating-linear-gradient(140deg, rgba(255, 255, 255, 0.1) 0 7px, rgba(255, 255, 255, 0) 7px 16px),
-                linear-gradient(132deg, #28435a 0%, #2f5e57 44%, #3f6f53 100%);
+                linear-gradient(140deg, rgba(20, 38, 51, 0.26), rgba(20, 38, 51, 0.26)),
+                url("assets/img/stories/story-feb23.webp");
         }
         .story-card--mar8 {
             background-image:
-                radial-gradient(circle at 20% 24%, rgba(255, 233, 250, 0.85) 0, rgba(255, 233, 250, 0) 36%),
-                radial-gradient(circle at 82% 14%, rgba(255, 179, 214, 0.6) 0, rgba(255, 179, 214, 0) 35%),
-                linear-gradient(138deg, #f06fa8 0%, #da4f90 46%, #be3f7f 100%);
+                linear-gradient(138deg, rgba(145, 36, 87, 0.22), rgba(145, 36, 87, 0.22)),
+                url("assets/img/stories/story-mar8.webp");
         }
         .story-card--combo {
             background-image:
-                radial-gradient(circle at 16% 80%, rgba(255, 208, 158, 0.62) 0, rgba(255, 208, 158, 0) 44%),
-                repeating-linear-gradient(150deg, rgba(255, 255, 255, 0.1) 0 9px, rgba(255, 255, 255, 0) 9px 19px),
-                linear-gradient(128deg, #ff6f2e 0%, #ff9144 48%, #ffba67 100%);
+                linear-gradient(128deg, rgba(122, 62, 20, 0.24), rgba(122, 62, 20, 0.24)),
+                url("assets/img/stories/story-combo.webp");
         }
         .story-card--hit {
             background-image:
@@ -645,21 +641,18 @@
         }
         .story-card--kyrgyz {
             background-image:
-                radial-gradient(circle at 50% 28%, rgba(255, 224, 126, 0.65) 0, rgba(255, 224, 126, 0) 34%),
-                repeating-radial-gradient(circle at 50% 52%, rgba(255, 255, 255, 0.08) 0 6px, rgba(255, 255, 255, 0) 6px 13px),
-                linear-gradient(140deg, #d73b2f 0%, #c8342c 52%, #ad2b29 100%);
+                linear-gradient(140deg, rgba(90, 24, 24, 0.22), rgba(90, 24, 24, 0.22)),
+                url("assets/img/stories/story-kyrgyz.webp");
         }
         .story-card--custom {
             background-image:
-                conic-gradient(from 120deg at 74% 26%, rgba(255, 213, 166, 0.5), rgba(255, 167, 126, 0.2), rgba(255, 213, 166, 0.5)),
-                repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.13) 0 8px, rgba(255, 255, 255, 0) 8px 18px),
-                linear-gradient(136deg, #ff7f36 0%, #f7673b 40%, #e05043 100%);
+                linear-gradient(136deg, rgba(115, 56, 20, 0.24), rgba(115, 56, 20, 0.24)),
+                url("assets/img/stories/story-ozunchogult.webp");
         }
         .story-card--delivery {
             background-image:
-                radial-gradient(circle at 86% 20%, rgba(197, 230, 255, 0.64) 0, rgba(197, 230, 255, 0) 36%),
-                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.11) 0 7px, rgba(255, 255, 255, 0) 7px 16px),
-                linear-gradient(142deg, #3a84c8 0%, #4a97d9 42%, #62aee8 100%);
+                linear-gradient(142deg, rgba(29, 74, 115, 0.22), rgba(29, 74, 115, 0.22)),
+                url("assets/img/stories/story-delivery-preview.webp");
         }
         .story-card.is-viewed {
             opacity: 0.48;
@@ -835,6 +828,13 @@
         .story-modal__cta:focus-visible {
             transform: translateY(-1px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.24);
+        }
+        .story-modal.is-cta-only .story-modal__content {
+            align-content: end;
+            padding: 74px 18px max(8px, env(safe-area-inset-bottom));
+        }
+        .story-modal.is-cta-only .story-modal__text {
+            display: none;
         }
         .story-modal__close {
             position: absolute;
@@ -1583,7 +1583,7 @@
                         <button class="story-card story-card--custom" type="button" data-story-text="Соберите корзину под свой вкус: только то, что нравится вам." data-story-target="#section-ozun-chogult">
                             <span class="story-card__title">Өзүн чогулт!</span>
                         </button>
-                        <button class="story-card story-card--delivery" type="button" data-story-text="Условия доставки, оплаты и безопасности заказа в одном разделе." data-story-target="#section-info">
+                        <button class="story-card story-card--delivery" type="button" data-story-text="Условия доставки, оплаты и безопасности заказа в одном разделе." data-story-target="#section-info" data-story-bg="url('assets/img/stories/story-delivery.webp')">
                             <span class="story-card__title">Доставка</span>
                         </button>
                     </div>
@@ -2825,6 +2825,7 @@
             if (storyModalTimerFill) {
                 storyModalTimerFill.style.width = "0%";
             }
+            storyModal.classList.remove("is-cta-only");
             storyModal.classList.remove("is-open");
             storyModal.setAttribute("aria-hidden", "true");
             document.body.style.overflow = "";
@@ -2850,8 +2851,10 @@
             const storyBackground = card.dataset.storyBg || getComputedStyle(card).backgroundImage || "";
             const storyText = card.dataset.storyText || "";
             const storyTarget = card.dataset.storyTarget || "#section-sebetter";
+            const isCtaOnlyStory = card.classList.contains("story-card--delivery");
+            storyModal.classList.toggle("is-cta-only", isCtaOnlyStory);
             if (storyModalText) {
-                storyModalText.textContent = storyText;
+                storyModalText.textContent = isCtaOnlyStory ? "" : storyText;
             }
             if (storyModalCta) {
                 storyModalCta.setAttribute("href", storyTarget);
