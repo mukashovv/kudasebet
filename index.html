@@ -618,6 +618,11 @@
                 linear-gradient(138deg, rgba(53, 35, 22, 0.22), rgba(53, 35, 22, 0.22)),
                 url("assets/img/stories/story-about.webp");
         }
+        .story-card--app {
+            background-image:
+                linear-gradient(138deg, rgba(28, 50, 76, 0.22), rgba(28, 50, 76, 0.22)),
+                url("assets/img/stories/story-app-preview.jpg");
+        }
         .story-card--feb23 {
             background-image:
                 linear-gradient(140deg, rgba(20, 38, 51, 0.26), rgba(20, 38, 51, 0.26)),
@@ -811,6 +816,7 @@
             font-weight: 600;
             text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
             max-width: 320px;
+            white-space: pre-line;
         }
         .story-modal__cta {
             border: none;
@@ -832,6 +838,9 @@
         .story-modal.is-cta-only .story-modal__content {
             align-content: end;
             padding: 74px 18px max(8px, env(safe-area-inset-bottom));
+        }
+        .story-modal.is-cta-right .story-modal__content {
+            justify-items: end;
         }
         .story-modal.is-cta-only .story-modal__text {
             display: none;
@@ -1565,6 +1574,9 @@
                         <button class="story-card story-card--about" type="button" data-story-text="Собираем стильные подарочные корзины в Бишкеке и доставляем с заботой." data-story-target="#section-sebetter">
                             <span class="story-card__title">О нас</span>
                         </button>
+                        <button class="story-card story-card--app" type="button" data-story-text="" data-story-target="#section-sebetter" data-story-bg="url('assets/img/stories/story-app-instruction.webp')" data-story-action="install-app" data-story-cta="Добавить на экран">
+                            <span class="story-card__title">Скачай приложение!</span>
+                        </button>
                         <button class="story-card story-card--feb23" type="button" data-story-text="Готовые подарки к 23 февраля для пап, друзей и коллег." data-story-target="#section-mayramdar">
                             <span class="story-card__title">23 февраля!</span>
                         </button>
@@ -1574,7 +1586,7 @@
                         <button class="story-card story-card--combo" type="button" data-story-text="Комбо-наборы с фруктами и сладостями в выгодном формате." data-story-target="#section-tematik-box">
                             <span class="story-card__title">Куда Себет Комбо</span>
                         </button>
-                        <button class="story-card story-card--hit" type="button" data-story-text="Хиты продаж, которые чаще всего выбирают для подарка." data-story-target="#section-sebetter">
+                        <button class="story-card story-card--hit" type="button" data-story-text="Хиты продаж, которые чаще всего выбирают для подарка." data-story-target="#section-popular">
                             <span class="story-card__title">Себет Хит!</span>
                         </button>
                         <button class="story-card story-card--kyrgyz" type="button" data-story-text="Кыргыз бокс с национальным акцентом и щедрым наполнением." data-story-target="#section-kyrgyz-box">
@@ -1592,7 +1604,7 @@
             </div>
         </section>
 
-        <section class="section section--popular">
+        <section class="section section--popular" id="section-popular">
             <div class="container">
                 <h2 class="section-title">Часто заказывают</h2>
                 <div class="popular-grid" id="popularGrid">
@@ -2273,6 +2285,12 @@
         let storyTimerFrame = 0;
         let addressInputTimer = 0;
         let deliveryCoords = null;
+        let deferredInstallPrompt = null;
+
+        window.addEventListener("beforeinstallprompt", (event) => {
+            event.preventDefault();
+            deferredInstallPrompt = event;
+        });
 
         const infoModalContent = {
             delivery: {
@@ -2826,6 +2844,7 @@
                 storyModalTimerFill.style.width = "0%";
             }
             storyModal.classList.remove("is-cta-only");
+            storyModal.classList.remove("is-cta-right");
             storyModal.classList.remove("is-open");
             storyModal.setAttribute("aria-hidden", "true");
             document.body.style.overflow = "";
@@ -2851,14 +2870,20 @@
             const storyBackground = card.dataset.storyBg || getComputedStyle(card).backgroundImage || "";
             const storyText = card.dataset.storyText || "";
             const storyTarget = card.dataset.storyTarget || "#section-sebetter";
-            const isCtaOnlyStory = card.classList.contains("story-card--delivery");
+            const storyAction = card.dataset.storyAction || "";
+            const storyCtaLabel = card.dataset.storyCta || "Перейти";
+            const isCtaOnlyStory = card.classList.contains("story-card--delivery") || card.classList.contains("story-card--app");
+            const isCtaRightStory = card.classList.contains("story-card--app");
             storyModal.classList.toggle("is-cta-only", isCtaOnlyStory);
+            storyModal.classList.toggle("is-cta-right", isCtaRightStory);
             if (storyModalText) {
                 storyModalText.textContent = isCtaOnlyStory ? "" : storyText;
             }
             if (storyModalCta) {
                 storyModalCta.setAttribute("href", storyTarget);
                 storyModalCta.dataset.target = storyTarget;
+                storyModalCta.dataset.action = storyAction;
+                storyModalCta.textContent = storyCtaLabel;
             }
             storyModalImage.style.backgroundImage = storyBackground === "none" ? "" : storyBackground;
             storyModal.classList.add("is-open");
@@ -2903,9 +2928,56 @@
         if (storyModalNext) {
             storyModalNext.addEventListener("click", openNextStory);
         }
+
+        const triggerInstallApp = async () => {
+            const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+            const userAgent = navigator.userAgent || "";
+            const isIOS = /iphone|ipad|ipod/i.test(userAgent);
+            const isAndroid = /android/i.test(userAgent);
+            const isMacDesktop = /macintosh|mac os x/i.test(userAgent) && !isIOS;
+            const isWindowsDesktop = /windows nt/i.test(userAgent);
+            if (isStandalone) {
+                alert("Приложение уже установлено на этом устройстве");
+                return;
+            }
+            if (deferredInstallPrompt) {
+                deferredInstallPrompt.prompt();
+                try {
+                    await deferredInstallPrompt.userChoice;
+                } catch (error) {
+                    // Ignore browser-specific prompt promise errors.
+                }
+                deferredInstallPrompt = null;
+                return;
+            }
+            if (isIOS) {
+                alert("На iPhone откройте сайт в Safari: Поделиться → На экран Домой");
+                return;
+            }
+            if (isAndroid) {
+                alert("На Android откройте меню браузера (⋮) и выберите «Добавить на главный экран»");
+                return;
+            }
+            if (isMacDesktop) {
+                alert("На Mac установите сайт на экран компьютера: в Chrome/Edge нажмите значок установки в адресной строке или Меню → «Установить приложение», в Safari — «Файл → Добавить в Dock»");
+                return;
+            }
+            if (isWindowsDesktop) {
+                alert("На компьютере откройте Chrome/Edge и нажмите значок установки в адресной строке или Меню → «Установить приложение»");
+                return;
+            }
+            alert("Откройте меню браузера и выберите установку приложения на экран устройства");
+        };
+
         if (storyModalCta) {
             storyModalCta.addEventListener("click", (event) => {
                 event.preventDefault();
+                const action = storyModalCta.dataset.action || "";
+                if (action === "install-app") {
+                    triggerInstallApp();
+                    closeStoryModal();
+                    return;
+                }
                 const targetSelector = storyModalCta.dataset.target || storyModalCta.getAttribute("href") || "";
                 closeStoryModal();
                 window.setTimeout(() => {
