@@ -845,10 +845,10 @@
         .story-modal.is-cta-only .story-modal__text {
             display: none;
         }
+        .story-modal__pause,
         .story-modal__close {
             position: absolute;
             top: 14px;
-            right: 14px;
             width: 32px;
             height: 32px;
             border: none;
@@ -857,8 +857,20 @@
             color: #fff;
             cursor: pointer;
             z-index: 6;
-            font-size: 20px;
             line-height: 1;
+        }
+        .story-modal__pause {
+            right: 52px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+        .story-modal__pause.is-paused {
+            background: rgba(255, 125, 26, 0.9);
+        }
+        .story-modal__close {
+            right: 14px;
+            font-size: 20px;
         }
         .story-modal__nav {
             position: absolute;
@@ -1448,6 +1460,9 @@
             }
             .story-modal__text {
                 font-size: 15px;
+            }
+            .story-modal__pause {
+                display: none;
             }
             .popular-grid {
                 grid-template-columns: 1fr;
@@ -2207,6 +2222,7 @@
             <div class="story-modal__timer">
                 <div class="story-modal__timer-fill" id="storyModalTimerFill"></div>
             </div>
+            <button class="story-modal__pause" type="button" id="storyModalPause" aria-label="Пауза истории" aria-pressed="false">||</button>
             <button class="story-modal__close" type="button" aria-label="Закрыть историю">×</button>
             <button class="story-modal__nav story-modal__nav--prev" type="button" id="storyModalPrev" aria-label="Предыдущая история">‹</button>
             <button class="story-modal__nav story-modal__nav--next" type="button" id="storyModalNext" aria-label="Следующая история">›</button>
@@ -2266,6 +2282,7 @@
         const storyModalTimerFill = document.getElementById("storyModalTimerFill");
         const storyModalText = document.getElementById("storyModalText");
         const storyModalCta = document.getElementById("storyModalCta");
+        const storyModalPause = document.getElementById("storyModalPause");
         const storyModalClose = document.querySelector(".story-modal__close");
         const storyModalPrev = document.getElementById("storyModalPrev");
         const storyModalNext = document.getElementById("storyModalNext");
@@ -2283,6 +2300,11 @@
         const STORY_DURATION_MS = 5000;
         let activeStoryIndex = -1;
         let storyTimerFrame = 0;
+        let storyTick = null;
+        let storyTimerStart = 0;
+        let storyPausedAt = 0;
+        let storyPausedTotal = 0;
+        let storyIsPaused = false;
         let addressInputTimer = 0;
         let deliveryCoords = null;
         let deferredInstallPrompt = null;
@@ -2836,18 +2858,54 @@
             }
         };
 
+        const updateStoryPauseUi = () => {
+            if (!storyModalPause) return;
+            storyModalPause.textContent = storyIsPaused ? ">" : "||";
+            storyModalPause.setAttribute("aria-label", storyIsPaused ? "Продолжить историю" : "Пауза истории");
+            storyModalPause.setAttribute("aria-pressed", storyIsPaused ? "true" : "false");
+            storyModalPause.classList.toggle("is-paused", storyIsPaused);
+        };
+
+        const setStoryPaused = (paused) => {
+            if (!storyModal || !storyModal.classList.contains("is-open")) return;
+            if (paused === storyIsPaused) return;
+            if (paused) {
+                storyIsPaused = true;
+                storyPausedAt = performance.now();
+                stopStoryTimer();
+            } else {
+                if (storyPausedAt) {
+                    storyPausedTotal += performance.now() - storyPausedAt;
+                }
+                storyPausedAt = 0;
+                storyIsPaused = false;
+                if (storyTick) {
+                    storyTimerFrame = requestAnimationFrame(storyTick);
+                }
+            }
+            storyModal.classList.toggle("is-paused", storyIsPaused);
+            updateStoryPauseUi();
+        };
+
         const closeStoryModal = () => {
             if (!storyModal) return;
             stopStoryTimer();
             activeStoryIndex = -1;
+            storyTick = null;
+            storyTimerStart = 0;
+            storyPausedAt = 0;
+            storyPausedTotal = 0;
+            storyIsPaused = false;
             if (storyModalTimerFill) {
                 storyModalTimerFill.style.width = "0%";
             }
             storyModal.classList.remove("is-cta-only");
             storyModal.classList.remove("is-cta-right");
+            storyModal.classList.remove("is-paused");
             storyModal.classList.remove("is-open");
             storyModal.setAttribute("aria-hidden", "true");
             document.body.style.overflow = "";
+            updateStoryPauseUi();
         };
 
         const openStoryTarget = (targetSelector) => {
@@ -2889,10 +2947,17 @@
             storyModal.classList.add("is-open");
             storyModal.setAttribute("aria-hidden", "false");
             document.body.style.overflow = "hidden";
+            storyIsPaused = false;
+            storyPausedAt = 0;
+            storyPausedTotal = 0;
+            storyTimerStart = performance.now();
+            storyModal.classList.remove("is-paused");
+            updateStoryPauseUi();
             stopStoryTimer();
-            const start = performance.now();
             const tick = (now) => {
-                const progress = Math.min((now - start) / STORY_DURATION_MS, 1);
+                if (storyIsPaused) return;
+                const elapsed = now - storyTimerStart - storyPausedTotal;
+                const progress = Math.min(elapsed / STORY_DURATION_MS, 1);
                 if (storyModalTimerFill) {
                     storyModalTimerFill.style.width = `${progress * 100}%`;
                 }
@@ -2902,10 +2967,11 @@
                 }
                 storyTimerFrame = requestAnimationFrame(tick);
             };
+            storyTick = tick;
             if (storyModalTimerFill) {
                 storyModalTimerFill.style.width = "0%";
             }
-            storyTimerFrame = requestAnimationFrame(tick);
+            storyTimerFrame = requestAnimationFrame(storyTick);
         };
 
         const openNextStory = () => {
@@ -2927,6 +2993,25 @@
         }
         if (storyModalNext) {
             storyModalNext.addEventListener("click", openNextStory);
+        }
+        if (storyModalPause) {
+            storyModalPause.addEventListener("click", (event) => {
+                event.preventDefault();
+                setStoryPaused(!storyIsPaused);
+            });
+        }
+        const handleStoryTouchHoldStart = () => {
+            if (!window.matchMedia("(max-width: 900px)").matches) return;
+            setStoryPaused(true);
+        };
+        const handleStoryTouchHoldEnd = () => {
+            if (!window.matchMedia("(max-width: 900px)").matches) return;
+            setStoryPaused(false);
+        };
+        if (storyModalImage) {
+            storyModalImage.addEventListener("touchstart", handleStoryTouchHoldStart, { passive: true });
+            storyModalImage.addEventListener("touchend", handleStoryTouchHoldEnd, { passive: true });
+            storyModalImage.addEventListener("touchcancel", handleStoryTouchHoldEnd, { passive: true });
         }
 
         const triggerInstallApp = async () => {
