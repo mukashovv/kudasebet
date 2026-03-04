@@ -632,6 +632,12 @@
                 linear-gradient(138deg, rgba(28, 50, 76, 0.22), rgba(28, 50, 76, 0.22)),
                 url("assets/img/stories/story-app-preview.jpg");
         }
+        .story-card--cashback {
+            background-image: url("assets/img/stories/story-heavy-bags.webp");
+            background-size: 128% auto;
+            background-position: center 72%;
+            background-repeat: no-repeat;
+        }
         .story-card--feb23 {
             background-image:
                 linear-gradient(140deg, rgba(20, 38, 51, 0.26), rgba(20, 38, 51, 0.26)),
@@ -1140,6 +1146,34 @@
             grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.8fr);
             gap: 24px;
         }
+        .builder-pro-entry {
+            margin-bottom: 14px;
+            padding: 14px 16px;
+            border: 1px solid #f0dfcf;
+            border-radius: 14px;
+            background: #fff7ee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .builder-pro-entry strong {
+            display: block;
+            color: #181818;
+            font-size: 17px;
+            line-height: 1.25;
+        }
+        .builder-pro-entry p {
+            margin-top: 4px;
+            color: #5f5750;
+            font-size: 14px;
+            line-height: 1.35;
+        }
+        .builder-pro-entry .button {
+            border-radius: 999px;
+            white-space: nowrap;
+            min-width: 220px;
+        }
         .builder-list {
             background: #ececef;
             border-radius: 18px;
@@ -1410,6 +1444,14 @@
             .builder {
                 grid-template-columns: 1fr;
             }
+            .builder-pro-entry {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .builder-pro-entry .button {
+                width: 100%;
+                min-width: 0;
+            }
             .builder-summary {
                 position: static;
             }
@@ -1591,6 +1633,7 @@
                 <a href="#section-gifts">Белектер</a>
                 <a href="#section-vegan-box">Веган Box</a>
                 <a href="#section-ozun-chogult">Өзүң чогулт</a>
+                <a href="./personal-builder.html">Личный конструктор</a>
             </nav>
         </div>
     </header>
@@ -1606,6 +1649,9 @@
                         </button>
                         <button class="story-card story-card--app" type="button" data-story-text="" data-story-target="#section-sebetter" data-story-bg="url('assets/img/stories/story-app-instruction.webp')" data-story-action="install-app" data-story-cta="Добавить на экран">
                             <span class="story-card__title">Скачай приложение!</span>
+                        </button>
+                        <button class="story-card story-card--cashback" type="button" data-story-text="Не носите тяжелые пакеты - закажите подарочные корзины прямо к двери." data-story-target="#section-info" data-story-cta="Подробнее" data-story-bg-size="cover" data-story-bg-position="72% 72%" data-story-bg-repeat="no-repeat">
+                            <span class="story-card__title">Не носите тяжелые пакеты</span>
                         </button>
                         <button class="story-card story-card--feb23" type="button" data-story-text="Готовые подарки к 23 февраля для пап, друзей и коллег." data-story-target="#section-mayramdar">
                             <span class="story-card__title">23 февраля!</span>
@@ -2014,6 +2060,13 @@
         <section class="section section--catalog section--builder" id="section-ozun-chogult">
             <div class="container">
                 <h2 class="section-title">Өзүң чогулт</h2>
+                <div class="builder-pro-entry">
+                    <div>
+                        <strong>Нужен более удобный режим для телефона?</strong>
+                        <p>Откройте отдельную страницу с категориями, сворачиванием разделов, правой корзиной, итоговой ценой и отправкой состава в WhatsApp.</p>
+                    </div>
+                    <a class="button button--cta" href="./personal-builder.html">Открыть личный конструктор</a>
+                </div>
                 <div class="builder" id="customBuilder">
                     <div class="builder-list">
                         <div class="builder-item" data-name="Виноград «Дамские пальчики»" data-price="650" data-qty="0">
@@ -2940,7 +2993,11 @@
             const card = storyCards[index];
             activeStoryIndex = index;
             card.classList.add("is-viewed");
-            const storyBackground = card.dataset.storyBg || getComputedStyle(card).backgroundImage || "";
+            const cardStyle = getComputedStyle(card);
+            const storyBackground = card.dataset.storyBg || cardStyle.backgroundImage || "";
+            const storyBackgroundSize = card.dataset.storyBgSize || cardStyle.backgroundSize || "cover";
+            const storyBackgroundPosition = card.dataset.storyBgPosition || cardStyle.backgroundPosition || "center";
+            const storyBackgroundRepeat = card.dataset.storyBgRepeat || cardStyle.backgroundRepeat || "no-repeat";
             const storyText = card.dataset.storyText || "";
             const storyTarget = card.dataset.storyTarget || "#section-sebetter";
             const storyAction = card.dataset.storyAction || "";
@@ -2959,6 +3016,9 @@
                 storyModalCta.textContent = storyCtaLabel;
             }
             storyModalImage.style.backgroundImage = storyBackground === "none" ? "" : storyBackground;
+            storyModalImage.style.backgroundSize = storyBackgroundSize;
+            storyModalImage.style.backgroundPosition = storyBackgroundPosition;
+            storyModalImage.style.backgroundRepeat = storyBackgroundRepeat;
             storyModal.classList.add("is-open");
             storyModal.setAttribute("aria-hidden", "false");
             document.body.style.overflow = "hidden";

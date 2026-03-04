@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Личный конструктор подарочной корзины: выбирайте товары по категориям, считайте итог и отправляйте состав в WhatsApp.">
+    <meta name="theme-color" content="#f46d26">
+    <title>Личный конструктор корзины | Куда Себет</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Prata&display=swap" rel="stylesheet">
+    <link rel="manifest" href="./site.webmanifest">
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/app-icon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon.png">
+    <link rel="stylesheet" href="./build/css/personal-builder.css">
+</head>
+<body>
+    <header class="pb-header">
+        <div class="pb-shell pb-header__inner">
+            <a class="pb-back-link" href="./index.html#section-ozun-chogult">← Назад к сайту</a>
+            <div class="pb-title-wrap">
+                <p class="pb-kicker">Өзүң чогулт • PRO</p>
+                <h1>Личный конструктор корзины</h1>
+                <p class="pb-subtitle">Удобная сборка с телефона: категории, быстрый подсчёт суммы, отправка состава в WhatsApp.</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="pb-main">
+        <div class="pb-shell">
+            <section class="pb-controls" aria-label="Управление">
+                <button class="pb-btn pb-btn--light" type="button" id="collapseAllBtn">Свернуть все</button>
+                <button class="pb-btn pb-btn--light" type="button" id="expandAllBtn">Развернуть все</button>
+                <button class="pb-btn pb-btn--light" type="button" id="priceModeBtn">Режим цен: выкл</button>
+                <button class="pb-btn pb-btn--light" type="button" id="resetPricesBtn">Сбросить цены</button>
+            </section>
+
+            <section class="pb-catalog" aria-label="Категории товаров">
+                <div id="categoryContainer"></div>
+            </section>
+
+            <section class="pb-summary" id="summarySection" aria-label="Итоговый состав">
+                <div class="pb-summary__head">
+                    <h2>Выбранный состав</h2>
+                    <div class="pb-summary__meta" id="summaryMeta">0 позиций</div>
+                </div>
+                <div class="pb-summary__list" id="bottomSummaryList">
+                    <div class="pb-empty">Добавьте товары, чтобы увидеть состав корзины.</div>
+                </div>
+                <div class="pb-custom-add">
+                    <h3>Нет нужного товара в списке?</h3>
+                    <p>Добавьте свой продукт вручную, и он сразу попадёт в корзину и в итоговый список.</p>
+                    <form class="pb-custom-add__form" id="customProductForm">
+                        <input class="pb-custom-input" id="customProductName" type="text" maxlength="80" placeholder="Название товара" required>
+                        <input class="pb-custom-input" id="customProductPrice" type="number" min="0" max="100000" step="1" inputmode="numeric" placeholder="Цена, сом" required>
+                        <div class="pb-custom-qty" role="group" aria-label="Количество товара">
+                            <input class="pb-custom-qty-input" id="customProductQty" type="text" value="1" readonly aria-label="Количество">
+                            <button class="pb-qty-btn pb-custom-qty-btn" type="button" id="customProductQtyDec" aria-label="Уменьшить количество">−</button>
+                            <button class="pb-qty-btn pb-custom-qty-btn" type="button" id="customProductQtyInc" aria-label="Увеличить количество">+</button>
+                        </div>
+                        <select class="pb-custom-input" id="customProductCategory" required></select>
+                        <button class="pb-btn pb-btn--light" type="submit" id="customProductAddBtn">Добавить свой товар</button>
+                    </form>
+                </div>
+                <div class="pb-summary__footer">
+                    <div class="pb-total-line"><span>Итого:</span><strong id="bottomSummaryTotal">0 сом</strong></div>
+                    <div class="pb-summary__actions">
+                        <button class="pb-btn pb-btn--ghost" type="button" id="copyBottomBtn">Скопировать состав</button>
+                        <button class="pb-btn pb-btn--primary" type="button" id="sendBottomBtn">Отправить в WhatsApp</button>
+                        <button class="pb-btn pb-btn--danger" type="button" id="clearBottomBtn">Очистить всё</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <aside class="pb-corner-cart" id="cornerCart" aria-label="Корзина справа">
+        <div class="pb-corner-cart__head">
+            <h3>Корзина</h3>
+            <span id="cornerCount">0</span>
+        </div>
+        <div class="pb-corner-cart__list" id="cornerCartList">
+            <div class="pb-empty">Пока пусто</div>
+        </div>
+        <div class="pb-corner-cart__footer">
+            <div class="pb-total-line"><span>Итого:</span><strong id="cornerCartTotal">0 сом</strong></div>
+            <button class="pb-btn pb-btn--primary" type="button" id="sendCornerBtn">WhatsApp</button>
+            <button class="pb-btn pb-btn--ghost" type="button" id="copyCornerBtn">Копировать</button>
+            <button class="pb-btn pb-btn--danger" type="button" id="clearCornerBtn">Очистить</button>
+        </div>
+    </aside>
+
+    <button class="pb-float-cart" type="button" id="floatingCartBtn" aria-controls="mobileCartSheet" aria-expanded="false">
+        Корзина
+        <span id="floatingCartCount">0</span>
+    </button>
+
+    <div class="pb-sheet-backdrop" id="sheetBackdrop" hidden></div>
+    <section class="pb-mobile-sheet" id="mobileCartSheet" aria-hidden="true">
+        <div class="pb-mobile-sheet__head">
+            <h3>Корзина</h3>
+            <button class="pb-close-btn" type="button" id="closeMobileSheetBtn" aria-label="Закрыть">×</button>
+        </div>
+        <div class="pb-mobile-sheet__list" id="mobileCartList">
+            <div class="pb-empty">Пока пусто</div>
+        </div>
+        <div class="pb-mobile-sheet__footer">
+            <div class="pb-total-line"><span>Итого:</span><strong id="mobileCartTotal">0 сом</strong></div>
+            <button class="pb-btn pb-btn--primary" type="button" id="sendMobileBtn">Отправить в WhatsApp</button>
+            <button class="pb-btn pb-btn--ghost" type="button" id="copyMobileBtn">Скопировать состав</button>
+            <button class="pb-btn pb-btn--danger" type="button" id="clearMobileBtn">Очистить всё</button>
+        </div>
+    </section>
+
+    <div class="pb-sticky-total">
+        <div class="pb-sticky-total__amount">
+            <span>Итоговая цена:</span>
+            <strong id="stickyTotal">0 сом</strong>
+        </div>
+        <button class="pb-btn pb-btn--primary" type="button" id="sendStickyBtn">WhatsApp</button>
+    </div>
+
+    <div class="pb-toast" id="toast" aria-live="polite"></div>
+
+    <script src="./build/js/personal-builder.js"></script>
+</body>
+</html>

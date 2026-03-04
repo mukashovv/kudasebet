@@ -1,0 +1,772 @@
+(() => {
+    const WA_PHONE = "996509130090";
+    const SESSION_KEY = "kudasebet-personal-builder-v1";
+
+    const catalog = [
+        {
+            id: "cookies",
+            name: "Печенья",
+            items: [
+                { id: "cookie-pechenye-banke", name: "Печенье в банке", price: 590 },
+                { id: "cookie-elka", name: "Елочка Печенья", price: 600 },
+                { id: "cookie-oreo", name: "Oreo Original", price: 210 },
+                { id: "cookie-choco-pie", name: "Choco Pie (12 шт)", price: 280 },
+                { id: "cookie-jubilee", name: "Юбилейное шоколадное", price: 170 },
+                { id: "cookie-milka", name: "Milka Choco Cookie", price: 230 }
+            ]
+        },
+        {
+            id: "candies",
+            name: "Конфеты",
+            items: [
+                { id: "candy-raffaello", name: "Raffaello", price: 680 },
+                { id: "candy-ferrero", name: "Ferrero Rocher", price: 1500 },
+                { id: "candy-ferrero-8", name: "Ferrero Rocher (8 шт)", price: 850 },
+                { id: "candy-fiorella-trufa-200", name: "Fiorella LA TRUFA, 200 г", price: 215 },
+                { id: "candy-kinder-santa", name: "Kinder Дед Мороз", price: 240 },
+                { id: "candy-korkunov", name: "Коркунов ассорти", price: 320 },
+                { id: "candy-mms", name: "M&M's", price: 190 },
+                { id: "candy-chinese", name: "Китайские конфеты", price: 0 }
+            ]
+        },
+        {
+            id: "sweets",
+            name: "Сладости",
+            items: [
+                { id: "sweet-merci-small", name: "Маленький Merci", price: 400 },
+                { id: "sweet-merci-big", name: "Большая шоколадка Merci", price: 1150 },
+                { id: "sweet-toblerone-mini", name: "Toblerone мини", price: 190 },
+                { id: "sweet-toblerone", name: "Toblerone шоколад", price: 800 },
+                { id: "sweet-dark-choco", name: "Горький шоколад", price: 580 },
+                { id: "sweet-ritter", name: "Ritter Sport", price: 731 },
+                { id: "sweet-milka", name: "Milka Alpine Milk", price: 240 },
+                { id: "sweet-nutella", name: "Nutella mini", price: 290 }
+            ]
+        },
+        {
+            id: "fruits",
+            name: "Фрукты",
+            items: [
+                { id: "fruit-grape-ladyfingers", name: "Виноград \"Дамские пальчики\"", price: 250 },
+                { id: "fruit-dragon", name: "Сердце дракона фрукт", price: 250 },
+                { id: "fruit-pomegranate", name: "Гранат", price: 320 },
+                { id: "fruit-mango", name: "Манго", price: 450 },
+                { id: "fruit-pineapple", name: "Ананас", price: 620 },
+                { id: "fruit-passion", name: "Маракуйя", price: 200 },
+                { id: "fruit-mandarin-7", name: "Мандарины 7 шт", price: 160 },
+                { id: "fruit-mandarin-kg", name: "Мандарины 1 кг", price: 160 }
+            ]
+        },
+        {
+            id: "alcohol",
+            name: "Алкоголь",
+            items: [
+                { id: "alco-santo-stefano", name: "Шампанское Santo Stefano", price: 530 },
+                { id: "alco-good-champagne", name: "Хорошее шампанское", price: 1000 },
+                { id: "alco-martini", name: "Martini Asti", price: 1650 },
+                { id: "alco-jager", name: "Jagermeister 0.5", price: 2300 },
+                { id: "alco-jack", name: "Jack Daniel's 0.5", price: 2400 },
+                { id: "alco-rioja", name: "Вино Rioja", price: 1800 }
+            ]
+        },
+        {
+            id: "juices",
+            name: "Соки",
+            items: [
+                { id: "juice-yan-mini-apple-pear", name: "Yan маленький Яблоко-Груша", price: 135 },
+                { id: "juice-yan-grape", name: "Сок Yan Виноград", price: 430 },
+                { id: "juice-yan-apple-pear", name: "Сок Yan Яблоко-Груша", price: 430 },
+                { id: "juice-rich-orange", name: "Rich Апельсин 1л", price: 220 },
+                { id: "juice-j7-apple", name: "J7 Яблоко 1л", price: 210 },
+                { id: "juice-dobry-multi", name: "Organic 1л", price: 190 },
+                { id: "juice-richard-tea", name: "Чай (Richard)", price: 340 }
+            ]
+        },
+        {
+            id: "soda",
+            name: "Газировки",
+            items: [
+                { id: "soda-cola", name: "Coca-Cola 1л", price: 140 },
+                { id: "soda-fanta", name: "Fanta 1л", price: 140 },
+                { id: "soda-sprite", name: "Sprite 1л", price: 140 },
+                { id: "soda-schweppes", name: "Schweppes 1л", price: 180 },
+                { id: "soda-festive-champ", name: "Шампанское (Праздничное)", price: 220 }
+            ]
+        },
+        {
+            id: "extra",
+            name: "Дополнительно",
+            items: [
+                { id: "extra-caviar", name: "Икра 50-100гр", price: 1790 },
+                { id: "extra-net", name: "Сеточка под продукты", price: 200 },
+                { id: "extra-decor", name: "Декор", price: 250 },
+                { id: "extra-tree-decor", name: "Елочки", price: 250 },
+                { id: "extra-fabric", name: "Ткань", price: 150 },
+                { id: "extra-basket-s", name: "Корзина S", price: 500 },
+                { id: "extra-basket-m", name: "Корзина M", price: 750 },
+                { id: "extra-basket-vip", name: "Корзина Vip", price: 850 },
+                { id: "extra-basket-new-year", name: "Корзина (новогодняя)", price: 400 },
+                { id: "extra-basket-base", name: "Корзина (базовая)", price: 600 }
+            ]
+        }
+    ];
+
+    const categoryContainer = document.getElementById("categoryContainer");
+    if (!categoryContainer) return;
+
+    const ui = {
+        collapseAllBtn: document.getElementById("collapseAllBtn"),
+        expandAllBtn: document.getElementById("expandAllBtn"),
+        priceModeBtn: document.getElementById("priceModeBtn"),
+        resetPricesBtn: document.getElementById("resetPricesBtn"),
+        customProductForm: document.getElementById("customProductForm"),
+        customProductName: document.getElementById("customProductName"),
+        customProductPrice: document.getElementById("customProductPrice"),
+        customProductQty: document.getElementById("customProductQty"),
+        customProductQtyDec: document.getElementById("customProductQtyDec"),
+        customProductQtyInc: document.getElementById("customProductQtyInc"),
+        customProductCategory: document.getElementById("customProductCategory"),
+        summaryMeta: document.getElementById("summaryMeta"),
+        bottomSummaryList: document.getElementById("bottomSummaryList"),
+        bottomSummaryTotal: document.getElementById("bottomSummaryTotal"),
+        cornerCartList: document.getElementById("cornerCartList"),
+        cornerCartTotal: document.getElementById("cornerCartTotal"),
+        mobileCartList: document.getElementById("mobileCartList"),
+        mobileCartTotal: document.getElementById("mobileCartTotal"),
+        stickyTotal: document.getElementById("stickyTotal"),
+        cornerCount: document.getElementById("cornerCount"),
+        floatingCartCount: document.getElementById("floatingCartCount"),
+        floatingCartBtn: document.getElementById("floatingCartBtn"),
+        mobileCartSheet: document.getElementById("mobileCartSheet"),
+        closeMobileSheetBtn: document.getElementById("closeMobileSheetBtn"),
+        sheetBackdrop: document.getElementById("sheetBackdrop"),
+        sendBottomBtn: document.getElementById("sendBottomBtn"),
+        sendCornerBtn: document.getElementById("sendCornerBtn"),
+        sendMobileBtn: document.getElementById("sendMobileBtn"),
+        sendStickyBtn: document.getElementById("sendStickyBtn"),
+        copyBottomBtn: document.getElementById("copyBottomBtn"),
+        copyCornerBtn: document.getElementById("copyCornerBtn"),
+        copyMobileBtn: document.getElementById("copyMobileBtn"),
+        clearBottomBtn: document.getElementById("clearBottomBtn"),
+        clearCornerBtn: document.getElementById("clearCornerBtn"),
+        clearMobileBtn: document.getElementById("clearMobileBtn"),
+        toast: document.getElementById("toast")
+    };
+
+    const itemIndex = new Map();
+    const defaultPrices = new Map();
+    const state = {
+        quantities: new Map(),
+        prices: new Map(),
+        customItems: new Map(),
+        priceMode: false
+    };
+
+    catalog.forEach((category) => {
+        category.items.forEach((item) => {
+            itemIndex.set(item.id, { ...item, categoryId: category.id, categoryName: category.name });
+            defaultPrices.set(item.id, item.price);
+            state.quantities.set(item.id, 0);
+            state.prices.set(item.id, item.price);
+        });
+    });
+
+    initCustomCategorySelect();
+    loadSession();
+    renderCatalog();
+    bindEvents();
+    render();
+
+    function formatSom(value) {
+        return `${Number(value || 0).toLocaleString("ru-RU")} сом`;
+    }
+
+    function clamp(value, min, max) {
+        if (!Number.isFinite(value)) return min;
+        return Math.min(max, Math.max(min, Math.round(value)));
+    }
+
+    function escapeHtml(text) {
+        return String(text)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#39;");
+    }
+
+    function normalizeItemName(value) {
+        return String(value || "")
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, " ");
+    }
+
+    function slugifyName(value) {
+        return String(value || "")
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-zа-я0-9]+/gi, "-")
+            .replace(/^-+|-+$/g, "")
+            .slice(0, 40) || "custom-item";
+    }
+
+    function getCategoryById(categoryId) {
+        return catalog.find((entry) => entry.id === categoryId) || null;
+    }
+
+    function initCustomCategorySelect() {
+        if (!ui.customProductCategory) return;
+        ui.customProductCategory.innerHTML = catalog
+            .map((category) => `<option value="${category.id}">${escapeHtml(category.name)}</option>`)
+            .join("");
+        if (catalog.some((category) => category.id === "extra")) {
+            ui.customProductCategory.value = "extra";
+        }
+    }
+
+    function renderCatalog() {
+        const html = catalog
+            .map((category, index) => {
+                const rows = category.items
+                    .map((item) => {
+                        const price = state.prices.get(item.id) || item.price;
+                        return `
+                            <article class="pb-item" data-item-id="${item.id}">
+                                <div>
+                                    <h3 class="pb-item__name">${escapeHtml(item.name)}</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">${formatSom(price)}</span>
+                                        <input
+                                            class="pb-item__price-input"
+                                            data-role="price-input"
+                                            aria-label="Цена для ${escapeHtml(item.name)}"
+                                            type="number"
+                                            min="0"
+                                            max="100000"
+                                            step="10"
+                                            inputmode="numeric"
+                                            value="${price}"
+                                        >
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        `;
+                    })
+                    .join("");
+
+                return `
+                    <details class="pb-category" data-category-id="${category.id}" ${index < 3 ? "open" : ""}>
+                        <summary>
+                            <span class="pb-category__title">
+                                <strong>${escapeHtml(category.name)}</strong>
+                                <span class="pb-category__hint" data-role="category-total">0 сом</span>
+                            </span>
+                            <span class="pb-category__count" data-role="category-count">0</span>
+                        </summary>
+                        <div class="pb-category__items">${rows}</div>
+                    </details>
+                `;
+            })
+            .join("");
+
+        categoryContainer.innerHTML = html;
+    }
+
+    function collectSummary() {
+        const groups = [];
+        const groupMap = new Map();
+        let total = 0;
+        let count = 0;
+
+        const ensureGroup = (groupId, groupName) => {
+            if (groupMap.has(groupId)) return groupMap.get(groupId);
+            const group = {
+                id: groupId,
+                name: groupName,
+                items: [],
+                categoryTotal: 0,
+                categoryCount: 0
+            };
+            groupMap.set(groupId, group);
+            groups.push(group);
+            return group;
+        };
+
+        catalog.forEach((category) => {
+            category.items.forEach((item) => {
+                const qty = state.quantities.get(item.id) || 0;
+                if (qty <= 0) return;
+
+                const price = state.prices.get(item.id) || 0;
+                const lineTotal = price * qty;
+                const group = ensureGroup(category.id, category.name);
+                group.items.push({ id: item.id, name: item.name, qty, price, lineTotal });
+                group.categoryTotal += lineTotal;
+                group.categoryCount += qty;
+                total += lineTotal;
+                count += qty;
+            });
+        });
+
+        state.customItems.forEach((customItem, customKey) => {
+            const qty = customItem.qty || 0;
+            const price = customItem.price || 0;
+            if (qty <= 0) return;
+
+            const categoryId = customItem.categoryId || "extra";
+            const categoryName = customItem.categoryName || getCategoryById(categoryId)?.name || "Дополнительно";
+            const lineTotal = price * qty;
+            const group = ensureGroup(categoryId, categoryName);
+            group.items.push({
+                id: `custom-${customKey}`,
+                name: customItem.name,
+                qty,
+                price,
+                lineTotal
+            });
+            group.categoryTotal += lineTotal;
+            group.categoryCount += qty;
+            total += lineTotal;
+            count += qty;
+        });
+
+        return { groups, total, count };
+    }
+
+    function buildSummaryHtml(groups) {
+        if (groups.length === 0) {
+            return `<div class="pb-empty">Добавьте товары, чтобы увидеть состав корзины.</div>`;
+        }
+
+        return groups
+            .map(
+                (group) => `
+                    <div class="pb-selected-group">
+                        <h4>${escapeHtml(group.name)} (${group.categoryCount})</h4>
+                        ${group.items
+                            .map(
+                                (item) => `
+                                <div class="pb-selected-item">
+                                    <span>${escapeHtml(item.name)} × ${item.qty}</span>
+                                    <span>${formatSom(item.lineTotal)}</span>
+                                </div>
+                            `
+                            )
+                            .join("")}
+                    </div>
+                `
+            )
+            .join("");
+    }
+
+    function buildShareText(summary) {
+        const lines = ["Состав подарочной корзины", ""];
+
+        summary.groups.forEach((group) => {
+            lines.push(`${group.name}:`);
+            group.items.forEach((item) => {
+                lines.push(`• ${item.name} ×${item.qty} — ${formatSom(item.lineTotal)}`);
+            });
+            lines.push("");
+        });
+
+        lines.push(`Позиций: ${summary.count}`);
+        lines.push(`Итоговая цена: ${formatSom(summary.total)}`);
+        lines.push("");
+        lines.push("Собрано в личном конструкторе Куда Себет.");
+        return lines.join("\n");
+    }
+
+    function showToast(message) {
+        if (!ui.toast) return;
+        ui.toast.textContent = message;
+        ui.toast.classList.add("is-visible");
+        window.clearTimeout(showToast.timer);
+        showToast.timer = window.setTimeout(() => {
+            ui.toast.classList.remove("is-visible");
+        }, 1800);
+    }
+
+    function saveSession() {
+        const payload = {
+            quantities: Object.fromEntries(state.quantities),
+            prices: Object.fromEntries(state.prices),
+            customItems: Array.from(state.customItems.entries())
+        };
+        try {
+            sessionStorage.setItem(SESSION_KEY, JSON.stringify(payload));
+        } catch (error) {
+            // Ignore quota/session restrictions.
+        }
+    }
+
+    function loadSession() {
+        try {
+            const raw = sessionStorage.getItem(SESSION_KEY);
+            if (!raw) return;
+            const data = JSON.parse(raw);
+            if (!data || typeof data !== "object") return;
+
+            if (data.quantities && typeof data.quantities === "object") {
+                Object.entries(data.quantities).forEach(([itemId, qty]) => {
+                    if (!itemIndex.has(itemId)) return;
+                    state.quantities.set(itemId, clamp(Number(qty), 0, 99));
+                });
+            }
+
+            if (data.prices && typeof data.prices === "object") {
+                Object.entries(data.prices).forEach(([itemId, price]) => {
+                    if (!itemIndex.has(itemId)) return;
+                    state.prices.set(itemId, clamp(Number(price), 0, 100000));
+                });
+            }
+
+            if (Array.isArray(data.customItems)) {
+                data.customItems.forEach((entry) => {
+                    if (!Array.isArray(entry) || entry.length < 2) return;
+                    const [customKey, rawItem] = entry;
+                    if (!customKey || !rawItem || typeof rawItem !== "object") return;
+
+                    const name = String(rawItem.name || "").trim();
+                    if (!name) return;
+
+                    const categoryId = String(rawItem.categoryId || "extra");
+                    const categoryName = rawItem.categoryName || getCategoryById(categoryId)?.name || "Дополнительно";
+                    const price = clamp(Number(rawItem.price), 0, 100000);
+                    const qty = clamp(Number(rawItem.qty), 0, 99);
+                    if (qty <= 0) return;
+
+                    state.customItems.set(String(customKey), {
+                        name,
+                        categoryId,
+                        categoryName,
+                        price,
+                        qty
+                    });
+                });
+            }
+        } catch (error) {
+            // Ignore malformed session payload.
+        }
+    }
+
+    function render() {
+        const summary = collectSummary();
+
+        categoryContainer.querySelectorAll(".pb-item").forEach((row) => {
+            const itemId = row.dataset.itemId;
+            if (!itemId) return;
+
+            const qty = state.quantities.get(itemId) || 0;
+            const price = state.prices.get(itemId) || 0;
+
+            row.classList.toggle("is-selected", qty > 0);
+            const qtyNode = row.querySelector('[data-role="qty"]');
+            if (qtyNode) qtyNode.textContent = String(qty);
+
+            const priceNode = row.querySelector('[data-role="price-label"]');
+            if (priceNode) priceNode.textContent = formatSom(price);
+
+            const priceInput = row.querySelector('[data-role="price-input"]');
+            if (priceInput && document.activeElement !== priceInput) {
+                priceInput.value = String(price);
+            }
+        });
+
+        categoryContainer.querySelectorAll(".pb-category").forEach((details) => {
+            const categoryId = details.dataset.categoryId;
+            const category = catalog.find((entry) => entry.id === categoryId);
+            if (!category) return;
+
+            let categoryCount = 0;
+            let categoryTotal = 0;
+
+            category.items.forEach((item) => {
+                const qty = state.quantities.get(item.id) || 0;
+                if (qty <= 0) return;
+                const price = state.prices.get(item.id) || 0;
+                categoryCount += qty;
+                categoryTotal += price * qty;
+            });
+
+            const countNode = details.querySelector('[data-role="category-count"]');
+            if (countNode) countNode.textContent = String(categoryCount);
+
+            const totalNode = details.querySelector('[data-role="category-total"]');
+            if (totalNode) totalNode.textContent = formatSom(categoryTotal);
+        });
+
+        const summaryHtml = buildSummaryHtml(summary.groups);
+        if (ui.bottomSummaryList) ui.bottomSummaryList.innerHTML = summaryHtml;
+        if (ui.cornerCartList) ui.cornerCartList.innerHTML = summaryHtml;
+        if (ui.mobileCartList) ui.mobileCartList.innerHTML = summaryHtml;
+
+        if (ui.bottomSummaryTotal) ui.bottomSummaryTotal.textContent = formatSom(summary.total);
+        if (ui.cornerCartTotal) ui.cornerCartTotal.textContent = formatSom(summary.total);
+        if (ui.mobileCartTotal) ui.mobileCartTotal.textContent = formatSom(summary.total);
+        if (ui.stickyTotal) ui.stickyTotal.textContent = formatSom(summary.total);
+
+        if (ui.cornerCount) ui.cornerCount.textContent = String(summary.count);
+        if (ui.floatingCartCount) ui.floatingCartCount.textContent = String(summary.count);
+        if (ui.summaryMeta) ui.summaryMeta.textContent = `${summary.count} позиций`;
+
+        document.body.classList.toggle("price-edit-mode", state.priceMode);
+        if (ui.priceModeBtn) {
+            ui.priceModeBtn.textContent = `Режим цен: ${state.priceMode ? "вкл" : "выкл"}`;
+        }
+    }
+
+    function updateQuantity(itemId, delta) {
+        if (!itemIndex.has(itemId)) return;
+        const next = clamp((state.quantities.get(itemId) || 0) + delta, 0, 99);
+        state.quantities.set(itemId, next);
+        saveSession();
+        render();
+    }
+
+    function setPrice(itemId, nextPriceRaw) {
+        if (!itemIndex.has(itemId)) return;
+        const next = clamp(Number(nextPriceRaw), 0, 100000);
+        state.prices.set(itemId, next);
+        saveSession();
+        render();
+    }
+
+    function updateCustomQty(delta) {
+        if (!ui.customProductQty) return;
+        const current = clamp(Number(ui.customProductQty.value || 1), 1, 99);
+        const next = clamp(current + delta, 1, 99);
+        ui.customProductQty.value = String(next);
+    }
+
+    function addCustomProduct() {
+        const name = ui.customProductName?.value.trim() || "";
+        const rawPrice = ui.customProductPrice?.value;
+        const rawQty = ui.customProductQty?.value;
+        const categoryId = ui.customProductCategory?.value || "extra";
+        const normalizedName = normalizeItemName(name);
+
+        if (!normalizedName) {
+            alert("Введите название товара");
+            return;
+        }
+        if (rawPrice === undefined || rawPrice === null || rawPrice === "") {
+            alert("Введите цену товара");
+            return;
+        }
+
+        const price = clamp(Number(rawPrice), 0, 100000);
+        const qty = clamp(Number(rawQty || 1), 1, 99);
+        const categoryName = getCategoryById(categoryId)?.name || "Дополнительно";
+
+        // If the same item already exists in the base list, use it instead of duplicating.
+        for (const [itemId, item] of itemIndex.entries()) {
+            if (normalizeItemName(item.name) !== normalizedName) continue;
+            state.quantities.set(itemId, clamp((state.quantities.get(itemId) || 0) + qty, 0, 99));
+            state.prices.set(itemId, price);
+            saveSession();
+            render();
+            showToast("Товар уже есть в списке и добавлен в корзину");
+            if (ui.customProductName) ui.customProductName.value = "";
+            if (ui.customProductQty) ui.customProductQty.value = "1";
+            ui.customProductName?.focus();
+            return;
+        }
+
+        const customKey = `${categoryId}::${normalizedName}`;
+        if (state.customItems.has(customKey)) {
+            const existing = state.customItems.get(customKey);
+            existing.qty = clamp((existing.qty || 0) + qty, 0, 99);
+            existing.price = price;
+            existing.categoryName = categoryName;
+            state.customItems.set(customKey, existing);
+        } else {
+            state.customItems.set(customKey, {
+                id: `custom-${slugifyName(name)}-${Date.now()}`,
+                name,
+                categoryId,
+                categoryName,
+                price,
+                qty
+            });
+        }
+
+        saveSession();
+        render();
+        showToast("Свой товар добавлен");
+        if (ui.customProductName) ui.customProductName.value = "";
+        if (ui.customProductPrice) ui.customProductPrice.value = "";
+        if (ui.customProductQty) ui.customProductQty.value = "1";
+        ui.customProductName?.focus();
+    }
+
+    function clearAllSelection() {
+        state.quantities.forEach((_, itemId) => {
+            state.quantities.set(itemId, 0);
+        });
+        state.customItems.clear();
+        saveSession();
+        render();
+        showToast("Состав очищен");
+    }
+
+    function resetPrices() {
+        defaultPrices.forEach((price, itemId) => {
+            state.prices.set(itemId, price);
+        });
+        saveSession();
+        render();
+        showToast("Цены сброшены к базовым");
+    }
+
+    function openWhatsApp() {
+        const summary = collectSummary();
+        if (summary.groups.length === 0) {
+            alert("Добавьте хотя бы один товар в корзину");
+            return;
+        }
+
+        const message = buildShareText(summary);
+        const url = `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(message)}`;
+        window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    async function copySummary() {
+        const summary = collectSummary();
+        if (summary.groups.length === 0) {
+            alert("Добавьте хотя бы один товар в корзину");
+            return;
+        }
+
+        const message = buildShareText(summary);
+        try {
+            await navigator.clipboard.writeText(message);
+            showToast("Состав скопирован");
+        } catch (error) {
+            const helper = document.createElement("textarea");
+            helper.value = message;
+            helper.style.position = "fixed";
+            helper.style.left = "-9999px";
+            document.body.appendChild(helper);
+            helper.select();
+            document.execCommand("copy");
+            helper.remove();
+            showToast("Состав скопирован");
+        }
+    }
+
+    function setSheetOpen(isOpen) {
+        const sheet = ui.mobileCartSheet;
+        const backdrop = ui.sheetBackdrop;
+        if (!sheet || !backdrop) return;
+
+        sheet.classList.toggle("is-open", isOpen);
+        sheet.setAttribute("aria-hidden", String(!isOpen));
+        if (ui.floatingCartBtn) ui.floatingCartBtn.setAttribute("aria-expanded", String(isOpen));
+
+        if (isOpen) {
+            backdrop.hidden = false;
+            return;
+        }
+
+        window.setTimeout(() => {
+            if (!sheet.classList.contains("is-open")) {
+                backdrop.hidden = true;
+            }
+        }, 220);
+    }
+
+    function bindEvents() {
+        categoryContainer.addEventListener("click", (event) => {
+            const button = event.target.closest(".pb-qty-btn");
+            if (!button) return;
+
+            const row = button.closest(".pb-item");
+            const itemId = row?.dataset.itemId;
+            if (!itemId) return;
+
+            const action = button.dataset.action;
+            if (action === "inc") updateQuantity(itemId, 1);
+            if (action === "dec") updateQuantity(itemId, -1);
+        });
+
+        categoryContainer.addEventListener("input", (event) => {
+            const input = event.target.closest('[data-role="price-input"]');
+            if (!input) return;
+
+            const row = input.closest(".pb-item");
+            const itemId = row?.dataset.itemId;
+            if (!itemId) return;
+
+            if (input.value === "") return;
+            setPrice(itemId, input.value);
+        });
+
+        ui.customProductForm?.addEventListener("submit", (event) => {
+            event.preventDefault();
+            addCustomProduct();
+        });
+
+        ui.customProductQtyDec?.addEventListener("click", () => {
+            updateCustomQty(-1);
+        });
+
+        ui.customProductQtyInc?.addEventListener("click", () => {
+            updateCustomQty(1);
+        });
+
+        ui.collapseAllBtn?.addEventListener("click", () => {
+            categoryContainer.querySelectorAll(".pb-category").forEach((details) => {
+                details.open = false;
+            });
+        });
+
+        ui.expandAllBtn?.addEventListener("click", () => {
+            categoryContainer.querySelectorAll(".pb-category").forEach((details) => {
+                details.open = true;
+            });
+        });
+
+        ui.priceModeBtn?.addEventListener("click", () => {
+            state.priceMode = !state.priceMode;
+            render();
+        });
+
+        ui.resetPricesBtn?.addEventListener("click", resetPrices);
+
+        [ui.clearBottomBtn, ui.clearCornerBtn, ui.clearMobileBtn].forEach((btn) => {
+            btn?.addEventListener("click", clearAllSelection);
+        });
+
+        [ui.sendBottomBtn, ui.sendCornerBtn, ui.sendMobileBtn, ui.sendStickyBtn].forEach((btn) => {
+            btn?.addEventListener("click", openWhatsApp);
+        });
+
+        [ui.copyBottomBtn, ui.copyCornerBtn, ui.copyMobileBtn].forEach((btn) => {
+            btn?.addEventListener("click", copySummary);
+        });
+
+        ui.floatingCartBtn?.addEventListener("click", () => {
+            const isOpen = ui.mobileCartSheet?.classList.contains("is-open");
+            setSheetOpen(!isOpen);
+        });
+
+        ui.closeMobileSheetBtn?.addEventListener("click", () => {
+            setSheetOpen(false);
+        });
+
+        ui.sheetBackdrop?.addEventListener("click", () => {
+            setSheetOpen(false);
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") setSheetOpen(false);
+        });
+    }
+})();
