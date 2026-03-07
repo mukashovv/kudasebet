@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Куда Подсказки: интерактивные факты о Куда Себет — забота, индивидуальные корзины, приложение и Кыргыз Box.">
+    <meta name="theme-color" content="#ff6900">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Куда Себет">
+    <title>Куда Подсказки | Куда Себет</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="manifest" href="./site.webmanifest">
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/app-icon-192.png">
+    <link rel="icon" href="https://framerusercontent.com/images/qPEgZC7jwWSxqEYT17wbDPXbAs.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon.png">
+    <style>
+        :root {
+            --bg: #fff;
+            --ink: #141414;
+            --muted: #59606b;
+            --stroke: #ece3da;
+            --accent: #ff6900;
+            --accent-dark: #b94b00;
+            --font: "Inter", "Helvetica Neue", Arial, sans-serif;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html,
+        body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        body {
+            font-family: var(--font);
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 0% -8%, rgba(255, 180, 114, 0.2) 0%, rgba(255, 180, 114, 0) 34%),
+                radial-gradient(circle at 100% 0%, rgba(255, 230, 206, 0.25) 0%, rgba(255, 230, 206, 0) 33%),
+                var(--bg);
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .container {
+            width: min(960px, 92vw);
+            margin: 0 auto;
+        }
+        .topbar {
+            border-bottom: 1px solid var(--stroke);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+        .topbar .container {
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+        .brand__mark {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #ff6900 url("https://framerusercontent.com/images/qPEgZC7jwWSxqEYT17wbDPXbAs.svg") center/70% no-repeat;
+            box-shadow: 0 6px 14px rgba(255, 105, 0, 0.22);
+            flex: 0 0 auto;
+        }
+        .brand__name {
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+            text-transform: uppercase;
+            line-height: 1;
+            white-space: nowrap;
+        }
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--stroke);
+            border-radius: 999px;
+            background: #fff;
+            color: #1d1d1d;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 9px 14px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            white-space: nowrap;
+        }
+        .button:hover,
+        .button:focus-visible {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+        }
+        .button--accent {
+            background: linear-gradient(135deg, #ff8d34 0%, #ff6900 100%);
+            border-color: #df5d00;
+            color: #fff;
+        }
+        .main {
+            padding: 24px 0 40px;
+        }
+        .facts {
+            display: grid;
+            gap: 8px;
+        }
+        .fact {
+            border: 1px solid var(--stroke);
+            border-radius: 16px;
+            background: #fff;
+            overflow: hidden;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .fact:hover,
+        .fact:focus-within {
+            border-color: #e7d1bb;
+            box-shadow: 0 10px 20px rgba(25, 13, 4, 0.06);
+        }
+        .fact summary {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 40px 1fr 24px;
+            grid-template-areas:
+                "cover cover cover"
+                "num title icon";
+            align-items: center;
+            column-gap: 10px;
+            row-gap: 10px;
+            padding: 10px 14px 12px;
+            cursor: pointer;
+        }
+        .fact summary::-webkit-details-marker {
+            display: none;
+        }
+        .fact__cover {
+            grid-area: cover;
+            height: 78px;
+            border-radius: 12px;
+            border: 1px solid #f0e4d8;
+            background: #f7efe6 center/cover no-repeat;
+        }
+        .fact__cover--care {
+            background-image:
+                linear-gradient(145deg, rgba(73, 42, 20, 0.2), rgba(73, 42, 20, 0.2)),
+                url("assets/img/stories/story-about.webp");
+            background-position: center 42%;
+        }
+        .fact__cover--app {
+            background-image:
+                linear-gradient(145deg, rgba(85, 43, 25, 0.18), rgba(85, 43, 25, 0.18)),
+                url("assets/img/stories/story-app-instruction.webp");
+            background-position: 74% 34%;
+            background-size: 118%;
+        }
+        .fact__cover--custom {
+            background-image:
+                linear-gradient(145deg, rgba(62, 34, 21, 0.2), rgba(62, 34, 21, 0.2)),
+                url("assets/img/stories/story-combo.webp");
+            background-position: center 48%;
+        }
+        .fact__num {
+            grid-area: num;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #ff9f54, #ff6900);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            display: grid;
+            place-items: center;
+        }
+        .fact__title {
+            grid-area: title;
+            font-size: clamp(18px, 2.6vw, 25px);
+            line-height: 1.2;
+            color: #191919;
+            font-weight: 700;
+        }
+        .fact__icon {
+            grid-area: icon;
+            width: 18px;
+            height: 18px;
+            border-right: 2px solid #c76517;
+            border-bottom: 2px solid #c76517;
+            transform: rotate(45deg) translateY(-2px);
+            transition: transform 0.2s ease;
+            justify-self: center;
+        }
+        .fact[open] .fact__icon {
+            transform: rotate(-135deg) translateY(2px);
+        }
+        .fact__content {
+            padding: 0 14px 13px 14px;
+            color: #4e5661;
+            font-size: 15px;
+            line-height: 1.55;
+        }
+        .fact__content ul {
+            margin-top: 8px;
+            padding-left: 18px;
+            display: grid;
+            gap: 4px;
+        }
+        .actions {
+            margin-top: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: flex-start;
+        }
+        .button--footer {
+            border-radius: 12px;
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+        @media (max-width: 700px) {
+            .topbar .container {
+                min-height: 62px;
+            }
+            .brand__mark {
+                width: 30px;
+                height: 30px;
+                border-radius: 8px;
+            }
+            .brand__name {
+                font-size: 18px;
+            }
+            .button {
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+            .main {
+                padding: 18px 0 30px;
+            }
+            .fact summary {
+                grid-template-columns: 36px 1fr 20px;
+                grid-template-areas:
+                    "cover cover cover"
+                    "num title icon";
+                row-gap: 8px;
+                padding: 10px 12px 11px;
+            }
+            .fact__cover {
+                height: 62px;
+            }
+            .fact__num {
+                width: 28px;
+                height: 28px;
+                font-size: 11px;
+            }
+            .fact__content {
+                padding: 0 12px 12px 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="container">
+            <a class="brand" href="./index.html" aria-label="На главную Куда Себет">
+                <span class="brand__mark" aria-hidden="true"></span>
+                <span class="brand__name">Куда Себет</span>
+            </a>
+            <a class="button" href="./index.html#section-popular">Назад к каталогу</a>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <section class="facts" aria-label="Интересные факты о Куда Себет">
+                <details class="fact" open>
+                    <summary>
+                        <span class="fact__cover fact__cover--care" aria-hidden="true"></span>
+                        <span class="fact__num">01</span>
+                        <span class="fact__title">Забота на каждом этапе заказа</span>
+                        <span class="fact__icon" aria-hidden="true"></span>
+                    </summary>
+                    <div class="fact__content">
+                        Мы сопровождаем заказ от первого сообщения до вручения: помогаем выбрать, уточняем детали и подтверждаем состав.
+                    </div>
+                </details>
+
+                <details class="fact">
+                    <summary>
+                        <span class="fact__cover fact__cover--app" aria-hidden="true"></span>
+                        <span class="fact__num">02</span>
+                        <span class="fact__title">Сайт можно использовать как приложение</span>
+                        <span class="fact__icon" aria-hidden="true"></span>
+                    </summary>
+                    <div class="fact__content">
+                        Добавьте Куда Себет на главный экран телефона и используйте как приложение, чтобы быстро заказывать Себеты на все случаи жизни: дни рождения, семейные праздники, деловые поздравления и визиты к близким.
+                        <ul>
+                            <li>iPhone: Safari → «Поделиться» → «На экран Домой».</li>
+                            <li>Android: Chrome → меню → «Добавить на главный экран».</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="fact">
+                    <summary>
+                        <span class="fact__cover fact__cover--custom" aria-hidden="true"></span>
+                        <span class="fact__num">03</span>
+                        <span class="fact__title">Өзүң чогулт и индивидуальная сборка под ваш вкус</span>
+                        <span class="fact__icon" aria-hidden="true"></span>
+                    </summary>
+                    <div class="fact__content">
+                        Можно воспользоваться форматом «Өзүң чогулт» и собрать корзину самостоятельно, либо написать нам, и мы поможем собрать индивидуальный Себет под ваш бюджет, повод и пожелания.
+                    </div>
+                </details>
+
+            </section>
+
+            <div class="actions">
+                <a class="button button--accent button--footer" href="./index.html#section-sebetter">Выбрать свою корзину</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

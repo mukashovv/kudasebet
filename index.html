@@ -698,18 +698,20 @@
         }
         .popular-grid {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 18px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
         }
         .popular-card {
-            border: 1px solid #efebe7;
-            border-radius: 18px;
-            background: #fff;
-            padding: 18px 18px 56px;
-            min-height: 126px;
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
+            border: 1px solid #ece6df;
+            border-radius: 22px;
+            background: #f5f5f7;
+            padding: 10px 12px;
+            min-height: 96px;
+            display: grid;
+            grid-template-columns: 58px minmax(0, 1fr) auto;
+            grid-template-areas: "thumb meta add";
+            align-items: center;
+            gap: 10px;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             outline: none;
@@ -721,45 +723,161 @@
             box-shadow: 0 10px 26px rgba(13, 13, 13, 0.08);
         }
         .popular-card__thumb {
-            width: 84px;
-            height: 84px;
-            flex: 0 0 84px;
+            width: 58px;
+            height: 58px;
+            grid-area: thumb;
             border-radius: 50%;
-            background: #f5efe8 center/contain no-repeat;
+            background: #fff center/86% no-repeat;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+        }
+        .popular-card__meta {
+            grid-area: meta;
+            min-width: 0;
         }
         .popular-card__meta h3 {
-            font-size: 22px;
+            font-size: 17px;
             font-weight: 600;
-            line-height: 1.05;
-            margin-bottom: 6px;
+            line-height: 1.08;
+            margin-bottom: 4px;
             color: #181818;
         }
         .popular-card__meta p {
-            font-size: 15px;
+            font-size: 12px;
             color: #5f6470;
-            line-height: 1.05;
+            line-height: 1.1;
             font-weight: 400;
         }
         .popular-card__add {
-            position: absolute;
-            right: 14px;
-            bottom: 12px;
-            border: 1px solid #eadfd3;
-            background: #fff;
-            color: #d25a00;
+            grid-area: add;
+            border: 1px solid #d96a12;
+            background: linear-gradient(135deg, #ff8a2a 0%, #ff6d00 100%);
+            color: #fff;
             border-radius: 999px;
-            padding: 8px 14px;
-            font-size: 13px;
-            font-weight: 600;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 700;
             font-family: inherit;
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+            white-space: nowrap;
+            align-self: center;
+            box-shadow: 0 6px 14px rgba(255, 109, 0, 0.32);
         }
         .popular-card__add:hover,
         .popular-card__add:focus-visible {
             transform: translateY(-1px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
-            background: #fff8f2;
+            box-shadow: 0 10px 18px rgba(255, 109, 0, 0.38);
+            filter: saturate(1.08) brightness(1.02);
+        }
+        .popular-card--note {
+            border-color: #ffd5b5;
+            background:
+                radial-gradient(circle at 100% 0%, rgba(255, 139, 42, 0.26) 0%, rgba(255, 139, 42, 0) 48%),
+                linear-gradient(138deg, #fff7ef 0%, #fff 58%, #fff2e5 100%);
+            padding: 10px 12px;
+            min-height: 96px;
+            cursor: pointer;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 7px;
+            align-content: start;
+            position: relative;
+            overflow: hidden;
+        }
+        .popular-card--note::before {
+            content: "";
+            position: absolute;
+            right: -20px;
+            bottom: -24px;
+            width: 86px;
+            height: 86px;
+            border-radius: 24px;
+            background: linear-gradient(145deg, rgba(255, 166, 94, 0.38), rgba(255, 105, 0, 0.08));
+            border: 1px solid rgba(255, 120, 24, 0.24);
+            transform: rotate(18deg);
+            pointer-events: none;
+        }
+        .popular-card--note::after {
+            content: "";
+            position: absolute;
+            top: -26px;
+            left: -34px;
+            width: 86px;
+            height: 86px;
+            border-radius: 50%;
+            background: rgba(255, 145, 50, 0.12);
+            pointer-events: none;
+        }
+        .popular-card--note:hover,
+        .popular-card--note:focus-visible {
+            transform: none;
+            box-shadow: 0 10px 24px rgba(210, 90, 0, 0.08);
+        }
+        .popular-note__head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            z-index: 1;
+        }
+        .popular-note__logo {
+            width: 18px;
+            height: 18px;
+            border-radius: 6px;
+            background: #ff6900 url("https://framerusercontent.com/images/qPEgZC7jwWSxqEYT17wbDPXbAs.svg") center/70% no-repeat;
+            box-shadow: 0 5px 12px rgba(255, 105, 0, 0.34);
+            flex: 0 0 auto;
+        }
+        .popular-note__title {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.2;
+            font-weight: 700;
+            color: #b85207;
+            text-decoration-line: underline;
+            text-decoration-style: wavy;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 3px;
+            text-decoration-color: rgba(184, 82, 7, 0.45);
+            transition: color 0.2s ease, text-decoration-color 0.2s ease;
+        }
+        .popular-note__list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            gap: 5px;
+            position: relative;
+            z-index: 1;
+        }
+        .popular-note__list li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 4px 7px;
+            border: 1px solid #f4deca;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 11px;
+            line-height: 1.15;
+            color: #4a3d33;
+        }
+        .popular-note__list span {
+            font-weight: 600;
+            color: #6b4a2d;
+            white-space: nowrap;
+        }
+        .popular-note__list strong {
+            color: #b64b00;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .popular-card--note:hover .popular-note__title,
+        .popular-card--note:focus-visible .popular-note__title {
+            color: #933600;
+            text-decoration-color: #ff6d00;
         }
         .story-modal {
             position: fixed;
@@ -1419,6 +1537,11 @@
         .footer-socials {
             justify-self: end;
         }
+        @media (max-width: 1200px) {
+            .popular-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
         @media (max-width: 980px) {
             .topbar-main {
                 flex-direction: column;
@@ -1524,11 +1647,32 @@
             .popular-grid {
                 grid-template-columns: 1fr;
             }
+            .popular-card {
+                grid-template-columns: 54px minmax(0, 1fr);
+                grid-template-areas:
+                    "thumb meta"
+                    "add add";
+                row-gap: 8px;
+            }
+            .popular-card__thumb {
+                width: 54px;
+                height: 54px;
+            }
+            .popular-card__add {
+                justify-self: start;
+            }
+            .popular-card--note {
+                grid-template-columns: 1fr;
+                grid-template-areas: none;
+            }
             .popular-card__meta h3 {
-                font-size: 18px;
+                font-size: 16px;
             }
             .popular-card__meta p {
-                font-size: 14px;
+                font-size: 12px;
+            }
+            .popular-note__list li {
+                font-size: 10px;
             }
             .product-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1707,6 +1851,17 @@
                             <p>от 13 790 сом</p>
                         </div>
                         <button class="popular-card__add" type="button">Добавить</button>
+                    </article>
+                    <article class="popular-card popular-card--note" data-href="kuda-podskazki.html" tabindex="0" role="link" aria-label="Открыть страницу Куда Подсказки">
+                        <div class="popular-note__head">
+                            <span class="popular-note__logo" aria-hidden="true"></span>
+                            <p class="popular-note__title">Куда Подсказки</p>
+                        </div>
+                        <ul class="popular-note__list">
+                            <li><span>S корзина</span><strong>от 7 позиций</strong></li>
+                            <li><span>M корзина</span><strong>от 9 позиций</strong></li>
+                            <li><span>VIP корзина</span><strong>от 12 позиций</strong></li>
+                        </ul>
                     </article>
                 </div>
             </div>
@@ -2715,6 +2870,14 @@
             window.location.href = `product.html?item=${encodeURIComponent(slug)}`;
         };
 
+        const openPopularLink = (card) => {
+            if (!card || !card.dataset) return false;
+            const href = card.dataset.href || "";
+            if (!href) return false;
+            window.location.href = href;
+            return true;
+        };
+
         productGrids.forEach((grid) => {
             grid.addEventListener("click", (event) => {
                 const card = event.target.closest(".product-card");
@@ -2739,12 +2902,12 @@
             popularGrid.addEventListener("click", (event) => {
                 const card = event.target.closest(".popular-card");
                 if (!card) return;
-                if (!ACTIVE_PRODUCT_NAMES.has(card.dataset.name || "")) return;
+                const name = card.dataset.name || "";
+                const isProductCard = ACTIVE_PRODUCT_NAMES.has(name);
                 const addBtn = event.target.closest(".popular-card__add");
                 if (addBtn) {
-                    const name = card.dataset.name || "";
                     const price = Number(card.dataset.price || 0);
-                    if (!name || price <= 0) return;
+                    if (!isProductCard || !name || price <= 0) return;
                     triggerCartBump();
                     const existing = cart.get(name) || { price, qty: 0, details: "" };
                     cart.set(name, { price, qty: existing.qty + 1, details: existing.details || "" });
@@ -2752,6 +2915,8 @@
                     saveCart();
                     return;
                 }
+                if (openPopularLink(card)) return;
+                if (!isProductCard) return;
                 openProductBySlug(card.dataset.slug);
             });
             popularGrid.addEventListener("keydown", (event) => {
@@ -2759,8 +2924,9 @@
                 if (event.target.closest(".popular-card__add")) return;
                 const card = event.target.closest(".popular-card");
                 if (!card) return;
-                if (!ACTIVE_PRODUCT_NAMES.has(card.dataset.name || "")) return;
                 event.preventDefault();
+                if (openPopularLink(card)) return;
+                if (!ACTIVE_PRODUCT_NAMES.has(card.dataset.name || "")) return;
                 openProductBySlug(card.dataset.slug);
             });
         }
