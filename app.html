@@ -3,129 +3,169 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#e84f2f">
+  <meta name="theme-color" content="#f2f2f7">
   <meta name="description" content="Подарочные корзины Куда Себет. Выберите готовый набор или соберите свой из сладостей, фруктов и напитков.">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Куда Себет">
+  <meta name="format-detection" content="telephone=no">
   <title>Куда Себет — приложение</title>
   <link rel="manifest" href="./site.webmanifest">
   <link rel="icon" href="./assets/icons/app-icon-192.png" sizes="192x192">
   <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png">
-  <link rel="stylesheet" href="./assets/css/app.css">
-  <link rel="stylesheet" href="./assets/css/app-controls.css">
+  <link rel="stylesheet" href="./assets/css/webapp.css">
+  <script src="./build/js/google-sheet-catalog.js?v=2"></script>
 </head>
 <body>
-  <div class="app-shell">
-    <header class="app-header">
-      <div class="app-header__top">
-        <a class="brand" href="#home" aria-label="Куда Себет — главная">
-          <span class="brand__icon"><img src="./assets/icons/app-icon.svg" alt=""></span>
-          <span class="brand__text"><small>ПОДАРКИ СО ВКУСОМ</small><strong>Куда себет</strong></span>
-        </a>
-        <button class="icon-button cart-shortcut" id="cartShortcut" type="button" aria-label="Открыть корзину">
-          <span class="icon-slot" data-icon="bag"></span><span class="cart-badge" id="headerCartCount">0</span>
-        </button>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10.5 9-7.5 9 7.5V20a1 1 0 0 1-1 1h-5v-6.5H9V21H4a1 1 0 0 1-1-1z"/></symbol>
+      <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3.5 14 9l5.5 2-5.5 2-2 5.5-2-5.5L4.5 11 10 9z"/><path d="M19 3.5v3M17.5 5h3"/></symbol>
+      <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l1 12.5H4z"/><path d="M9 9.5V7a3 3 0 0 1 6 0v2.5"/></symbol>
+      <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.8"/><path d="M4.5 20.5c.8-3.8 3.7-5.6 7.5-5.6s6.7 1.8 7.5 5.6"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s6.5-5.7 6.5-11A6.5 6.5 0 0 0 5.5 10C5.5 15.3 12 21 12 21z"/><circle cx="12" cy="10" r="2.3"/></symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l1.6 4.2-2.2 1.5a11 11 0 0 0 5.9 5.9l1.5-2.2L20 15v4a1 1 0 0 1-1 1A15 15 0 0 1 4 5a1 1 0 0 1 1-1z"/></symbol>
+      <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+      <symbol id="i-camera" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.6" cy="7.4" r=".6"/></symbol>
+      <symbol id="i-plus-sq" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8.5v7M8.5 12h7"/></symbol>
+      <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3.5M8 7l4-4 4 4"/><path d="M7 10.5H6a1.5 1.5 0 0 0-1.5 1.5v7A1.5 1.5 0 0 0 6 20.5h12a1.5 1.5 0 0 0 1.5-1.5v-7a1.5 1.5 0 0 0-1.5-1.5h-1"/></symbol>
+      <symbol id="i-truck" viewBox="0 0 24 24"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></symbol>
+      <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5.5c0 4.3 3 7.7 7 9.5 4-1.8 7-5.2 7-9.5V6z"/><path d="m9 12 2.2 2.2L15.5 10"/></symbol>
+      <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3.5h8l4 4V20.5H6z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h6"/></symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.5 3.5 5.5 3.5 8.5s-1 6-3.5 8.5c-2.5-2.5-3.5-5.5-3.5-8.5S9.5 6 12 3.5z"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="app" id="app">
+    <!-- ГЛАВНАЯ -->
+    <section class="page" id="page-home" data-page="home" aria-label="Главная">
+      <div class="topbar">
+        <button class="loc" type="button" id="locBtn"><svg class="i"><use href="#i-pin"/></svg>Бишкек <small>доставка</small></button>
+        <button class="round-btn" type="button" data-go="cart" aria-label="Открыть корзину"><svg class="i"><use href="#i-bag"/></svg><span class="badge" data-count hidden>0</span></button>
       </div>
-      <button class="delivery-pill" id="deliveryInfo" type="button">
-        <span class="delivery-pill__pin">⌖</span>
-        <span><small>ДОСТАВКА В</small><strong>Бишкек</strong></span>
-        <span class="delivery-pill__arrow">⌄</span>
+      <h1 class="large-title">Дарите вкусное</h1>
+      <p class="subtitle">Подарочные корзины с фруктами, сладостями и напитками</p>
+
+      <div class="hero">
+        <div>
+          <span class="hero__tag">Ваш идеальный подарок</span>
+          <h1>Соберите<br>свой себет</h1>
+          <button class="btn" type="button" data-go="builder">Начать сборку</button>
+        </div>
+        <img src="./assets/img/cards/kuda_sebet_s-removebg-preview_square.png" alt="Подарочная корзина Куда Себет">
+      </div>
+
+      <div class="install" id="installBanner" hidden>
+        <img class="install__icon" src="./assets/icons/app-icon.svg" alt="">
+        <div class="install__text"><strong>Добавьте на экран «Домой»</strong><span>Откроется как обычное приложение</span></div>
+        <button class="btn" type="button" data-install>Добавить</button>
+        <button class="install__x" type="button" id="installClose" aria-label="Скрыть">×</button>
+      </div>
+
+      <h2 class="section-title">Что положим?</h2>
+      <div class="tiles">
+        <button class="tile" type="button" data-cat="Сладости"><span class="tile__emoji">🍬</span><strong>Сладости</strong><small>маленькая радость</small></button>
+        <button class="tile" type="button" data-cat="Фрукты"><span class="tile__emoji">🍊</span><strong>Фрукты</strong><small>сочные акценты</small></button>
+        <button class="tile" type="button" data-cat="Напитки"><span class="tile__emoji">🧃</span><strong>Напитки</strong><small>добавить к набору</small></button>
+        <button class="tile" type="button" id="toProducts"><span class="tile__emoji">🎁</span><strong>Корзины</strong><small>готовые подарки</small></button>
+      </div>
+
+      <div class="section-head" id="products"><h2 class="section-title">Популярные корзины</h2></div>
+      <label class="search"><svg class="i"><use href="#i-search"/></svg><input id="search" type="search" placeholder="Найти корзину" autocomplete="off" enterkeyhint="search"></label>
+      <div class="chips" id="filters" role="group" aria-label="Категории корзин" style="margin-top:8px"></div>
+      <div class="grid" id="grid"></div>
+      <div class="empty" id="noResults" hidden>Такой корзины пока нет. Попробуйте другое название.</div>
+
+      <button class="care" type="button" data-go="profile">
+        <span class="care__mark">✳</span>
+        <span><strong>Упакуем заботливо</strong><span class="t">Доставим по Бишкеку с 10:00 до 20:00</span></span>
+        <span class="chev">›</span>
       </button>
-    </header>
+    </section>
 
-    <main class="app-main">
-      <section class="page is-active" id="homePage" data-page="home" aria-label="Главная">
-        <div class="welcome-line">
-          <div><p class="eyebrow">С КАЖДЫМ ПОВОДОМ — С ТЕПЛОМ</p><h1>Дарите<br><span>вкусное.</span></h1></div>
-          <span class="welcome-spark" aria-hidden="true">✳</span>
-        </div>
+    <!-- КОНСТРУКТОР -->
+    <section class="page" id="page-builder" data-page="builder" aria-label="Конструктор" hidden>
+      <div class="topbar"><span></span><button class="round-btn" type="button" data-go="cart" aria-label="Открыть корзину"><svg class="i"><use href="#i-bag"/></svg><span class="badge" data-count hidden>0</span></button></div>
+      <h1 class="large-title">Соберите свой себет</h1>
+      <p class="subtitle">Выберите размер и наполните корзину тем, что любят.</p>
+      <div class="sizes" id="sizes" role="group" aria-label="Размер корзины"></div>
+      <div class="progress">
+        <div class="progress__top"><span id="bCount">0 позиций</span><span id="bGoal"></span></div>
+        <div class="track"><i id="bBar"></i></div>
+      </div>
+      <h2 class="section-title">Добавьте любимое</h2>
+      <div class="chips" id="bChips" role="tablist" aria-label="Категории товаров"></div>
+      <div class="list" id="bList"></div>
+      <div class="dock">
+        <div class="dock__sum">Подарок уже на<b id="bTotal">0 сом</b></div>
+        <button class="btn" type="button" id="bAdd" disabled>В корзину</button>
+      </div>
+    </section>
 
-        <button class="hero-card" id="heroBuilderButton" type="button">
-          <span class="hero-card__copy"><span class="hero-card__tag">ВАШ ИДЕАЛЬНЫЙ ПОДАРОК</span><strong>Соберите<br>свой себет</strong><span class="hero-card__link">Начать сборку <b>↗</b></span></span>
-          <span class="hero-card__image"><img src="./assets/img/cards/kuda_sebet_s-removebg-preview_square.png" alt="Подарочная корзина Куда Себет"></span>
-          <span class="hero-card__decor hero-card__decor--one" aria-hidden="true">✦</span>
-          <span class="hero-card__decor hero-card__decor--two" aria-hidden="true">✳</span>
-        </button>
+    <!-- КОРЗИНА -->
+    <section class="page" id="page-cart" data-page="cart" aria-label="Корзина" hidden>
+      <div class="topbar"><span></span><span></span></div>
+      <h1 class="large-title">Корзина</h1>
+      <p class="subtitle">Пусть хороший повод случится поскорее.</p>
+      <div id="cartBody"></div>
+    </section>
 
-        <section class="home-section" aria-labelledby="categoriesTitle">
-          <div class="section-heading"><div><p class="eyebrow">НАЙДИТЕ СВОЁ</p><h2 id="categoriesTitle">Что положим?</h2></div><span class="heading-note">4 раздела</span></div>
-          <div class="category-rail" id="homeCategories">
-            <button class="category-tile category-tile--berry" type="button" data-builder-category="candies"><span>🍬</span><strong>Сладости</strong><small>маленькая радость</small></button>
-            <button class="category-tile category-tile--green" type="button" data-builder-category="fruits"><span>🍊</span><strong>Фрукты</strong><small>сочные акценты</small></button>
-            <button class="category-tile category-tile--blue" type="button" data-builder-category="drinks"><span>🧃</span><strong>Напитки</strong><small>добавить к набору</small></button>
-            <button class="category-tile category-tile--sand" type="button" data-page-link="home-products"><span>🎁</span><strong>Корзины</strong><small>готовые подарки</small></button>
-          </div>
-        </section>
+    <!-- ПРОФИЛЬ -->
+    <section class="page" id="page-profile" data-page="profile" aria-label="Профиль" hidden>
+      <div class="topbar"><span></span><span></span></div>
+      <h1 class="large-title">Профиль</h1>
+      <div class="profile-card">
+        <span class="profile-card__tag">Куда Себет · Бишкек</span>
+        <h2>Подарки, которые говорят</h2>
+        <p>Наполненные сладостями корзины к вашим важным моментам.</p>
+        <a class="btn" href="https://instagram.com/kudasebet" target="_blank" rel="noopener">Наш Instagram</a>
+      </div>
 
-        <section class="home-section" id="home-products" aria-labelledby="productsTitle">
-          <div class="section-heading section-heading--products"><div><p class="eyebrow">СОБРАЛИ С ЛЮБОВЬЮ</p><h2 id="productsTitle">Популярные корзины</h2></div><button class="text-button" id="seeAllProducts" type="button">Все <span>→</span></button></div>
-          <label class="search-field"><span class="icon-slot" data-icon="search"></span><input id="productSearch" type="search" placeholder="Найти корзину" autocomplete="off"><span class="search-hint">⌕</span></label>
-          <div class="filter-rail" id="productFilters" aria-label="Категории корзин">
-            <button class="filter-chip is-selected" type="button" data-filter="all">Все</button>
-            <button class="filter-chip" type="button" data-filter="classic">Классика</button>
-            <button class="filter-chip" type="button" data-filter="celebration">Комбо</button>
-          </div>
-          <div class="product-grid" id="productGrid"></div>
-          <div class="empty-search" id="emptySearch" hidden>Такой корзины пока нет. Попробуйте другое название.</div>
-        </section>
+      <div class="group__title">Приложение</div>
+      <div class="group">
+        <button class="lrow" type="button" data-install><span class="lrow__icon bg-brand"><svg class="i"><use href="#i-plus-sq"/></svg></span><span class="lrow__text"><strong>На экран «Домой»</strong><small id="installHint">Установить как приложение</small></span><span class="chev">›</span></button>
+        <a class="lrow" href="./index.html"><span class="lrow__icon bg-blue"><svg class="i"><use href="#i-globe"/></svg></span><span class="lrow__text"><strong>Открыть сайт</strong><small>Полная версия каталога</small></span><span class="chev">›</span></a>
+      </div>
 
-        <button class="care-banner" id="careBanner" type="button" data-page-link="profile">
-          <span class="care-banner__mark">✳</span><span><strong>Упакуем заботливо</strong><small>Доставим по Бишкеку с 10:00 до 20:00</small></span><span class="care-banner__arrow">↗</span>
-        </button>
-      </section>
+      <div class="group__title">Связь</div>
+      <div class="group">
+        <a class="lrow" href="tel:+996509130090"><span class="lrow__icon bg-green"><svg class="i"><use href="#i-phone"/></svg></span><span class="lrow__text"><small>Мы на связи</small><strong>+996 509 130 090</strong></span><span class="chev">›</span></a>
+        <a class="lrow" href="https://wa.me/996509130090" target="_blank" rel="noopener"><span class="lrow__icon bg-green"><svg class="i"><use href="#i-chat"/></svg></span><span class="lrow__text"><strong>Написать в WhatsApp</strong></span><span class="chev">›</span></a>
+        <a class="lrow" href="https://instagram.com/kudasebet" target="_blank" rel="noopener"><span class="lrow__icon bg-pink"><svg class="i"><use href="#i-camera"/></svg></span><span class="lrow__text"><strong>Instagram</strong><small>@kudasebet</small></span><span class="chev">›</span></a>
+      </div>
 
-      <section class="page" id="builderPage" data-page="builder" aria-label="Конструктор корзины" hidden>
-        <div class="page-heading"><button class="back-button" type="button" data-go="home"><span>←</span> Главная</button><span class="page-kicker">ӨЗҮҢ ЧОГУЛТ</span><h1>Соберите<br>свой <em>себет</em></h1><p>Выберите основу и наполните её тем, что любят.</p></div>
-        <div class="builder-feature"><div class="builder-feature__image"><img src="./assets/img/cards/kuda_sebet_s-removebg-preview_square.png" alt="Подарочная корзина"></div><div class="builder-feature__copy"><span class="step-label"><b>01</b> ВЫБЕРИТЕ РАЗМЕР</span><strong>Начинаем<br>с корзины</strong><small>Сладкое и фрукты соберём следующим шагом.</small></div></div>
-        <div class="size-selector" id="sizeSelector" role="group" aria-label="Размер корзины"></div>
-        <div class="builder-progress"><div class="builder-progress__top"><span id="builderItemCount">0 позиций</span><span id="builderGoalText">Ваша корзина только начинается</span></div><div class="progress-track"><span id="builderProgress"></span></div></div>
-        <section class="builder-items-section">
-          <div class="section-heading"><div><p class="eyebrow">ШАГ 02 · НАПОЛНЕНИЕ</p><h2>Добавьте любимое</h2></div><span class="builder-flower">✳</span></div>
-          <div class="builder-category-rail" id="builderCategories" role="tablist" aria-label="Категории товаров"></div>
-          <div class="builder-list" id="builderList"></div>
-        </section>
-        <div class="builder-dock" id="builderDock">
-          <div class="builder-dock__meta"><span>Подарок уже на <b id="builderTotal">0 сом</b></span><small id="builderDockHint">Корзина и выбранные товары</small></div>
-          <button class="primary-button" id="addCustomBasket" type="button"><span>Добавить в корзину</span><span class="button-arrow">↗</span></button>
-        </div>
-      </section>
+      <div class="group__title">Доставка</div>
+      <div class="group">
+        <div class="lrow"><span class="lrow__icon bg-orange"><svg class="i"><use href="#i-clock"/></svg></span><span class="lrow__text"><small>Время доставки</small><strong>Вт–Вс · 10:00–20:00</strong></span></div>
+        <div class="lrow"><span class="lrow__icon bg-purple"><svg class="i"><use href="#i-pin"/></svg></span><span class="lrow__text"><small>Зона доставки</small><strong>Бишкек и рядом</strong></span></div>
+      </div>
 
-      <section class="page" id="cartPage" data-page="cart" aria-label="Корзина" hidden>
-        <div class="page-heading page-heading--compact"><p class="eyebrow">ВАШИ ВЫБОРЫ</p><h1>Корзина<span class="cart-page-count" id="cartPageCount">0</span></h1><p>Пусть хороший повод случится поскорее.</p></div>
-        <div id="cartContents"></div>
-        <div class="cart-empty" id="cartEmpty"><span>🧺</span><h2>Здесь пока пусто</h2><p>Добавьте готовый себет или соберите свою корзину.</p><button class="primary-button" type="button" data-go="home">Выбрать подарок <span class="button-arrow">↗</span></button></div>
-        <div class="cart-checkout" id="cartCheckout" hidden>
-          <div class="cart-checkout__row"><span>Товаров</span><strong id="cartSubtotal">0 сом</strong></div>
-          <div class="cart-checkout__row cart-checkout__row--total"><span>Итого</span><strong id="cartTotal">0 сом</strong></div>
-          <p class="cart-checkout__note"><span>✳</span> Менеджер подтвердит наличие и адрес доставки в WhatsApp.</p>
-          <button class="primary-button primary-button--wide" id="checkoutButton" type="button">Оформить в WhatsApp <span class="button-arrow">↗</span></button>
-        </div>
-        <button class="secondary-button cart-continue" type="button" data-go="home">Продолжить покупки</button>
-      </section>
+      <div class="group__title">Информация</div>
+      <div class="group">
+        <button class="lrow" type="button" data-info="delivery"><span class="lrow__icon bg-orange"><svg class="i"><use href="#i-truck"/></svg></span><span class="lrow__text"><strong>Способы доставки</strong></span><span class="chev">›</span></button>
+        <button class="lrow" type="button" data-info="payment"><span class="lrow__icon bg-blue"><svg class="i"><use href="#i-card"/></svg></span><span class="lrow__text"><strong>Способы оплаты</strong></span><span class="chev">›</span></button>
+        <button class="lrow" type="button" data-info="safety"><span class="lrow__icon bg-green"><svg class="i"><use href="#i-shield"/></svg></span><span class="lrow__text"><strong>Безопасность заказа</strong></span><span class="chev">›</span></button>
+        <button class="lrow" type="button" data-info="policy"><span class="lrow__icon bg-gray"><svg class="i"><use href="#i-doc"/></svg></span><span class="lrow__text"><strong>Политика конфиденциальности</strong></span><span class="chev">›</span></button>
+      </div>
+      <p class="footnote">Куда Себет · подарки со вкусом</p>
+    </section>
 
-      <section class="page" id="profilePage" data-page="profile" aria-label="Профиль и информация" hidden>
-        <div class="page-heading page-heading--compact"><p class="eyebrow">МЫ РЯДОМ</p><h1>Забота<br>в каждой <em>детали</em></h1><p>Красиво соберём, вовремя доставим, поможем с выбором.</p></div>
-        <div class="profile-card profile-card--orange"><div class="profile-card__symbol">✳</div><span class="profile-card__label">КУДА СЕБЕТ · БИШКЕК</span><h2>Подарки,<br>которые говорят</h2><p>Наполненные сладостями корзины к вашим важным моментам.</p><a href="https://instagram.com/kudasebet" target="_blank" rel="noopener">Наш Instagram <span>↗</span></a></div>
-        <div class="profile-links">
-          <a href="tel:+996509130090"><span class="profile-link-icon">⌕</span><span><small>МЫ НА СВЯЗИ</small><strong>+996 509 130 090</strong></span><b>↗</b></a>
-          <div class="profile-link-static"><span class="profile-link-icon">◷</span><span><small>ВРЕМЯ ДОСТАВКИ</small><strong>Вт–Вс · 10:00–20:00</strong></span><b>✓</b></div>
-          <div class="profile-link-static"><span class="profile-link-icon">⌖</span><span><small>ЗОНА ДОСТАВКИ</small><strong>Бишкек и рядом</strong></span><b>✓</b></div>
-        </div>
-        <button class="install-card" id="installButton" type="button"><span class="install-card__icon">↓</span><span><strong>На главный экран</strong><small>Установите Куда Себет как приложение</small></span><b>↗</b></button>
-      </section>
-    </main>
-
-    <nav class="bottom-nav" aria-label="Основная навигация">
-      <button class="nav-item is-active" type="button" data-go="home"><span class="nav-icon" data-icon="home"></span><small>Главная</small></button>
-      <button class="nav-item" type="button" data-go="builder"><span class="nav-icon" data-icon="spark"></span><small>Собрать</small></button>
-      <button class="nav-item nav-item--cart" type="button" data-go="cart"><span class="nav-icon" data-icon="bag"></span><span class="nav-item__badge" id="navCartCount" hidden>0</span><small>Корзина</small></button>
-      <button class="nav-item" type="button" data-go="profile"><span class="nav-icon" data-icon="person"></span><small>Профиль</small></button>
+    <nav class="tabbar" aria-label="Основная навигация">
+      <button class="tab is-on" type="button" data-go="home"><svg class="i"><use href="#i-home"/></svg>Главная</button>
+      <button class="tab" type="button" data-go="builder"><svg class="i"><use href="#i-spark"/></svg>Собрать</button>
+      <button class="tab" type="button" data-go="cart"><svg class="i"><use href="#i-bag"/></svg>Корзина<span class="badge" data-count hidden>0</span></button>
+      <button class="tab" type="button" data-go="profile"><svg class="i"><use href="#i-person"/></svg>Профиль</button>
     </nav>
   </div>
 
-  <dialog class="product-dialog" id="productDialog"><button class="dialog-close" id="closeProductDialog" type="button" aria-label="Закрыть">×</button><div id="productDialogBody"></div></dialog>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="./assets/js/app.js" defer></script>
+  <div class="overlay" id="overlay" hidden>
+    <div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
+  </div>
+
+  <script src="./assets/js/webapp.js"></script>
 </body>
 </html>
