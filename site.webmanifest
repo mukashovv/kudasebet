@@ -1,11 +1,11 @@
 {
   "name": "Куда Себет",
   "short_name": "Куда Себет",
-  "start_url": "./index.html",
+  "start_url": "./app.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#ff6900",
+  "theme_color": "#e84f2f",
   "icons": [
     {
       "src": "./assets/icons/app-icon-192.png",

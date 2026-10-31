@@ -1,0 +1,5 @@
+.product-card__visual{width:100%;padding:0;border:0;cursor:pointer}
+.product-card__name{display:block;width:100%;margin:0;padding:0;border:0;background:none;text-align:left;font-size:13px;letter-spacing:-.02em;line-height:1.15;cursor:pointer}
+.product-card__visual.is-photo img{object-fit:cover;mix-blend-mode:normal}
+.cart-line__image img.is-photo{width:100%;height:100%;object-fit:cover;mix-blend-mode:normal}
+.dialog-visual.is-photo img{width:100%;height:100%;object-fit:cover;mix-blend-mode:normal}

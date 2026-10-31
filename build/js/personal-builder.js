@@ -1,7 +1,6 @@
 (async () => {
     const WA_PHONE = "996509130090";
     const SESSION_KEY = "kudasebet-personal-builder-v1";
-    const GOOGLE_SHEET_SHARE_URL = "https://docs.google.com/spreadsheets/d/1_MtkToKftXgZsrl6SAvC5LJBujP4PvGmnq9lVH5MI-g/edit?usp=sharing";
     const CATALOG_XLSX_FILE = "./kuda-sebet-products.xlsx";
     const CATALOG_XLSX_SHEET = "Товары";
 
@@ -268,93 +267,9 @@
             .trim()
             .replace(/\s+/g, "")
             .replace(",", ".");
-        if (!normalized) return 0;
-        return clamp(Number(normalized), 0, 100000);
-    }
-
-    function buildGoogleSheetCsvUrls(shareUrl) {
-        try {
-            const url = new URL(String(shareUrl || ""));
-            const directCsv =
-                (url.searchParams.get("output") || "").toLowerCase() === "csv" ||
-                (url.searchParams.get("format") || "").toLowerCase() === "csv";
-            if (directCsv) return [url.toString()];
-
-            const idMatch = url.pathname.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
-            if (!idMatch || !idMatch[1]) return [];
-
-            const hashParams = new URLSearchParams(String(url.hash || "").replace(/^#/, ""));
-            const gid = url.searchParams.get("gid") || hashParams.get("gid") || "0";
-            const encodedGid = encodeURIComponent(gid);
-            const spreadsheetId = idMatch[1];
-
-            return [
-                `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv&gid=${encodedGid}`,
-                `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv&gid=${encodedGid}`
-            ];
-        } catch (error) {
-            return [];
-        }
-    }
-
-    function parseCsvTable(csvText) {
-        const rows = [];
-        let row = [];
-        let cell = "";
-        let inQuotes = false;
-        const text = String(csvText || "").replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-
-        for (let i = 0; i < text.length; i += 1) {
-            const char = text[i];
-
-            if (inQuotes) {
-                if (char === '"') {
-                    if (text[i + 1] === '"') {
-                        cell += '"';
-                        i += 1;
-                    } else {
-                        inQuotes = false;
-                    }
-                } else {
-                    cell += char;
-                }
-                continue;
-            }
-
-            if (char === '"') {
-                inQuotes = true;
-                continue;
-            }
-
-            if (char === ",") {
-                row.push(cell);
-                cell = "";
-                continue;
-            }
-
-            if (char === "\n") {
-                row.push(cell);
-                rows.push(row);
-                row = [];
-                cell = "";
-                continue;
-            }
-
-            cell += char;
-        }
-
-        row.push(cell);
-        rows.push(row);
-
-        if (rows[0]?.[0]) {
-            rows[0][0] = String(rows[0][0]).replace(/^\uFEFF/, "");
-        }
-
-        while (rows.length > 0 && rows[rows.length - 1].every((value) => String(value || "").trim() === "")) {
-            rows.pop();
-        }
-
-        return rows;
+        if (!normalized) return null;
+        const parsed = Number(normalized);
+        return Number.isFinite(parsed) ? clamp(parsed, 0, 100000) : null;
     }
 
     function buildCatalogFromSheetRows(rows) {
@@ -370,7 +285,7 @@
         };
 
         const categoryCol = pickHeaderIndex(/катег|category/i, 0);
-        const itemCol = pickHeaderIndex(/товар|наимен|item|product/i, 1);
+        const itemCol = pickHeaderIndex(/товар|наимен|себет|корзин|item|product/i, 1);
         const priceCol = pickHeaderIndex(/цен|price|стоим/i, 2);
 
         const categories = [];
@@ -405,10 +320,12 @@
             const itemName = String(row[itemCol] || "").trim();
             if (!categoryName || !itemName) continue;
 
+            const price = parsePrice(row[priceCol]);
+            if (price === null) continue;
+
             const category = ensureCategory(categoryName);
             if (!category) continue;
 
-            const price = parsePrice(row[priceCol]);
             const itemBaseId = `${category.id}-${slugifyName(itemName)}`;
             const itemCount = (itemIdCounter.get(itemBaseId) || 0) + 1;
             itemIdCounter.set(itemBaseId, itemCount);
@@ -448,29 +365,10 @@
     }
 
     async function loadCatalogFromGoogleSheet() {
-        const csvUrls = buildGoogleSheetCsvUrls(GOOGLE_SHEET_SHARE_URL);
-        if (csvUrls.length === 0) return null;
-
-        let lastError = null;
-
-        for (const csvUrl of csvUrls) {
-            try {
-                const response = await fetch(csvUrl, { cache: "no-store" });
-                if (!response.ok) continue;
-
-                const csvText = await response.text();
-                if (/<!doctype html|<html[\s>]/i.test(csvText)) continue;
-
-                const rows = parseCsvTable(csvText);
-                const nextCatalog = buildCatalogFromSheetRows(rows);
-                if (nextCatalog.length > 0) return nextCatalog;
-            } catch (error) {
-                lastError = error;
-            }
-        }
-
-        if (lastError) throw lastError;
-        return null;
+        if (!window.KudaSebetSheetCatalog) return null;
+        const rows = await window.KudaSebetSheetCatalog.loadRows(CATALOG_XLSX_SHEET);
+        const nextCatalog = buildCatalogFromSheetRows(rows);
+        return nextCatalog.length > 0 ? nextCatalog : null;
     }
 
     function initializeCatalogState() {

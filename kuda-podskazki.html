@@ -5,26 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="description" content="Куда Подсказки: интерактивные факты о Куда Себет — забота, индивидуальные корзины, приложение и Кыргыз Box.">
-    <meta name="theme-color" content="#ff6900">
+    <meta name="theme-color" content="#FF6801">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Куда Себет">
     <title>Куда Подсказки | Куда Себет</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="manifest" href="./site.webmanifest">
     <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/app-icon-192.png">
-    <link rel="icon" href="https://framerusercontent.com/images/qPEgZC7jwWSxqEYT17wbDPXbAs.svg" type="image/svg+xml">
+    <link rel="icon" href="./assets/icons/app-icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon.png">
     <style>
         :root {
-            --bg: #fff;
-            --ink: #141414;
-            --muted: #59606b;
-            --stroke: #ece3da;
-            --accent: #ff6900;
-            --accent-dark: #b94b00;
+            --bg: #f5f4f2;
+            --ink: #282421;
+            --muted: #817b75;
+            --stroke: #e4dfd8;
+            --accent: #FF6801;
+            --accent-dark: #E84F2F;
             --font: "Inter", "Helvetica Neue", Arial, sans-serif;
         }
         * {
@@ -79,7 +79,7 @@
             width: 36px;
             height: 36px;
             border-radius: 10px;
-            background: #ff6900 url("https://framerusercontent.com/images/qPEgZC7jwWSxqEYT17wbDPXbAs.svg") center/70% no-repeat;
+            background: #FF6801 url("./assets/icons/app-icon.svg") center/100% no-repeat;
             box-shadow: 0 6px 14px rgba(255, 105, 0, 0.22);
             flex: 0 0 auto;
         }
@@ -271,6 +271,109 @@
                 padding: 0 12px 12px 12px;
                 font-size: 14px;
             }
+        }
+        body {
+            background: var(--bg);
+        }
+        .topbar {
+            background: rgba(245, 244, 242, 0.94);
+        }
+        .brand__mark {
+            background-color: #FF6801;
+            box-shadow: 0 7px 17px rgba(255, 104, 1, 0.22);
+        }
+        .brand__name {
+            color: var(--ink);
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+            text-transform: uppercase;
+        }
+        .button {
+            transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+        }
+        .button--accent {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+            box-shadow: 0 7px 16px rgba(255, 104, 1, 0.22);
+        }
+        .button--accent:hover,
+        .button--accent:focus-visible {
+            background: var(--accent-dark);
+            border-color: var(--accent-dark);
+        }
+        .fact {
+            border-radius: 18px;
+            background: #eeece8;
+            box-shadow: 0 5px 16px rgba(48, 35, 28, 0.035);
+            transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+        }
+        .fact:hover,
+        .fact:focus-within {
+            border-color: #dac9bd;
+            box-shadow: 0 14px 28px rgba(48, 35, 28, 0.10);
+            transform: translateY(-2px);
+        }
+        .fact__cover {
+            border-color: var(--stroke);
+        }
+        .fact__num {
+            border-radius: 50%;
+            background: var(--accent);
+            font-family: "Fragment Mono", monospace;
+        }
+        .fact__title {
+            color: var(--ink);
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        }
+        .fact__icon {
+            border-color: var(--accent);
+        }
+        .fact__content {
+            color: #514943;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .button,
+            .fact {
+                transition: none;
+            }
+            .fact:hover,
+            .fact:focus-within {
+                transform: none;
+            }
+        }
+        @font-face {
+            font-family: "Museo";
+            src: url("./assets/fonts/Museo-Sans-Cyr/MuseoSansCyrl_0.otf") format("opentype");
+            font-weight: 400;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: "Museo";
+            src: url("./assets/fonts/Museo-Sans-Cyr/MuseoSansCyrl_1.otf") format("opentype");
+            font-weight: 600 800;
+            font-display: swap;
+        }
+        :root { --bg: #f2eee8; --ink: #1f201d; --muted: #817b75; --stroke: #eee4d8; --accent: #FF6801; --accent-dark: #E84F2F; --font: "Museo", "Inter", Arial, sans-serif; }
+        body { background: #f2eee8; color: var(--ink); font-family: var(--font); }
+        .container { width: min(1000px, calc(100% - 40px)); }
+        .topbar { background: rgba(255, 253, 249, 0.94); border-color: var(--stroke); }
+        .brand__mark { background: #FF6801 url("./assets/icons/app-icon.svg") center/100% no-repeat; box-shadow: 0 8px 20px rgba(255, 104, 1, 0.2); }
+        .brand__name { color: var(--ink); font-family: var(--font); font-weight: 800; letter-spacing: -0.03em; }
+        .fact { border-color: var(--stroke); border-radius: 20px; background: #fffdf9; box-shadow: 0 8px 22px rgba(72, 48, 29, 0.055); }
+        .fact__cover { border-radius: 15px; }
+        .fact__num { background: linear-gradient(115deg, #FF6801, #E84F2F); }
+        .fact__title { color: var(--ink); font-family: var(--font); font-weight: 800; }
+        .fact__content { color: #6e675f; }
+        .button--accent { border-radius: 12px; background: linear-gradient(115deg, #FF6801, #E84F2F); color: #fff; }
+        @media (max-width: 700px) {
+            .container { width: calc(100% - 24px); }
+            .topbar .container { min-height: 60px; }
+            .brand__name { font-size: 16px; }
+            .button { border-radius: 10px; padding: 9px 11px; font-size: 11px; }
+            .fact { border-radius: 16px; }
         }
     </style>
 </head>

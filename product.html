@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="description" content="Куда себет — карточка товара">
-    <meta name="theme-color" content="#ff6900">
+    <meta name="theme-color" content="#FF6801">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Куда Себет">
     <title>Куда себет — товар</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" rel="stylesheet">
     <link rel="manifest" href="./site.webmanifest">
     <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/app-icon-192.png">
-    <link rel="icon" href="https://framerusercontent.com/images/qPEgZC7jwWSxqEYT17wbDPXbAs.svg" type="image/svg+xml">
+    <link rel="icon" href="./assets/icons/app-icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon.png">
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./assets/icons/apple-touch-icon.png">
     <!-- Google tag (gtag.js) -->
@@ -30,14 +30,16 @@
     </script>
     <style>
         :root {
-            --bg: #ffffff;
-            --ink: #101010;
-            --muted: #5d6470;
-            --accent: #e45c00;
-            --accent-soft: #eadbd1;
-            --stroke: #ece3da;
-            --font-title: "Inter Display", "Inter", "Helvetica Neue", Arial, sans-serif;
-            --font-body: "Inter Display", "Inter", "Helvetica Neue", Arial, sans-serif;
+            --bg: #f2eee8;
+            --ink: #1f201d;
+            --muted: #817b75;
+            --accent: #FF6801;
+            --accent-dark: #E84F2F;
+            --accent-soft: #fff0e5;
+            --stroke: #e4dfd8;
+            --font-title: "Museo", "Inter", Arial, sans-serif;
+            --font-body: "Museo", "Inter", Arial, sans-serif;
+            --font-mono: "Museo", "Inter", Arial, sans-serif;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html,
@@ -83,7 +85,7 @@
             width: 42px;
             height: 42px;
             border-radius: 12px;
-            background: #ff6900 url("https://framerusercontent.com/images/qPEgZC7jwWSxqEYT17wbDPXbAs.svg") center/70% no-repeat;
+            background: #FF6801 url("./assets/icons/app-icon.svg") center/100% no-repeat;
         }
         .brand__name {
             font-size: 24px;
@@ -431,7 +433,7 @@
         }
         .footer .container {
             display: grid;
-            grid-template-columns: auto 1fr auto;
+            grid-template-columns: auto 1fr auto auto;
             align-items: center;
             gap: 14px;
         }
@@ -464,12 +466,17 @@
             width: 32px;
             height: 32px;
             border-radius: 10px;
-            background: #ff6900 url("https://framerusercontent.com/images/qPEgZC7jwWSxqEYT17wbDPXbAs.svg") center/70% no-repeat;
+            background: #FF6801 url("./assets/icons/app-icon.svg") center/100% no-repeat;
             box-shadow: 0 8px 16px rgba(255, 105, 0, 0.22);
         }
         .footer-socials {
             justify-self: end;
         }
+        .footer-android-link { display: inline-flex; align-items: center; gap: 8px; padding: 8px 11px; border: 1px solid var(--stroke); border-radius: 12px; background: #fffdf9; color: var(--ink); text-decoration: none; }
+        .footer-android-link > i { color: #E84F2F; font-size: 22px; }
+        .footer-android-link span { display: grid; gap: 1px; }
+        .footer-android-link small { color: var(--muted); font-size: 9px; }
+        .footer-android-link strong { font-size: 12px; }
         .cart-drawer {
             position: fixed;
             inset: 0;
@@ -863,6 +870,273 @@
             .footer-socials {
                 justify-self: center;
             }
+            .footer-android-link { grid-column: auto; }
+        }
+        body {
+            background: var(--bg);
+        }
+        .topbar,
+        .footer {
+            background: var(--bg);
+            border-color: var(--stroke);
+        }
+        .brand__mark,
+        .footer-logo {
+            background-color: #FF6801;
+            box-shadow: 0 7px 17px rgba(255, 104, 1, 0.22);
+        }
+        .brand__name,
+        .details h1,
+        .recommend h2 {
+            color: var(--ink);
+            font-weight: 600;
+            letter-spacing: -0.045em;
+        }
+        .brand__name {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+        .social-link--wa,
+        .social-link--ig {
+            color: var(--accent);
+            background: #f0eeea;
+            border-color: var(--stroke);
+        }
+        .topbar-cart-link,
+        .cart-fab {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fffaf7;
+        }
+        .topbar-cart-link {
+            margin-right: 64px;
+        }
+        .cart-fab {
+            box-shadow: 0 10px 22px rgba(255, 104, 1, 0.24);
+        }
+        .cart-fab__count {
+            background: var(--ink);
+        }
+        .gallery {
+            overflow: hidden;
+            border: 1px solid var(--stroke);
+            border-radius: 22px;
+            background: var(--accent-soft);
+            box-shadow: 0 8px 24px rgba(48, 35, 28, 0.06);
+        }
+        .gallery-main,
+        .gallery-slide {
+            background-color: #e9e6e1;
+        }
+        .gallery-dot.is-active {
+            background: var(--accent);
+        }
+        .thumb {
+            border-color: var(--stroke);
+            border-radius: 13px;
+            background-color: #efede8;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+        .thumb:hover,
+        .thumb:focus-visible {
+            border-color: #cf9a87;
+            transform: translateY(-2px);
+        }
+        .details__comp {
+            color: #514943;
+        }
+        .price,
+        .recommend-card__price {
+            color: var(--accent-dark, #E84F2F);
+        }
+        .button,
+        .quick-buy-modal .button {
+            font-family: var(--font-mono);
+            letter-spacing: 0.015em;
+        }
+        .button--cta,
+        .button--accent {
+            border: 1px solid #FF6801;
+            background: linear-gradient(115deg, #FF6801 0%, #E84F2F 100%);
+            color: #fff;
+            box-shadow: 0 7px 16px rgba(255, 104, 1, 0.22);
+            text-shadow: none;
+        }
+        .button--cta {
+            border-radius: 10px;
+        }
+        .button--cta:hover,
+        .button--cta:focus-visible,
+        .button--accent:hover,
+        .button--accent:focus-visible {
+            background: #E84F2F;
+            border-color: #E84F2F;
+            box-shadow: 0 11px 22px rgba(232, 79, 47, 0.28);
+        }
+        .recommend-card {
+            padding: 9px;
+            border: 1px solid var(--stroke);
+            border-radius: 18px;
+            background: #eeece8;
+            box-shadow: 0 5px 16px rgba(48, 35, 28, 0.035);
+            transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+        }
+        .recommend-card:hover,
+        .recommend-card:focus-visible {
+            transform: translateY(-3px);
+            border-color: #dac9bd;
+            box-shadow: 0 14px 28px rgba(48, 35, 28, 0.10);
+        }
+        .recommend-card__image {
+            border-radius: 13px;
+            background-color: #e9e6e1;
+        }
+        .recommend-card h3 {
+            color: var(--ink);
+            letter-spacing: -0.035em;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .thumb,
+            .recommend-card {
+                transition: none;
+            }
+            .thumb:hover,
+            .recommend-card:hover {
+                transform: none;
+            }
+        }
+        @font-face {
+            font-family: "Museo";
+            src: url("./assets/fonts/Museo-Sans-Cyr/MuseoSansCyrl_0.otf") format("opentype");
+            font-weight: 400;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: "Museo";
+            src: url("./assets/fonts/Museo-Sans-Cyr/MuseoSansCyrl_1.otf") format("opentype");
+            font-weight: 600 800;
+            font-display: swap;
+        }
+        html { scroll-behavior: smooth; }
+        body { background: #f2eee8; color: var(--ink); font-family: var(--font-body); }
+        .container { width: min(1260px, calc(100% - 48px)); }
+        .topbar {
+            background: rgba(255, 253, 249, 0.94);
+            border-color: #eee4d8;
+            box-shadow: 0 6px 20px rgba(72, 48, 29, 0.035);
+            backdrop-filter: blur(18px);
+        }
+        .brand__mark,
+        .footer-logo {
+            background: #FF6801 url("./assets/icons/app-icon.svg") center/100% no-repeat;
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(255, 104, 1, 0.2);
+        }
+        .brand__name { color: var(--ink); font-family: var(--font-title); font-weight: 800; letter-spacing: -0.035em; }
+        .topbar-cart-link { margin-right: 0; }
+        .product-page { padding: 30px 0 72px; }
+        .product-layout { align-items: stretch; gap: clamp(24px, 4vw, 54px); }
+        .gallery,
+        .details {
+            border: 1px solid #eee4d8;
+            border-radius: 26px;
+            background: #fffdf9;
+            box-shadow: 0 14px 38px rgba(72, 48, 29, 0.07);
+        }
+        .gallery { padding: 12px; }
+        .gallery-main { border-radius: 18px; background-color: #fff0e5; }
+        .gallery-slide { background-color: #fff0e5; background-size: cover; }
+        .details { align-content: start; padding: clamp(22px, 3vw, 40px); }
+        .details h1 { color: var(--ink); font-size: clamp(30px, 4vw, 50px); font-weight: 800; letter-spacing: -0.055em; }
+        .details__comp { color: #6e675f; line-height: 1.6; }
+        .price { color: #bf4920; font-size: 24px; font-weight: 800; }
+        .button--cta,
+        .details-actions .button { min-height: 46px; border-radius: 12px; }
+        .recommend { margin-top: 54px; }
+        .recommend h2 { color: var(--ink); font-family: var(--font-title); font-weight: 800; letter-spacing: -0.05em; }
+        .recommend-card { border-color: #eee4d8; border-radius: 20px; background: #fffdf9; box-shadow: 0 8px 22px rgba(72, 48, 29, 0.055); }
+        .recommend-card__image { min-height: 185px; border-radius: 14px; background-color: #fff0e5; background-position: center; background-size: cover; }
+        .recommend-card h3 { color: var(--ink); font-weight: 800; }
+        .recommend-card .button { border-radius: 10px; }
+        .cart-fab { border: 0; background: linear-gradient(115deg, #FF6801, #E84F2F); }
+        .cart-drawer__panel { background: #fffdf9; }
+        .cart-drawer__checkout { border-radius: 12px; background: linear-gradient(115deg, #FF6801, #E84F2F); color: #fff; }
+        .topbar { overflow: visible; }
+        .topbar-more-button { display: none; }
+        .topbar-compact-menu[hidden] { display: none; }
+        .topbar-compact-menu {
+            position: absolute;
+            z-index: 40;
+            top: calc(100% - 2px);
+            right: max(16px, calc((100vw - 1360px) / 2));
+            display: grid;
+            width: min(290px, calc(100vw - 32px));
+            gap: 7px;
+            padding: 12px;
+            border: 1px solid #eee4d8;
+            border-radius: 18px;
+            background: #fffdf9;
+            box-shadow: 0 18px 42px rgba(52, 38, 26, .16);
+        }
+        .topbar-compact-menu a,
+        .topbar-compact-menu button {
+            display: flex;
+            min-height: 42px;
+            align-items: center;
+            padding: 9px 12px;
+            border: 1px solid #eee4d8;
+            border-radius: 11px;
+            background: #f7f3ee;
+            color: var(--ink);
+            font: 700 12px/1.2 var(--font-body);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .topbar-compact-menu button { border-color: transparent; background: linear-gradient(115deg, #FF6801, #E84F2F); color: #fff; }
+        .topbar-more-button {
+            width: 44px;
+            height: 44px;
+            place-items: center;
+            border: 0;
+            border-radius: 50%;
+            background: linear-gradient(115deg, #FF6801, #E84F2F);
+            color: #fff;
+            cursor: pointer;
+        }
+        .topbar-more-button svg { width: 27px; height: 27px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; transition: transform .2s ease; }
+        .topbar-more-button[aria-expanded="true"] svg { transform: rotate(45deg); }
+        @media (max-width: 900px) {
+            .container { width: calc(100% - 32px); }
+            .product-page { padding: 22px 0 56px; }
+            .product-layout { grid-template-columns: 1fr; gap: 16px; }
+            .gallery { border-radius: 22px; }
+            .gallery-main { max-height: min(72vw, 480px); }
+            .details { border-radius: 22px; padding: 22px; }
+            .recommend-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .recommend-card__image { min-height: 135px; }
+            .topbar { padding: 8px 0; }
+            .topbar .container { position: relative; flex-direction: row; align-items: center; }
+            .topbar-actions { display: none; }
+            .topbar-more-button { display: grid; flex: 0 0 auto; }
+            .topbar-compact-menu { right: 0; }
+            .cart-fab { top: auto; bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); }
+        }
+        @media (max-width: 520px) {
+            .container { width: calc(100% - 24px); }
+            .topbar { padding: 10px 0; }
+            .topbar .container { gap: 8px; }
+            .brand__name { font-size: 17px; }
+            .brand__mark { width: 38px; height: 38px; }
+            .topbar-actions { gap: 7px; }
+            .topbar-socials { display: none; }
+            .topbar-actions .button { min-height: 38px; padding: 0 11px; border-radius: 10px; font-size: 11px; }
+            .recommend-grid { gap: 9px; }
+            .recommend-card { padding: 7px; border-radius: 15px; }
+            .recommend-card__image { min-height: 105px; }
+            .recommend-card h3 { font-size: 13px; }
+            .recommend-card .button { min-width: 0; width: 100%; padding: 8px 6px; font-size: 10px; }
         }
     </style>
 </head>
@@ -884,6 +1158,15 @@
                     </a>
                 </div>
                 <button class="button button--accent" type="button" id="topCartButton">Корзина</button>
+            </div>
+            <button class="topbar-more-button" id="topbarMoreButton" type="button" aria-label="Открыть меню" aria-controls="topbarCompactMenu" aria-expanded="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16"/></svg>
+            </button>
+            <div class="topbar-compact-menu" id="topbarCompactMenu" hidden>
+                <a href="./index.html">На главную</a>
+                <button type="button" id="compactCartButton">Корзина</button>
+                <a href="https://wa.me/996509130090" target="_blank" rel="noopener">WhatsApp ↗</a>
+                <a href="https://instagram.com/kudasebet" target="_blank" rel="noopener">Instagram ↗</a>
             </div>
         </div>
     </header>
@@ -937,6 +1220,11 @@
                     <i class="fab fa-instagram" aria-hidden="true"></i>
                 </a>
             </div>
+            <a class="footer-android-link" href="https://github.com/mukashovv/kudasebet/releases" target="_blank" rel="noopener">
+                <i class="fab fa-android" aria-hidden="true"></i>
+                <span><small>Доступно для</small><strong>Android</strong></span>
+                <b aria-hidden="true">↗</b>
+            </a>
         </div>
     </footer>
 
@@ -990,35 +1278,47 @@
         const DELIVERY_ADDRESS_KEY = "kuda_sebet_delivery_address_v1";
         const DELIVERY_COORDS_KEY = "kuda_sebet_delivery_coords_v1";
         const SHARED_IMAGE = "assets/img/cards/kuda_sebet_s-removebg-preview_square.png";
+        const PRODUCT_IMAGES = {
+            "sebet-s": ["assets/img/cards/kuda_sebet_s.jpg", SHARED_IMAGE],
+            "sebet-m": ["assets/img/cards/kuda_sebet_m.jpg", SHARED_IMAGE],
+            "sebet-vip": ["assets/img/cards/kuda_sebet_vip.jpg", SHARED_IMAGE],
+            "sebet-combo": ["assets/img/stories/story-combo.webp", SHARED_IMAGE]
+        };
+        const IMAGE_BY_NAME = {
+            "Куда Себет S": PRODUCT_IMAGES["sebet-s"][0],
+            "Куда Себет M": PRODUCT_IMAGES["sebet-m"][0],
+            "Куда Себет Vip": PRODUCT_IMAGES["sebet-vip"][0],
+            "Куда Себет Комбо 3в1": PRODUCT_IMAGES["sebet-combo"][0]
+        };
 
         const products = {
             "sebet-s": {
                 name: "Куда Себет S",
                 price: 4790,
-                desc: "Компактная подарочная корзина с популярным набором фруктов и сладостей.",
-                composition: "Виноград «Дамские пальчики», фрукт «Сердце дракона», гранат, манго, сок Yan и шоколадный набор.",
-                images: [SHARED_IMAGE, SHARED_IMAGE, SHARED_IMAGE]
+                desc: "Корзина S — это маленький мир сладостей, подобранных с любовью. Каждый элемент выбран так, чтобы порадовать самых близких любителей вкусного.",
+                composition: "«Merci», «Toblerone» mini, сок яблоко-груша 0,25 мл, виноград «Дамские пальчики», фрукт «Сердце дракона», гранат ~600 г, манго ~500 г.",
+                images: PRODUCT_IMAGES["sebet-s"]
             },
             "sebet-m": {
                 name: "Куда Себет M",
                 price: 6990,
-                desc: "Универсальный средний формат для поздравлений и семейных праздников.",
-                composition: "Виноград, манго, ананас, печенье в банке, маракуйя, сок и сладости.",
-                images: [SHARED_IMAGE, SHARED_IMAGE, SHARED_IMAGE]
+                desc: "Подарочная корзина, наполненная свежими фруктами и сладостями. Внутри — сочный ананас, манго, гранат, маракуйя, виноград «Дамские пальчики», экзотический «Сердце дракона», печенье в банке и натуральный сок Yan. Идеальный подарок для любимых и близких.",
+                composition: "Фрукт «Сердце дракона», гранат, манго, ананас, печенье в банке, маракуйя, сок Yan «Виноград», сеточка под продукты, виноград «Дамские пальчики».",
+                images: PRODUCT_IMAGES["sebet-m"]
             },
             "sebet-vip": {
                 name: "Куда Себет Vip",
                 price: 13790,
-                desc: "Премиальная корзина с расширенным составом и эффектной презентацией.",
-                composition: "Фрукты, Ferrero Rocher, Raffaello, Toblerone, Merci, сок Yan и фирменная корзина.",
-                images: [SHARED_IMAGE, SHARED_IMAGE, SHARED_IMAGE]
+                desc: "Стильная премиальная корзина, созданная для особых случаев. Вместительная, прочная и эстетичная — идеально подчёркивает статус и ценность подарка.",
+                composition: "Виноград «Дамские пальчики», фрукт «Сердце дракона», гранат, манго, ананас, печенье в банке, маракуйя, сок Yan «Яблоко–Груша», сеточка под продукты, шоколад «Toblerone», Raffaello, Ferrero Rocher, большая шоколадка Merci, корзина.",
+                images: PRODUCT_IMAGES["sebet-vip"]
             },
             "sebet-combo": {
                 name: "Куда Себет Комбо 3в1",
                 price: 25570,
                 desc: "Большая праздничная корзина с богатым составом для семейных торжеств и важных событий.",
                 composition: "Расширенный набор фруктов, сладостей, напитков и фирменная корзина большого объема.",
-                images: [SHARED_IMAGE, SHARED_IMAGE, SHARED_IMAGE]
+                images: PRODUCT_IMAGES["sebet-combo"]
             }
         };
         const ACTIVE_PRODUCT_NAMES = new Set([
@@ -1033,7 +1333,7 @@
             { slug: "sebet-m", name: "Куда Себет M", price: 6990, desc: "Оптимальный формат для семьи." },
             { slug: "sebet-vip", name: "Куда Себет Vip", price: 13790, desc: "Премиальная праздничная сборка." },
             { slug: "sebet-combo", name: "Куда Себет Комбо 3в1", price: 25570, desc: "Максимальный размер и состав." },
-            { slug: "sebet-s", name: "Кыргыз Box Традиция", price: 5890, desc: "Локальный стиль и вкус." },
+            { slug: "sebet-s", name: "Кыргыз Box Стандарт", price: 5890, desc: "Локальный стиль и вкус." },
             { slug: "sebet-m", name: "Майрам Box Family", price: 7990, desc: "Для семейного праздника." },
             { slug: "sebet-m", name: "Love Story Box", price: 8990, desc: "Романтическая тематическая сборка." },
             { slug: "sebet-vip", name: "Белек Platinum", price: 17990, desc: "Флагманский подарочный набор." },
@@ -1063,6 +1363,9 @@
         const cartFab = document.getElementById("cartFab");
         const cartFabCount = document.getElementById("cartFabCount");
         const topCartButton = document.getElementById("topCartButton");
+        const compactCartButton = document.getElementById("compactCartButton");
+        const topbarMoreButton = document.getElementById("topbarMoreButton");
+        const topbarCompactMenu = document.getElementById("topbarCompactMenu");
         const cartDrawer = document.getElementById("cartDrawer");
         const cartDrawerList = document.getElementById("cartDrawerList");
         const cartDrawerTotal = document.getElementById("cartDrawerTotal");
@@ -1328,7 +1631,7 @@
                 const isActive = ACTIVE_PRODUCT_NAMES.has(item.name);
                 return `
                 <article class="recommend-card${isActive ? "" : " recommend-card--soon"}" data-slug="${item.slug}" data-name="${item.name}" data-price="${item.price}"${isActive ? "" : " aria-disabled=\"true\""}>
-                    <div class="recommend-card__image" style="background-image:url('${SHARED_IMAGE}')"></div>
+                    <div class="recommend-card__image" style="background-image:url('${PRODUCT_IMAGES[item.slug]?.[0] || SHARED_IMAGE}')"></div>
                     <h3>${item.name}</h3>
                     <p class="recommend-card__desc">${item.desc}</p>
                     <div class="recommend-card__bottom">
@@ -1383,7 +1686,7 @@
                 const row = document.createElement("div");
                 row.className = "cart-drawer__item";
                 row.innerHTML = `
-                    <div class="cart-drawer__thumb" style="background-image:url('${SHARED_IMAGE}')"></div>
+                    <div class="cart-drawer__thumb" style="background-image:url('${IMAGE_BY_NAME[name] || SHARED_IMAGE}')"></div>
                     <div>
                         <div class="cart-drawer__name">${item.name}</div>
                         <div class="cart-drawer__controls">
@@ -1456,6 +1759,29 @@
         if (topCartButton) {
             topCartButton.addEventListener("click", (event) => {
                 event.preventDefault();
+                openDrawer();
+            });
+        }
+        const closeCompactMenu = () => {
+            if (!topbarCompactMenu || !topbarMoreButton) return;
+            topbarCompactMenu.hidden = true;
+            topbarMoreButton.setAttribute("aria-expanded", "false");
+        };
+        if (topbarMoreButton && topbarCompactMenu) {
+            topbarMoreButton.addEventListener("click", (event) => {
+                event.stopPropagation();
+                topbarCompactMenu.hidden = !topbarCompactMenu.hidden;
+                topbarMoreButton.setAttribute("aria-expanded", String(!topbarCompactMenu.hidden));
+            });
+            topbarCompactMenu.addEventListener("click", (event) => event.stopPropagation());
+            document.addEventListener("click", closeCompactMenu);
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape") closeCompactMenu();
+            });
+        }
+        if (compactCartButton) {
+            compactCartButton.addEventListener("click", () => {
+                closeCompactMenu();
                 openDrawer();
             });
         }

@@ -2,22 +2,28 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="description" content="Личный конструктор подарочной корзины: выбирайте товары по категориям, считайте итог и отправляйте состав в WhatsApp.">
-    <meta name="theme-color" content="#f46d26">
+    <meta name="theme-color" content="#FF6801">
     <title>Личный конструктор корзины | Куда Себет</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Prata&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="manifest" href="./site.webmanifest">
     <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/app-icon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon.png">
-    <link rel="stylesheet" href="./build/css/personal-builder.css">
+    <link rel="stylesheet" href="./build/css/personal-builder.css?v=4">
 </head>
 <body>
     <header class="pb-header">
         <div class="pb-shell pb-header__inner">
-            <a class="pb-back-link" href="./index.html#section-ozun-chogult">← Назад к сайту</a>
+            <div class="pb-header__nav">
+                <a class="pb-brand" href="./index.html" aria-label="Куда Себет — на главную">
+                    <img src="./assets/icons/app-icon.svg" alt="">
+                    <span>Куда Себет</span>
+                </a>
+                <a class="pb-back-link" href="./index.html#section-ozun-chogult">← В магазин</a>
+            </div>
             <div class="pb-title-wrap">
                 <p class="pb-kicker">Өзүң чогулт • PRO</p>
                 <h1>Личный конструктор корзины</h1>
@@ -173,7 +179,8 @@
 
     <div class="pb-toast" id="toast" aria-live="polite"></div>
 
+    <script src="./build/js/google-sheet-catalog.js?v=2"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <script src="./build/js/personal-builder.js"></script>
+    <script src="./build/js/personal-builder.js?v=2"></script>
 </body>
 </html>
