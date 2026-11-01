@@ -1,14 +1,13 @@
-const CACHE_NAME = "kuda-sebet-app-v11";
+const CACHE_NAME = "kuda-sebet-app-v12";
 const APP_SHELL = [
   "./index.html",
   "./personal-builder.html",
   "./product.html",
   "./app.html",
   "./site.webmanifest",
-  "./build/css/personal-builder.css",
-  "./build/css/personal-builder-fixes.css",
-  "./build/js/google-sheet-catalog.js",
-  "./build/js/personal-builder.js",
+  "./build/css/personal-builder.css?v=7",
+  "./build/js/google-sheet-catalog.js?v=3",
+  "./build/js/personal-builder.js?v=3",
   "./kuda-sebet-products.xlsx",
   "./kuda-podskazki.html",
   "./assets/css/site.css",
@@ -21,7 +20,6 @@ const APP_SHELL = [
   "./assets/icons/app-icon-192.png",
   "./assets/icons/app-icon-512.png",
   "./assets/img/cards/kuda_sebet_s-removebg-preview_square.png",
-  "./assets/img/hero-girl.jpg",
   "./assets/img/stories/story-combo.webp",
   "./assets/img/stories/story-kyrgyz.webp",
   "./assets/img/stories/story-mar8.webp"

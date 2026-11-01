@@ -120,11 +120,11 @@
         topControls: document.getElementById("topControls"),
         floatingControls: document.getElementById("floatingControls"),
         mobileFloatingControls: document.getElementById("mobileFloatingControls"),
-        collapseAllBtn: document.getElementById("collapseAllBtn"),
-        expandAllBtn: document.getElementById("expandAllBtn"),
+        toggleAllBtn: document.getElementById("toggleAllBtn"),
         priceModeBtn: document.getElementById("priceModeBtn"),
         resetPricesBtn: document.getElementById("resetPricesBtn"),
         toggleAllFloatBtn: document.getElementById("toggleAllFloatBtn"),
+        resetPricesFloatBtn: document.getElementById("resetPricesFloatBtn"),
         priceModeFloatBtn: document.getElementById("priceModeFloatBtn"),
         toggleAllMobileFloatBtn: document.getElementById("toggleAllMobileFloatBtn"),
         priceModeMobileFloatBtn: document.getElementById("priceModeMobileFloatBtn"),
@@ -809,9 +809,15 @@
 
     function syncFloatingToggleButton() {
         const openCount = getOpenCategoriesCount();
-        if (ui.toggleAllFloatBtn) {
-            ui.toggleAllFloatBtn.textContent = openCount >= 2 ? "Свернуть все" : "Развернуть все";
-        }
+        const categoryCount = categoryContainer.querySelectorAll(".pb-category").length;
+        const allOpen = categoryCount > 0 && openCount === categoryCount;
+        const label = allOpen ? "Свернуть все" : "Развернуть все";
+        [ui.toggleAllBtn, ui.toggleAllFloatBtn].forEach((button) => {
+            if (!button) return;
+            button.textContent = label;
+            button.setAttribute("aria-label", label);
+            button.setAttribute("title", label);
+        });
         if (ui.toggleAllMobileFloatBtn) {
             const shouldCollapse = openCount >= 1;
             ui.toggleAllMobileFloatBtn.textContent = shouldCollapse ? "−" : "+";
@@ -1300,17 +1306,12 @@
             showToast("Наценка сброшена");
         });
 
-        ui.collapseAllBtn?.addEventListener("click", () => {
-            setAllCategoriesOpen(false);
-        });
-
-        ui.expandAllBtn?.addEventListener("click", () => {
-            setAllCategoriesOpen(true);
-        });
-
-        ui.toggleAllFloatBtn?.addEventListener("click", () => {
-            const openCount = getOpenCategoriesCount();
-            setAllCategoriesOpen(openCount < 2);
+        [ui.toggleAllBtn, ui.toggleAllFloatBtn].forEach((button) => {
+            button?.addEventListener("click", () => {
+                const categoryCount = categoryContainer.querySelectorAll(".pb-category").length;
+                const allOpen = categoryCount > 0 && getOpenCategoriesCount() === categoryCount;
+                setAllCategoriesOpen(!allOpen);
+            });
         });
 
         ui.toggleAllMobileFloatBtn?.addEventListener("click", () => {
@@ -1325,7 +1326,7 @@
             });
         });
 
-        [ui.resetPricesBtn, ui.resetPricesMobileFloatBtn].forEach((button) => {
+        [ui.resetPricesBtn, ui.resetPricesFloatBtn, ui.resetPricesMobileFloatBtn].forEach((button) => {
             button?.addEventListener("click", resetPrices);
         });
 
