@@ -1,4 +1,4 @@
-const CACHE_NAME = "kuda-sebet-app-v7";
+const CACHE_NAME = "kuda-sebet-app-v8";
 const APP_SHELL = [
   "./index.html",
   "./personal-builder.html",
@@ -20,6 +20,7 @@ const APP_SHELL = [
   "./assets/icons/app-icon-192.png",
   "./assets/icons/app-icon-512.png",
   "./assets/img/cards/kuda_sebet_s-removebg-preview_square.png",
+  "./assets/img/hero-girl.jpg",
   "./assets/img/stories/story-combo.webp",
   "./assets/img/stories/story-kyrgyz.webp",
   "./assets/img/stories/story-mar8.webp"
