@@ -1,17 +1,18 @@
-const CACHE_NAME = "kuda-sebet-app-v9";
+const CACHE_NAME = "kuda-sebet-app-v11";
 const APP_SHELL = [
   "./index.html",
   "./personal-builder.html",
   "./product.html",
   "./app.html",
   "./site.webmanifest",
+  "./build/css/personal-builder.css",
+  "./build/css/personal-builder-fixes.css",
   "./build/js/google-sheet-catalog.js",
+  "./build/js/personal-builder.js",
   "./kuda-sebet-products.xlsx",
   "./kuda-podskazki.html",
   "./assets/css/site.css",
-  "./assets/css/builder.css",
   "./assets/js/site.js",
-  "./assets/js/builder.js",
   "./assets/js/home.js",
   "./assets/js/product.js",
   "./assets/css/webapp.css",

@@ -1,129 +1,1579 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
+<!-- saved from url=(0052)https://kudasebet.mukashov.com/personal-builder.html -->
+<html lang="ru" style="--pb-sticky-total-height: 0px;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="description" content="Личный конструктор подарочной корзины: выбирайте товары по категориям, считайте итог и отправляйте состав в WhatsApp.">
     <meta name="theme-color" content="#FF6801">
     <title>Личный конструктор корзины | Куда Себет</title>
-    <link rel="manifest" href="./site.webmanifest">
-    <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/app-icon-192.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon.png">
-    <link rel="stylesheet" href="./assets/css/site.css">
-    <link rel="stylesheet" href="./assets/css/builder.css">
-</head>
-<body>
-    <header class="site-header">
-        <div class="container header-row">
-            <a class="brand" href="./index.html" aria-label="Куда Себет — на главную"><img src="./assets/icons/app-icon.svg" alt=""><span>Куда Себет</span></a>
-            <div class="header-actions" style="margin-left:auto">
-                <a class="btn" href="./index.html#section-ozun-chogult">← В магазин</a>
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="./Личный конструктор корзины _ Куда Себет_files/css2" rel="stylesheet">
+    <link rel="manifest" href="https://kudasebet.mukashov.com/site.webmanifest">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://kudasebet.mukashov.com/assets/icons/app-icon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://kudasebet.mukashov.com/assets/icons/apple-touch-icon.png">
+    <link rel="stylesheet" href="./Личный конструктор корзины _ Куда Себет_files/personal-builder.css">
+<script src="chrome-extension://liecbddmkiiihnedobmlmillhodjkdmb/js/recordConsoleEvents.js"></script></head>
+<body data-new-gr-c-s-check-loaded="14.1343.0" data-gr-ext-installed="" cz-shortcut-listen="true">
+    <header class="pb-header">
+        <div class="pb-shell pb-header__inner">
+            <div class="pb-header__nav">
+                <a class="pb-brand" href="https://kudasebet.mukashov.com/index.html" aria-label="Куда Себет — на главную">
+                    <img src="./Личный конструктор корзины _ Куда Себет_files/app-icon.svg" alt="">
+                    <span>Куда Себет</span>
+                </a>
+                <a class="pb-back-link" href="https://kudasebet.mukashov.com/index.html#section-ozun-chogult">← В магазин</a>
+            </div>
+            <div class="pb-title-wrap">
+                <p class="pb-kicker">Өзүң чогулт • PRO</p>
+                <h1>Личный конструктор корзины</h1>
+                <p class="pb-subtitle">Удобная сборка с телефона: категории, быстрый подсчёт суммы, отправка состава в WhatsApp.</p>
             </div>
         </div>
     </header>
 
-    <main class="container pb-page">
-        <div class="pb-title">
-            <p class="eyebrow">Өзүң чогулт • PRO</p>
-            <h1>Личный конструктор корзины</h1>
-            <p class="muted">Удобная сборка с телефона: категории, быстрый подсчёт суммы, отправка состава в WhatsApp.</p>
-        </div>
+    <main class="pb-main">
+        <div class="pb-shell">
+            <section class="pb-controls" id="topControls" aria-label="Управление">
+                <button class="pb-btn pb-btn--light" type="button" id="collapseAllBtn">Свернуть все</button>
+                <button class="pb-btn pb-btn--light" type="button" id="expandAllBtn">Развернуть все</button>
+                <button class="pb-btn pb-btn--light" type="button" id="priceModeBtn">Режим цен: выкл</button>
+                <button class="pb-btn pb-btn--light" type="button" id="resetPricesBtn">Сбросить цены</button>
+            </section>
+            <section class="pb-controls pb-controls--floating" id="floatingControls" aria-label="Плавающее управление">
+                <button class="pb-btn pb-btn--light" type="button" id="toggleAllFloatBtn">Свернуть все</button>
+                <button class="pb-btn pb-btn--light" type="button" id="priceModeFloatBtn">Режим цен: выкл</button>
+            </section>
+            <section class="pb-controls-mobile-floating" id="mobileFloatingControls" aria-label="Мобильное плавающее управление">
+                <button class="pb-controls-mobile-floating__btn" type="button" id="toggleAllMobileFloatBtn" aria-label="Свернуть все" title="Свернуть все">−</button>
+                <button class="pb-controls-mobile-floating__btn is-pencil" type="button" id="priceModeMobileFloatBtn" aria-label="Включить режим редактирования цен" title="Включить режим редактирования цен">✎</button>
+                <button class="pb-controls-mobile-floating__btn" type="button" id="resetPricesMobileFloatBtn" aria-label="Сбросить цены" title="Сбросить цены">↺</button>
+            </section>
 
-        <div class="pb-layout">
-            <div class="pb-col">
-                <div class="pb-toolbar" role="group" aria-label="Управление">
-                    <button class="btn btn--sm" type="button" id="toggleAllBtn">Свернуть все</button>
-                    <button class="btn btn--sm" type="button" id="priceModeBtn" aria-pressed="false">Режим цен: выкл</button>
-                    <button class="btn btn--sm" type="button" id="resetPricesBtn">Сбросить цены</button>
+            <section class="pb-catalog" aria-label="Категории товаров">
+                <div id="categoryContainer">
+                    <details class="pb-category" data-category-id="cat-печенья" open="">
+                        <summary>
+                            <span class="pb-category__title">
+                                <strong>Печенья</strong>
+                                <span class="pb-category__hint" data-role="category-total">0 сом</span>
+                            </span>
+                            <span class="pb-category__count" data-role="category-count">0</span>
+                        </summary>
+                        <div class="pb-category__items">
+                            <article class="pb-item" data-item-id="cat-печенья-milka-choco-cookie">
+                                <div>
+                                    <h3 class="pb-item__name">Milka Choco Cookie</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">230 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Milka Choco Cookie" type="number" min="0" max="100000" step="10" inputmode="numeric" value="230">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-печенья-oreo-original">
+                                <div>
+                                    <h3 class="pb-item__name">Oreo Original</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">310 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Oreo Original" type="number" min="0" max="100000" step="10" inputmode="numeric" value="310">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-печенья-елочка-печенья">
+                                <div>
+                                    <h3 class="pb-item__name">Елочка Печенья</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">600 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Елочка Печенья" type="number" min="0" max="100000" step="10" inputmode="numeric" value="600">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-печенья-печенье-в-банке">
+                                <div>
+                                    <h3 class="pb-item__name">Печенье в банке</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">590 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Печенье в банке" type="number" min="0" max="100000" step="10" inputmode="numeric" value="590">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-печенья-golden-danish-большая-коробка">
+                                <div>
+                                    <h3 class="pb-item__name">Golden Danish (большая коробка)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">905 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Golden Danish (большая коробка)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="905">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-печенья-печенье-в-металлической-коробке-вариант">
+                                <div>
+                                    <h3 class="pb-item__name">Печенье в металлической коробке (вариант)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">535 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Печенье в металлической коробке (вариант)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="535">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-печенья-юбилейное-шоколадное">
+                                <div>
+                                    <h3 class="pb-item__name">Юбилейное шоколадное</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">170 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Юбилейное шоколадное" type="number" min="0" max="100000" step="10" inputmode="numeric" value="170">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        </div>
+                    </details>
+                
+                    <details class="pb-category" data-category-id="cat-конфеты" open="">
+                        <summary>
+                            <span class="pb-category__title">
+                                <strong>Конфеты</strong>
+                                <span class="pb-category__hint" data-role="category-total">0 сом</span>
+                            </span>
+                            <span class="pb-category__count" data-role="category-count">0</span>
+                        </summary>
+                        <div class="pb-category__items">
+                            <article class="pb-item" data-item-id="cat-конфеты-ferrero-rocher">
+                                <div>
+                                    <h3 class="pb-item__name">Ferrero Rocher</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">1&nbsp;800 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Ferrero Rocher" type="number" min="0" max="100000" step="10" inputmode="numeric" value="1800">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-конфеты-ferrero-rocher-8-шт">
+                                <div>
+                                    <h3 class="pb-item__name">Ferrero Rocher (8 шт)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">850 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Ferrero Rocher (8 шт)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="850">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-конфеты-fiorella-la-trufa-200-г">
+                                <div>
+                                    <h3 class="pb-item__name">Fiorella LA TRUFA, 200 г</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">215 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Fiorella LA TRUFA, 200 г" type="number" min="0" max="100000" step="10" inputmode="numeric" value="215">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-конфеты-kinder-дед-мороз">
+                                <div>
+                                    <h3 class="pb-item__name">Kinder Дед Мороз</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">240 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Kinder Дед Мороз" type="number" min="0" max="100000" step="10" inputmode="numeric" value="240">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-конфеты-m-m-s">
+                                <div>
+                                    <h3 class="pb-item__name">M&amp;M's</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">190 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для M&amp;M's" type="number" min="0" max="100000" step="10" inputmode="numeric" value="190">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-конфеты-raffaello">
+                                <div>
+                                    <h3 class="pb-item__name">Raffaello</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">800 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Raffaello" type="number" min="0" max="100000" step="10" inputmode="numeric" value="800">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-конфеты-китайские-конфеты">
+                                <div>
+                                    <h3 class="pb-item__name">Китайские конфеты</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">0 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Китайские конфеты" type="number" min="0" max="100000" step="10" inputmode="numeric" value="0">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-конфеты-коркунов-ассорти">
+                                <div>
+                                    <h3 class="pb-item__name">Коркунов ассорти</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">350 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Коркунов ассорти" type="number" min="0" max="100000" step="10" inputmode="numeric" value="350">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-конфеты-ferrero-rocher-двухъярусный">
+                                <div>
+                                    <h3 class="pb-item__name">Ferrero Rocher двухъярусный</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">795 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Ferrero Rocher двухъярусный" type="number" min="0" max="100000" step="10" inputmode="numeric" value="795">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-конфеты-ferrero-rocher-маленький-одноярусный">
+                                <div>
+                                    <h3 class="pb-item__name">Ferrero Rocher маленький одноярусный</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">360 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Ferrero Rocher маленький одноярусный" type="number" min="0" max="100000" step="10" inputmode="numeric" value="360">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-конфеты-toffifee-обычная-упаковка">
+                                <div>
+                                    <h3 class="pb-item__name">Toffifee (обычная упаковка)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">210 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Toffifee (обычная упаковка)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="210">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-конфеты-toffifee-большой-квадратный">
+                                <div>
+                                    <h3 class="pb-item__name">Toffifee большой квадратный</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">550 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Toffifee большой квадратный" type="number" min="0" max="100000" step="10" inputmode="numeric" value="550">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        </div>
+                    </details>
+                
+                    <details class="pb-category" data-category-id="cat-сладости" open="">
+                        <summary>
+                            <span class="pb-category__title">
+                                <strong>Сладости</strong>
+                                <span class="pb-category__hint" data-role="category-total">0 сом</span>
+                            </span>
+                            <span class="pb-category__count" data-role="category-count">0</span>
+                        </summary>
+                        <div class="pb-category__items">
+                            <article class="pb-item" data-item-id="cat-сладости-маленький-merci">
+                                <div>
+                                    <h3 class="pb-item__name">Маленький Merci</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">400 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Маленький Merci" type="number" min="0" max="100000" step="10" inputmode="numeric" value="400">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-сладости-большая-шоколадка-merci">
+                                <div>
+                                    <h3 class="pb-item__name">Большая шоколадка Merci</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">1&nbsp;150 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Большая шоколадка Merci" type="number" min="0" max="100000" step="10" inputmode="numeric" value="1150">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-сладости-milka-alpine-milk">
+                                <div>
+                                    <h3 class="pb-item__name">Milka Alpine Milk</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">240 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Milka Alpine Milk" type="number" min="0" max="100000" step="10" inputmode="numeric" value="240">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-сладости-nutella-mini">
+                                <div>
+                                    <h3 class="pb-item__name">Nutella mini</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">300 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Nutella mini" type="number" min="0" max="100000" step="10" inputmode="numeric" value="300">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-сладости-ritter-sport">
+                                <div>
+                                    <h3 class="pb-item__name">Ritter Sport</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">731 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Ritter Sport" type="number" min="0" max="100000" step="10" inputmode="numeric" value="731">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-сладости-toblerone-мини">
+                                <div>
+                                    <h3 class="pb-item__name">Toblerone мини</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">190 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Toblerone мини" type="number" min="0" max="100000" step="10" inputmode="numeric" value="190">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-сладости-toblerone-шоколад">
+                                <div>
+                                    <h3 class="pb-item__name">Toblerone шоколад</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">800 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Toblerone шоколад" type="number" min="0" max="100000" step="10" inputmode="numeric" value="800">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-сладости-горький-шоколад">
+                                <div>
+                                    <h3 class="pb-item__name">Горький шоколад</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">580 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Горький шоколад" type="number" min="0" max="100000" step="10" inputmode="numeric" value="580">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-сладости-merci-квадратная-коробка">
+                                <div>
+                                    <h3 class="pb-item__name">Merci квадратная коробка</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">585 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Merci квадратная коробка" type="number" min="0" max="100000" step="10" inputmode="numeric" value="585">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-сладости-merci-маленькая-прямоугольная">
+                                <div>
+                                    <h3 class="pb-item__name">Merci маленькая прямоугольная</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">235 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Merci маленькая прямоугольная" type="number" min="0" max="100000" step="10" inputmode="numeric" value="235">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-сладости-трюфели-маленькая-коробка">
+                                <div>
+                                    <h3 class="pb-item__name">Трюфели (маленькая коробка)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">415 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Трюфели (маленькая коробка)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="415">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        </div>
+                    </details>
+                
+                    <details class="pb-category" data-category-id="cat-фрукты">
+                        <summary>
+                            <span class="pb-category__title">
+                                <strong>Фрукты</strong>
+                                <span class="pb-category__hint" data-role="category-total">0 сом</span>
+                            </span>
+                            <span class="pb-category__count" data-role="category-count">0</span>
+                        </summary>
+                        <div class="pb-category__items">
+                            <article class="pb-item" data-item-id="cat-фрукты-ананас-филиппинский-1-шт">
+                                <div>
+                                    <h3 class="pb-item__name">Ананас филиппинский (1 шт)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">350 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Ананас филиппинский (1 шт)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="350">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-фрукты-ананас-китайский-1-шт">
+                                <div>
+                                    <h3 class="pb-item__name">Ананас китайский (1 шт)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">350 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Ананас китайский (1 шт)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="350">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-фрукты-бананы-1-кг">
+                                <div>
+                                    <h3 class="pb-item__name">Бананы (1 кг)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">150 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Бананы (1 кг)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="150">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-фрукты-виноград-дамский-пальчик-1-кг">
+                                <div>
+                                    <h3 class="pb-item__name">Виноград «Дамский пальчик» (1 кг)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">180 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Виноград «Дамский пальчик» (1 кг)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="180">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-фрукты-виноград-сладкий-1-кг">
+                                <div>
+                                    <h3 class="pb-item__name">Виноград сладкий (1 кг)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">150 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Виноград сладкий (1 кг)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="150">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-фрукты-виноград-корейский-единица-уточняется">
+                                <div>
+                                    <h3 class="pb-item__name">Виноград корейский (единица уточняется)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">800 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Виноград корейский (единица уточняется)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="800">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-фрукты-кокос-1-шт">
+                                <div>
+                                    <h3 class="pb-item__name">Кокос (1 шт)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">400 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Кокос (1 шт)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="400">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-фрукты-манго-1-кг">
+                                <div>
+                                    <h3 class="pb-item__name">Манго (1 кг)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">700 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Манго (1 кг)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="700">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-фрукты-мандарины-маленькие-1-кг">
+                                <div>
+                                    <h3 class="pb-item__name">Мандарины маленькие (1 кг)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">250 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Мандарины маленькие (1 кг)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="250">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-фрукты-гранат">
+                                <div>
+                                    <h3 class="pb-item__name">Гранат</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">320 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Гранат" type="number" min="0" max="100000" step="10" inputmode="numeric" value="320">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-фрукты-ананас">
+                                <div>
+                                    <h3 class="pb-item__name">Ананас</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">620 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Ананас" type="number" min="0" max="100000" step="10" inputmode="numeric" value="620">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-фрукты-манго">
+                                <div>
+                                    <h3 class="pb-item__name">Манго</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">450 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Манго" type="number" min="0" max="100000" step="10" inputmode="numeric" value="450">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-фрукты-мандарины-7-шт">
+                                <div>
+                                    <h3 class="pb-item__name">Мандарины 7 шт</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">160 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Мандарины 7 шт" type="number" min="0" max="100000" step="10" inputmode="numeric" value="160">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-фрукты-мандарины-1-кг">
+                                <div>
+                                    <h3 class="pb-item__name">Мандарины 1 кг</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">160 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Мандарины 1 кг" type="number" min="0" max="100000" step="10" inputmode="numeric" value="160">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-фрукты-маракуйя">
+                                <div>
+                                    <h3 class="pb-item__name">Маракуйя</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">200 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Маракуйя" type="number" min="0" max="100000" step="10" inputmode="numeric" value="200">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-фрукты-сердце-дракона-фрукт">
+                                <div>
+                                    <h3 class="pb-item__name">Сердце дракона фрукт</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">250 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Сердце дракона фрукт" type="number" min="0" max="100000" step="10" inputmode="numeric" value="250">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        </div>
+                    </details>
+                
+                    <details class="pb-category" data-category-id="cat-алкоголь">
+                        <summary>
+                            <span class="pb-category__title">
+                                <strong>Алкоголь</strong>
+                                <span class="pb-category__hint" data-role="category-total">0 сом</span>
+                            </span>
+                            <span class="pb-category__count" data-role="category-count">0</span>
+                        </summary>
+                        <div class="pb-category__items">
+                            <article class="pb-item" data-item-id="cat-алкоголь-jack-daniel-s-0-5">
+                                <div>
+                                    <h3 class="pb-item__name">Jack Daniel's 0.5</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">1&nbsp;785 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Jack Daniel's 0.5" type="number" min="0" max="100000" step="10" inputmode="numeric" value="1785">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-алкоголь-jagermeister-0-5">
+                                <div>
+                                    <h3 class="pb-item__name">Jagermeister 0.5</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">1&nbsp;520 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Jagermeister 0.5" type="number" min="0" max="100000" step="10" inputmode="numeric" value="1520">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-алкоголь-martini-asti">
+                                <div>
+                                    <h3 class="pb-item__name">Martini Asti</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">1&nbsp;440 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Martini Asti" type="number" min="0" max="100000" step="10" inputmode="numeric" value="1440">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-алкоголь-вино-rioja">
+                                <div>
+                                    <h3 class="pb-item__name">Вино Rioja</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">1&nbsp;800 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Вино Rioja" type="number" min="0" max="100000" step="10" inputmode="numeric" value="1800">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-алкоголь-хорошее-шампанское">
+                                <div>
+                                    <h3 class="pb-item__name">Хорошее шампанское</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">1&nbsp;000 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Хорошее шампанское" type="number" min="0" max="100000" step="10" inputmode="numeric" value="1000">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-алкоголь-шампанское-santo-stefano">
+                                <div>
+                                    <h3 class="pb-item__name">Шампанское Santo Stefano</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">533 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Шампанское Santo Stefano" type="number" min="0" max="100000" step="10" inputmode="numeric" value="533">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        </div>
+                    </details>
+                
+                    <details class="pb-category" data-category-id="cat-соки">
+                        <summary>
+                            <span class="pb-category__title">
+                                <strong>Соки</strong>
+                                <span class="pb-category__hint" data-role="category-total">0 сом</span>
+                            </span>
+                            <span class="pb-category__count" data-role="category-count">0</span>
+                        </summary>
+                        <div class="pb-category__items">
+                            <article class="pb-item" data-item-id="cat-соки-j7-яблоко-1л">
+                                <div>
+                                    <h3 class="pb-item__name">J7 Яблоко 1л</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">175 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для J7 Яблоко 1л" type="number" min="0" max="100000" step="10" inputmode="numeric" value="175">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-соки-organic-1л">
+                                <div>
+                                    <h3 class="pb-item__name">Organic 1л</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">420 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Organic 1л" type="number" min="0" max="100000" step="10" inputmode="numeric" value="420">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-соки-rich-апельсин-1л">
+                                <div>
+                                    <h3 class="pb-item__name">Rich Апельсин 1л</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">205 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Rich Апельсин 1л" type="number" min="0" max="100000" step="10" inputmode="numeric" value="205">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-соки-yan-маленький-яблоко-груша">
+                                <div>
+                                    <h3 class="pb-item__name">Yan маленький Яблоко-Груша</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">125 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Yan маленький Яблоко-Груша" type="number" min="0" max="100000" step="10" inputmode="numeric" value="125">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-соки-чай-richard">
+                                <div>
+                                    <h3 class="pb-item__name">Чай (Richard)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">340 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Чай (Richard)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="340">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-соки-gracio-super-fruit-1-л">
+                                <div>
+                                    <h3 class="pb-item__name">Gracio Super Fruit 1 л</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">160 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Gracio Super Fruit 1 л" type="number" min="0" max="100000" step="10" inputmode="numeric" value="160">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-соки-j7-вариант-не-уточн-н-1-л">
+                                <div>
+                                    <h3 class="pb-item__name">J7 (вариант не уточнён) 1 л</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">175 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для J7 (вариант не уточнён) 1 л" type="number" min="0" max="100000" step="10" inputmode="numeric" value="175">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-соки-organic-маленький">
+                                <div>
+                                    <h3 class="pb-item__name">Organic маленький</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">165 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Organic маленький" type="number" min="0" max="100000" step="10" inputmode="numeric" value="165">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-соки-rich-вариант-не-уточн-н">
+                                <div>
+                                    <h3 class="pb-item__name">Rich (вариант не уточнён)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">205 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Rich (вариант не уточнён)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="205">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-соки-сок-yan-виноград">
+                                <div>
+                                    <h3 class="pb-item__name">Сок Yan Виноград</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">365 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Сок Yan Виноград" type="number" min="0" max="100000" step="10" inputmode="numeric" value="365">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-соки-сок-yan-яблоко-груша">
+                                <div>
+                                    <h3 class="pb-item__name">Сок Yan Яблоко-Груша</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">430 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Сок Yan Яблоко-Груша" type="number" min="0" max="100000" step="10" inputmode="numeric" value="430">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-соки-yan-гранат-1-л">
+                                <div>
+                                    <h3 class="pb-item__name">Yan гранат 1 л</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">520 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Yan гранат 1 л" type="number" min="0" max="100000" step="10" inputmode="numeric" value="520">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-соки-yan-другие-вкусы-1-л">
+                                <div>
+                                    <h3 class="pb-item__name">Yan другие вкусы 1 л</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">380 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Yan другие вкусы 1 л" type="number" min="0" max="100000" step="10" inputmode="numeric" value="380">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-соки-yan-маленький-вкус-не-указан">
+                                <div>
+                                    <h3 class="pb-item__name">Yan маленький (вкус не указан)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">135 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Yan маленький (вкус не указан)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="135">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-соки-добрый-натуральный-сок-1-л">
+                                <div>
+                                    <h3 class="pb-item__name">Добрый натуральный сок 1 л</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">150 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Добрый натуральный сок 1 л" type="number" min="0" max="100000" step="10" inputmode="numeric" value="150">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        </div>
+                    </details>
+                
+                    <details class="pb-category" data-category-id="cat-газировки">
+                        <summary>
+                            <span class="pb-category__title">
+                                <strong>Газировки</strong>
+                                <span class="pb-category__hint" data-role="category-total">0 сом</span>
+                            </span>
+                            <span class="pb-category__count" data-role="category-count">0</span>
+                        </summary>
+                        <div class="pb-category__items">
+                            <article class="pb-item" data-item-id="cat-газировки-coca-cola-1л">
+                                <div>
+                                    <h3 class="pb-item__name">Coca-Cola 1л</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">140 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Coca-Cola 1л" type="number" min="0" max="100000" step="10" inputmode="numeric" value="140">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-газировки-fanta-1л">
+                                <div>
+                                    <h3 class="pb-item__name">Fanta 1л</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">140 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Fanta 1л" type="number" min="0" max="100000" step="10" inputmode="numeric" value="140">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-газировки-schweppes-1л">
+                                <div>
+                                    <h3 class="pb-item__name">Schweppes 1л</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">180 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Schweppes 1л" type="number" min="0" max="100000" step="10" inputmode="numeric" value="180">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-газировки-sprite-1л">
+                                <div>
+                                    <h3 class="pb-item__name">Sprite 1л</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">140 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Sprite 1л" type="number" min="0" max="100000" step="10" inputmode="numeric" value="140">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="cat-газировки-шампанское-праздничное">
+                                <div>
+                                    <h3 class="pb-item__name">Шампанское (Праздничное)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">220 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Шампанское (Праздничное)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="220">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        </div>
+                    </details>
+                
+                    <details class="pb-category" data-category-id="extra">
+                        <summary>
+                            <span class="pb-category__title">
+                                <strong>Дополнительно</strong>
+                                <span class="pb-category__hint" data-role="category-total">0 сом</span>
+                            </span>
+                            <span class="pb-category__count" data-role="category-count">0</span>
+                        </summary>
+                        <div class="pb-category__items">
+                            <article class="pb-item" data-item-id="extra-декор">
+                                <div>
+                                    <h3 class="pb-item__name">Декор</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">250 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Декор" type="number" min="0" max="100000" step="10" inputmode="numeric" value="250">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="extra-елочки">
+                                <div>
+                                    <h3 class="pb-item__name">Елочки</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">250 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Елочки" type="number" min="0" max="100000" step="10" inputmode="numeric" value="250">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="extra-икра-50-100гр">
+                                <div>
+                                    <h3 class="pb-item__name">Икра 50-100гр</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">1&nbsp;790 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Икра 50-100гр" type="number" min="0" max="100000" step="10" inputmode="numeric" value="1790">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="extra-корзина-s">
+                                <div>
+                                    <h3 class="pb-item__name">Корзина S</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">500 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Корзина S" type="number" min="0" max="100000" step="10" inputmode="numeric" value="500">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="extra-корзина-m">
+                                <div>
+                                    <h3 class="pb-item__name">Корзина M</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">750 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Корзина M" type="number" min="0" max="100000" step="10" inputmode="numeric" value="750">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="extra-корзина-vip">
+                                <div>
+                                    <h3 class="pb-item__name">Корзина Vip</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">850 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Корзина Vip" type="number" min="0" max="100000" step="10" inputmode="numeric" value="850">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="extra-корзина-новогодняя">
+                                <div>
+                                    <h3 class="pb-item__name">Корзина (новогодняя)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">400 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Корзина (новогодняя)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="400">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="extra-корзина-базовая">
+                                <div>
+                                    <h3 class="pb-item__name">Корзина (базовая)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">600 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Корзина (базовая)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="600">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="extra-корзина-средняя-рынок-вариант-1">
+                                <div>
+                                    <h3 class="pb-item__name">Корзина средняя (рынок, вариант 1)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">1&nbsp;100 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Корзина средняя (рынок, вариант 1)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="1100">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="extra-корзина-средняя-рынок-вариант-2">
+                                <div>
+                                    <h3 class="pb-item__name">Корзина средняя (рынок, вариант 2)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">1&nbsp;200 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Корзина средняя (рынок, вариант 2)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="1200">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="extra-корзина-средняя-рынок-вариант-3">
+                                <div>
+                                    <h3 class="pb-item__name">Корзина средняя (рынок, вариант 3)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">1&nbsp;600 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Корзина средняя (рынок, вариант 3)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="1600">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="extra-корзина-большая-рынок">
+                                <div>
+                                    <h3 class="pb-item__name">Корзина большая (рынок)</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">1&nbsp;500 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Корзина большая (рынок)" type="number" min="0" max="100000" step="10" inputmode="numeric" value="1500">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="extra-ткань">
+                                <div>
+                                    <h3 class="pb-item__name">Ткань</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">150 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Ткань" type="number" min="0" max="100000" step="10" inputmode="numeric" value="150">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        
+                            <article class="pb-item" data-item-id="extra-сеточка-под-продукты">
+                                <div>
+                                    <h3 class="pb-item__name">Сеточка под продукты</h3>
+                                    <div class="pb-item__price-wrap">
+                                        <span class="pb-item__price" data-role="price-label">200 сом</span>
+                                        <input class="pb-item__price-input" data-role="price-input" aria-label="Цена для Сеточка под продукты" type="number" min="0" max="100000" step="10" inputmode="numeric" value="200">
+                                    </div>
+                                </div>
+                                <div class="pb-item__controls">
+                                    <button class="pb-qty-btn" type="button" data-action="dec" aria-label="Уменьшить">−</button>
+                                    <span class="pb-qty-value" data-role="qty">0</span>
+                                    <button class="pb-qty-btn" type="button" data-action="inc" aria-label="Увеличить">+</button>
+                                </div>
+                            </article>
+                        </div>
+                    </details>
                 </div>
-                <div class="pb-status" id="catalogStatus" aria-live="polite"></div>
+            </section>
 
-                <section aria-label="Категории товаров"><div id="categories"></div></section>
-
-                <section class="pb-box" aria-labelledby="customTitle">
-                    <h2 id="customTitle">Нет нужного товара в списке?</h2>
-                    <p class="muted">Добавьте свой продукт вручную, и он сразу попадёт в корзину.</p>
-                    <form class="pb-form" id="customForm" novalidate>
-                        <label class="pb-field pb-field--wide"><span>Название товара</span><input class="input" id="customName" type="text" maxlength="80" placeholder="Например, Конфеты ассорти" required autocomplete="off"></label>
-                        <label class="pb-field"><span>Цена, сом</span><input class="input" id="customPrice" type="number" min="0" max="100000" step="1" inputmode="numeric" placeholder="0" required></label>
-                        <label class="pb-field"><span>Категория</span><select class="input" id="customCategory" required></select></label>
-                        <div class="pb-field"><span>Количество</span>
-                            <div class="qty pb-qty-wide" role="group" aria-label="Количество товара">
-                                <button type="button" id="customQtyDec" aria-label="Уменьшить количество">−</button>
-                                <span id="customQty" aria-live="polite">1</span>
-                                <button type="button" id="customQtyInc" aria-label="Увеличить количество">+</button>
+            <section class="pb-summary" id="summarySection" aria-label="Итоговый состав">
+                <div class="pb-summary__head">
+                    <h2>Выбранный состав</h2>
+                    <div class="pb-summary__head-controls">
+                        <div class="pb-summary__meta" id="summaryMeta">0 позиций</div>
+                        <button class="pb-edit-toggle" type="button" id="toggleSummaryEditBtn" aria-label="Включить редактирование состава" title="Включить редактирование состава">✎</button>
+                    </div>
+                </div>
+                <div class="pb-summary__list" id="bottomSummaryList"><div class="pb-empty">Добавьте товары, чтобы увидеть состав корзины.</div></div>
+                <div class="pb-custom-add">
+                    <h3>Нет нужного товара в списке?</h3>
+                    <p>Добавьте свой продукт вручную, и он сразу попадёт в корзину и в итоговый список.</p>
+                    <form class="pb-custom-add__form" id="customProductForm">
+                        <input class="pb-custom-input" id="customProductName" type="text" maxlength="80" placeholder="Название товара" required="">
+                        <input class="pb-custom-input" id="customProductPrice" type="number" min="0" max="100000" step="1" inputmode="numeric" placeholder="Цена, сом" required="">
+                        <div class="pb-item__controls pb-custom-qty" role="group" aria-label="Количество товара">
+                            <button class="pb-qty-btn" type="button" id="customProductQtyDec" aria-label="Уменьшить количество">−</button>
+                            <span class="pb-qty-value" id="customProductQty" aria-label="Количество">1</span>
+                            <button class="pb-qty-btn" type="button" id="customProductQtyInc" aria-label="Увеличить количество">+</button>
+                        </div>
+                        <select class="pb-custom-input" id="customProductCategory" required=""><option value="cat-печенья">Печенья</option><option value="cat-конфеты">Конфеты</option><option value="cat-сладости">Сладости</option><option value="cat-фрукты">Фрукты</option><option value="cat-алкоголь">Алкоголь</option><option value="cat-соки">Соки</option><option value="cat-газировки">Газировки</option><option value="extra">Дополнительно</option></select>
+                        <button class="pb-btn pb-btn--light" type="submit" id="customProductAddBtn">Добавить свой товар</button>
+                    </form>
+                </div>
+                <div class="pb-commission">
+                    <div class="pb-commission__head">
+                        <h3>Комиссия</h3>
+                        <p>Введите пароль, чтобы открыть функцию</p>
+                    </div>
+                    <div class="pb-commission__gate">
+                        <input class="pb-custom-input" id="commissionPassword" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="Пароль">
+                        <button class="pb-btn pb-btn--light" type="button" id="commissionUnlockBtn">Открыть</button>
+                    </div>
+                    <div class="pb-commission__hint" id="commissionHint">Секция закрыта.</div>
+                    <div class="pb-commission__controls" id="commissionControls" hidden="">
+                        <input class="pb-custom-input" id="commissionPercent" type="number" min="0" max="300" step="0.1" inputmode="decimal" placeholder="Процент наценки, %">
+                        <button class="pb-btn pb-btn--light" type="button" id="commissionResetBtn">Сбросить наценку</button>
+                    </div>
+                </div>
+                <div class="pb-summary__footer">
+                    <div class="pb-total-line"><span>Итого:</span><strong id="bottomSummaryTotal">0 сом</strong></div>
+                    <div class="pb-summary__actions">
+                        <div class="pb-copy-dropdown">
+                            <button class="pb-btn pb-btn--ghost" type="button" id="copyBottomBtn">Скопировать состав</button>
+                            <button class="pb-btn pb-btn--ghost pb-copy-toggle" type="button" id="copyBottomMenuBtn" aria-label="Показать варианты копирования" aria-haspopup="menu" aria-expanded="false">▾</button>
+                            <div class="pb-copy-menu" id="copyBottomMenu" hidden="">
+                                <button class="pb-copy-menu__item" type="button" id="copyBottomWithPricesBtn">Копировать с ценами</button>
                             </div>
                         </div>
-                        <button class="btn btn--primary pb-field--wide" type="submit">Добавить свой товар</button>
-                        <p class="pb-error pb-field--wide" id="customError" role="alert" hidden></p>
-                    </form>
-                </section>
-
-                <section class="pb-box" aria-labelledby="comTitle">
-                    <h2 id="comTitle">Комиссия</h2>
-                    <p class="muted">Введите пароль, чтобы открыть функцию.</p>
-                    <form class="pb-form pb-form--inline" id="comForm" novalidate>
-                        <input class="input" id="comPassword" type="password" inputmode="numeric" maxlength="8" autocomplete="off" placeholder="Пароль" aria-label="Пароль">
-                        <button class="btn" type="submit" id="comUnlockBtn">Открыть</button>
-                    </form>
-                    <p class="note" id="comHint">Секция закрыта.</p>
-                    <div class="pb-form pb-form--inline" id="comControls" hidden>
-                        <input class="input" id="comPercent" type="number" min="0" max="300" step="0.1" inputmode="decimal" placeholder="Процент наценки, %" aria-label="Процент наценки">
-                        <button class="btn" type="button" id="comResetBtn">Сбросить наценку</button>
-                        <button class="btn" type="button" id="comLockBtn">Закрыть</button>
+                        <button class="pb-btn pb-btn--primary" type="button" id="sendBottomBtn">Отправить в WhatsApp</button>
+                        <button class="pb-btn pb-btn--danger" type="button" id="clearBottomBtn">Очистить всё</button>
                     </div>
-                </section>
-            </div>
-
-            <aside class="pb-cart" id="cartAside" aria-label="Корзина">
-                <div class="pb-cart__head">
-                    <h2>Корзина <span class="badge" id="cartCount">0</span></h2>
-                    <button class="icon-btn" type="button" id="editBtn" aria-pressed="false" aria-label="Редактировать состав" title="Редактировать состав">✎</button>
                 </div>
-                <div class="pb-cart__list" id="cartList"></div>
-                <div class="pb-cart__foot">
-                    <div class="pb-total"><span>Итого:</span><strong id="cartTotal">0 сом</strong></div>
-                    <button class="btn btn--primary btn--lg btn--block" type="button" data-send>Заказать в WhatsApp</button>
-                    <div class="pb-split">
-                        <button class="btn" type="button" data-copy="plain">Копировать</button>
-                        <button class="btn" type="button" data-copy="prices">С ценами</button>
-                    </div>
-                    <button class="btn btn--danger btn--block" type="button" data-clear>Очистить всё</button>
-                </div>
-            </aside>
+            </section>
         </div>
     </main>
 
-    <div class="pb-bar" id="cartBar">
-        <div class="pb-bar__sum"><span>Итого</span><strong id="barTotal">0 сом</strong></div>
-        <button class="btn btn--primary btn--lg" type="button" id="openSheetBtn" aria-haspopup="dialog">Корзина <span class="badge" id="barCount">0</span></button>
-    </div>
-
-    <div class="overlay pb-sheet-wrap" id="sheet" hidden>
-        <section class="pb-sheet" role="dialog" aria-modal="true" aria-label="Корзина">
-            <div class="pb-cart__head">
-                <h2>Корзина <span class="badge" id="sheetCount">0</span></h2>
-                <div class="pb-cart__tools">
-                    <button class="icon-btn" type="button" id="editBtn2" aria-pressed="false" aria-label="Редактировать состав" title="Редактировать состав">✎</button>
-                    <button class="icon-btn" type="button" id="closeSheetBtn" aria-label="Закрыть">×</button>
+    <aside class="pb-corner-cart" id="cornerCart" aria-label="Корзина справа">
+        <div class="pb-corner-cart__head">
+            <h3>Корзина</h3>
+            <div class="pb-corner-cart__head-controls">
+                <button class="pb-edit-toggle pb-edit-toggle--compact" type="button" id="toggleCornerEditBtn" aria-label="Включить редактирование состава" title="Включить редактирование состава">✎</button>
+                <span id="cornerCount">0</span>
+            </div>
+        </div>
+        <div class="pb-corner-cart__list" id="cornerCartList"><div class="pb-empty">Добавьте товары, чтобы увидеть состав корзины.</div></div>
+        <div class="pb-corner-cart__footer">
+            <div class="pb-total-line"><span>Итого:</span><strong id="cornerCartTotal">0 сом</strong></div>
+            <button class="pb-btn pb-btn--primary" type="button" id="sendCornerBtn">Заказать в Whatsapp</button>
+            <div class="pb-copy-dropdown">
+                <button class="pb-btn pb-btn--ghost" type="button" id="copyCornerBtn">Копировать</button>
+                <button class="pb-btn pb-btn--ghost pb-copy-toggle" type="button" id="copyCornerMenuBtn" aria-label="Показать варианты копирования" aria-haspopup="menu" aria-expanded="false">▾</button>
+                <div class="pb-copy-menu" id="copyCornerMenu" hidden="">
+                    <button class="pb-copy-menu__item" type="button" id="copyCornerWithPricesBtn">Копировать с ценами</button>
                 </div>
             </div>
-            <div class="pb-cart__list" id="sheetList"></div>
-            <div class="pb-cart__foot">
-                <div class="pb-total"><span>Итого:</span><strong id="sheetTotal">0 сом</strong></div>
-                <button class="btn btn--primary btn--lg btn--block" type="button" data-send>Отправить в WhatsApp</button>
-                <div class="pb-split">
-                    <button class="btn" type="button" data-copy="plain">Копировать</button>
-                    <button class="btn" type="button" data-copy="prices">С ценами</button>
-                </div>
-                <button class="btn btn--danger btn--block" type="button" data-clear>Очистить всё</button>
+            <button class="pb-btn pb-btn--danger" type="button" id="clearCornerBtn">Очистить</button>
+        </div>
+    </aside>
+
+    <button class="pb-float-cart" type="button" id="floatingCartBtn" aria-controls="mobileCartSheet" aria-expanded="false">
+        Корзина
+        <span id="floatingCartCount">0</span>
+    </button>
+
+    <div class="pb-sheet-backdrop" id="sheetBackdrop" hidden=""></div>
+    <section class="pb-mobile-sheet" id="mobileCartSheet" aria-hidden="true">
+        <div class="pb-mobile-sheet__head">
+            <h3>Корзина</h3>
+            <div class="pb-mobile-sheet__head-actions">
+                <button class="pb-edit-toggle pb-edit-toggle--compact" type="button" id="toggleMobileEditBtn" aria-label="Включить редактирование состава" title="Включить редактирование состава">✎</button>
+                <button class="pb-close-btn" type="button" id="closeMobileSheetBtn" aria-label="Закрыть">×</button>
             </div>
-        </section>
+        </div>
+        <div class="pb-mobile-sheet__list" id="mobileCartList"><div class="pb-empty">Добавьте товары, чтобы увидеть состав корзины.</div></div>
+        <div class="pb-mobile-sheet__footer">
+            <div class="pb-total-line"><span>Итого:</span><strong id="mobileCartTotal">0 сом</strong></div>
+            <button class="pb-btn pb-btn--primary" type="button" id="sendMobileBtn">Отправить в WhatsApp</button>
+            <div class="pb-copy-dropdown">
+                <button class="pb-btn pb-btn--ghost" type="button" id="copyMobileBtn">Скопировать состав</button>
+                <button class="pb-btn pb-btn--ghost pb-copy-toggle" type="button" id="copyMobileMenuBtn" aria-label="Показать варианты копирования" aria-haspopup="menu" aria-expanded="false">▾</button>
+                <div class="pb-copy-menu" id="copyMobileMenu" hidden="">
+                    <button class="pb-copy-menu__item" type="button" id="copyMobileWithPricesBtn">Копировать с ценами</button>
+                </div>
+            </div>
+            <button class="pb-btn pb-btn--danger" type="button" id="clearMobileBtn">Очистить всё</button>
+        </div>
+    </section>
+
+    <div class="pb-sticky-total" style="--pb-sticky-bottom-offset: 0px;">
+        <div class="pb-sticky-total__amount">
+            <span>Итоговая цена:</span>
+            <strong id="stickyTotal">0 сом</strong>
+        </div>
+        <button class="pb-btn pb-btn--primary" type="button" id="sendStickyBtn">Заказать в Whatsapp</button>
     </div>
 
-    <div class="pb-toast" id="toast" role="status" aria-live="polite" hidden></div>
+    <div class="pb-toast" id="toast" aria-live="polite">Состав очищен</div>
 
-    <script src="./build/js/google-sheet-catalog.js?v=2"></script>
-    <script src="./assets/js/builder.js"></script>
-</body>
-</html>
+    <script src="./Личный конструктор корзины _ Куда Себет_files/google-sheet-catalog.js"></script>
+    <script src="./Личный конструктор корзины _ Куда Себет_files/xlsx.full.min.js"></script>
+    <script src="./Личный конструктор корзины _ Куда Себет_files/personal-builder.js"></script>
+
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true" style="visibility: visible !important;"><template shadowrootmode="open"><style>
+      div.grammarly-desktop-integration {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select:none;
+        user-select:none;
+      }
+
+      div.grammarly-desktop-integration:before {
+        content: attr(data-content);
+      }
+    </style><div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration" data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}"></div></template></grammarly-desktop-integration></html>
