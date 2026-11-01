@@ -135,6 +135,10 @@ body {
     margin-bottom: 18px;
 }
 
+.pb-controls:not(.pb-controls--floating) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .pb-controls--floating {
     position: fixed;
     left: 50%;
@@ -452,9 +456,16 @@ body:not(.summary-edit-mode) .pb-edit-toggle {
 .pb-custom-add__form {
     margin-top: 10px;
     display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) 124px minmax(180px, 1.1fr) minmax(170px, 1fr);
-    gap: 10px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
     align-items: center;
+}
+
+#customProductName,
+#customProductCategory,
+#customProductAddBtn {
+    grid-column: 1 / -1;
+    min-width: 0;
 }
 
 .pb-custom-input {
@@ -490,6 +501,8 @@ body:not(.summary-edit-mode) .pb-edit-toggle {
 
 .pb-custom-add__form .pb-btn {
     width: 100%;
+    white-space: normal;
+    line-height: 1.2;
 }
 
 .pb-commission {
@@ -680,8 +693,20 @@ body:not(.summary-edit-mode) .pb-edit-toggle {
 
 .pb-summary__actions {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
+}
+
+.pb-summary__actions > .pb-btn {
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.pb-summary__actions > .pb-btn:last-child {
+    grid-column: 1 / -1;
 }
 
 .pb-copy-dropdown {
@@ -689,6 +714,16 @@ body:not(.summary-edit-mode) .pb-edit-toggle {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 38px;
     gap: 6px;
+    min-width: 0;
+}
+
+.pb-copy-dropdown > .pb-btn:first-child {
+    min-width: 0;
+    padding-inline: 8px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.2;
+    text-align: center;
 }
 
 .pb-copy-toggle {
@@ -699,15 +734,16 @@ body:not(.summary-edit-mode) .pb-edit-toggle {
 
 .pb-copy-menu {
     position: absolute;
-    top: calc(100% + 6px);
-    right: 0;
-    min-width: 210px;
+    bottom: calc(100% + 6px);
+    left: 0;
+    width: min(210px, calc(100vw - 32px));
+    min-width: 0;
     border: 1px solid #efceb0;
     border-radius: 10px;
     background: #fff;
     box-shadow: 0 12px 22px rgba(36, 18, 7, 0.16);
     padding: 6px;
-    z-index: 40;
+    z-index: 90;
 }
 
 .pb-copy-menu[hidden] {
