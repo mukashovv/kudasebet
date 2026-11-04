@@ -4,12 +4,8 @@
   const { esc, fmt, norm, add, modal, closeAll, geo, getAddr, setAddr, cleanAddr, WA, FALLBACK } = window.KS;
   const $ = (id) => document.getElementById(id);
 
-  const IMGS = {
-    "sebet-s": ["assets/img/cards/kuda_sebet_s.jpg", FALLBACK],
-    "sebet-m": ["assets/img/cards/kuda_sebet_m.jpg", FALLBACK],
-    "sebet-vip": ["assets/img/cards/kuda_sebet_vip.jpg", FALLBACK],
-    "sebet-combo": ["assets/img/stories/story-combo.webp", FALLBACK]
-  };
+  const SC = window.KudaSebetSheetCatalog;
+  const DEFAULT_PHOTO = SC.DEFAULT_PHOTO;
   const products = {
     "sebet-s": { name: "Куда Себет S", price: 4790, desc: "Корзина S — это маленький мир сладостей, подобранных с любовью. Каждый элемент выбран так, чтобы порадовать самых близких любителей вкусного.", composition: "«Merci», «Toblerone» mini, сок яблоко-груша 0,25 мл, виноград «Дамские пальчики», фрукт «Сердце дракона», гранат ~600 г, манго ~500 г." },
     "sebet-m": { name: "Куда Себет M", price: 6990, desc: "Подарочная корзина, наполненная свежими фруктами и сладостями. Внутри — сочный ананас, манго, гранат, маракуйя, виноград «Дамские пальчики», экзотический «Сердце дракона», печенье в банке и натуральный сок Yan. Идеальный подарок для любимых и близких.", composition: "Фрукт «Сердце дракона», гранат, манго, ананас, печенье в банке, маракуйя, сок Yan «Виноград», сеточка под продукты, виноград «Дамские пальчики»." },
@@ -33,8 +29,10 @@
   ];
 
   const slug = new URLSearchParams(location.search).get("item") || "sebet-s";
-  let product = products[slug] || { name: "Загрузка…", price: 0, desc: "", composition: "" };
-  let images = IMGS[slug] || [FALLBACK];
+  let product = { ...(products[slug] || { name: "Загрузка…", price: 0, desc: "", composition: "" }), available: false };
+  // Do not paint a guessed image while the table's photos are loading.
+  let images = [];
+  let selectPhoto;
 
   function renderProduct() {
     document.title = product.name + " — Куда Себет";
@@ -43,27 +41,33 @@
     $("pDesc").textContent = product.desc;
     $("pComp").textContent = product.composition;
     $("pPrice").textContent = product.name === "Загрузка…" ? "" : fmt(product.price);
-    const active = ACTIVE.has(product.name);
+    const active = product.available ?? ACTIVE.has(product.name);
     $("addBtn").disabled = !active;
     $("buyBtn").disabled = !active;
+    $("addBtn").textContent = active ? "В корзину" : "Скоро";
 
     /* Галерея */
-    $("gMain").innerHTML = `<img id="gImg" src="${esc(images[0])}" alt="${esc(product.name)}">`;
+    $("gMain").setAttribute("aria-busy", String(!images.length));
+    $("gMain").innerHTML = images.length ? `<img id="gImg" src="${esc(images[0])}" alt="${esc(product.name)}">` : "";
     $("gThumbs").innerHTML = images.map((src, i) => `<button class="thumb${i === 0 ? " is-active" : ""}" type="button" data-i="${i}" aria-label="Фото ${i + 1}"><img src="${esc(src)}" alt=""></button>`).join("");
+    selectPhoto = SC.bindGallery($("gMain"), images.length, showPhoto);
   }
   renderProduct();
+  function showPhoto(index) {
+    $("gImg").src = images[index];
+    $("gThumbs").querySelectorAll(".thumb").forEach((thumb, i) => thumb.classList.toggle("is-active", i === index));
+  }
   $("gThumbs").addEventListener("click", (e) => {
     const t = e.target.closest(".thumb"); if (!t) return;
-    $("gImg").src = images[Number(t.dataset.i)];
-    $("gThumbs").querySelectorAll(".thumb").forEach((x) => x.classList.toggle("is-active", x === t));
+    (selectPhoto || showPhoto)(Number(t.dataset.i));
   });
 
   /* Рекомендации */
   $("recommend").innerHTML = RECOMMEND.map(([s, name, cost, desc]) => {
-    const active = ACTIVE.has(name);
+    const active = false;
     const href = "product.html?item=" + encodeURIComponent(s);
-    const media = `<div class="card__img"><img src="${esc((IMGS[s] || [FALLBACK])[0])}" alt="${esc(name)}" loading="lazy"></div>`;
-    return `<article class="card${active ? "" : " card--soon"}">
+    const media = `<div class="card__img"><img src="${esc(DEFAULT_PHOTO)}" alt="${esc(name)}" loading="lazy"></div>`;
+    return `<article class="card${active ? "" : " card--soon"}" data-recommend="${esc(name)}">
       ${active ? `<a href="${href}">${media}</a>` : media}
       <h3>${active ? `<a href="${href}">${esc(name)}</a>` : esc(name)}</h3>
       <p class="card__desc">${esc(desc)}</p>
@@ -73,7 +77,7 @@
 
   /* Добавление в корзину */
   function flash(btn, text) { const prev = btn.textContent; btn.textContent = text; setTimeout(() => { btn.textContent = prev; }, 1000); }
-  $("addBtn").addEventListener("click", (e) => { if (!ACTIVE.has(product.name)) return; add(product.name, product.price); flash(e.currentTarget, "✓ Добавлено"); });
+  $("addBtn").addEventListener("click", (e) => { if (!(product.available ?? ACTIVE.has(product.name))) return; add(product.name, product.price); flash(e.currentTarget, "✓ Добавлено"); });
   $("recommend").addEventListener("click", (e) => {
     const b = e.target.closest("[data-add]"); if (!b) return;
     add(b.dataset.name, Number(b.dataset.price)); flash(b, "✓ Добавлено");
@@ -81,7 +85,7 @@
 
   /* Купить сейчас */
   $("buyBtn").addEventListener("click", () => {
-    if (!ACTIVE.has(product.name)) return;
+    if (!(product.available ?? ACTIVE.has(product.name))) return;
     const body = modal("Купить сейчас", `
       <p class="muted">${esc(product.name)} • ${fmt(product.price)}</p>
       <label class="field-label" for="qbAddr">Укажите точный адрес</label>
@@ -104,25 +108,41 @@
     body.querySelector("#qbSubmit").addEventListener("click", submit);
     input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); submit(); } });
   });
-  const SC = window.KudaSebetSheetCatalog;
-  if (SC) SC.loadRows("Себеттер").then((rows) => {
+  if (SC) SC.loadRows("Себеттер").then(async (rows) => {
     const list = SC.parseRows(rows);
     const base = products[slug];
-    const match = (p) => base ? SC.key(p.name) === SC.key(base.name) : SC.slug(p.name) === slug;
-    const found = list.find((p) => match(p) && !SC.isPopular(p.category)) || list.find(match);
+    // Keep old bookmarks working while new links use the table code or name.
+    const match = (p) => p.slug === slug || SC.slug(p.name) === slug || (base && SC.key(p.name) === SC.key(base.name));
+    const main = list.filter(p => !SC.isPopular(p.category));
+    const found = main.find(p => p.slug === slug) || main.find(match) || list.find(match);
     if (found) {
       product = { ...found, desc: found.desc || base?.desc || "", composition: found.composition || base?.composition || "" };
-      images = IMGS[slug] || [window.KS.IMG[found.name] || FALLBACK];
+      images = await SC.resolvePhotos(found.photo);
+      window.KS.IMG[found.name] = images[0];
       renderProduct();
-    } else if (!base) {
+      window.KudaSebetShare.mount($("productShare"), { slug: found.slug, name: found.name });
+    } else {
       product = { name: "Себет не найден", price: 0, desc: "", composition: "" };
+      images = SC.defaultPhotos();
       renderProduct();
     }
+    await Promise.all([...$("recommend").querySelectorAll("[data-recommend]")].map(async (card) => {
+      const item = list.find(p => !SC.isPopular(p.category) && SC.key(p.name) === SC.key(card.dataset.recommend));
+      if (!item) return;
+      const active = item.available ?? ACTIVE.has(item.name);
+      const href = "product.html?item=" + encodeURIComponent(item.slug);
+      const img = await SC.resolvePhoto(item.photo);
+      card.classList.toggle("card--soon", !active);
+      card.innerHTML = `<a href="${esc(href)}"><div class="card__img"><img src="${esc(img)}" alt="${esc(item.name)}" loading="lazy"></div></a>
+        <h3><a href="${esc(href)}">${esc(item.name)}</a></h3><p class="card__desc">${esc(item.desc)}</p>
+        <div class="card__foot"><span class="price">${active ? fmt(item.price) : "Скоро"}</span>${active ? `<button class="btn btn--primary btn--sm" type="button" data-add data-name="${esc(item.name)}" data-price="${item.price}">В корзину</button>` : `<button class="btn btn--sm" type="button" disabled>Скоро</button>`}</div>`;
+    }));
   }).catch((error) => {
     console.warn("Карточка себета не обновлена.", error);
+    images = SC.defaultPhotos();
     if (!products[slug]) {
       product = { name: "Не удалось загрузить себет", price: 0, desc: "Попробуйте обновить страницу.", composition: "" };
-      renderProduct();
     }
+    renderProduct();
   });
 })();

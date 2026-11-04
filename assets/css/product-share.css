@@ -1,0 +1,22 @@
+.product-navigation { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0 14px; }
+.product-navigation .crumbs { flex: 1; min-width: 0; padding: 0; }
+.product-navigation > .product-share-slot { position: static; flex-shrink: 0; }
+.product-share-slot { position: absolute; top: 8px; right: 14px; z-index: 2; }
+.sheet > .product-share-slot { top: 23px; right: 52px; }
+.product-share-slot:empty { display: none; }
+.product-share { position: relative; width: fit-content; }
+.product-share__toggle { display: flex; align-items: center; gap: 5px; width: fit-content; padding: 0; border: 0; background: transparent; color: #c64e00; font: inherit; font-size: 12px; line-height: 14px; font-weight: 500; cursor: pointer; list-style: none; }
+.product-share__toggle::-webkit-details-marker { display: none; }
+.product-share__toggle { opacity: 0.85; }
+.product-share__toggle:hover, .product-share__toggle:focus-visible, .product-share[open] > .product-share__toggle { opacity: 1; }
+.product-share svg { flex: 0 0 21px; width: 21px; height: 21px; }
+.product-share__toggle svg { flex-basis: 14px; width: 14px; height: 14px; }
+.product-share__menu { position: absolute; z-index: 30; top: calc(100% + 10px); right: 0; width: min(280px, calc(100vw - 80px)); padding: 6px 14px; border: 1px solid #e4dfd8; border-radius: 16px; background: #fffdf9; color: #1d1d1f; box-shadow: 0 12px 30px #38271918; }
+.product-share__menu::before { content: ""; position: absolute; top: -6px; right: 24px; width: 10px; height: 10px; background: #fffdf9; border-top: 1px solid #e4dfd8; border-left: 1px solid #e4dfd8; transform: rotate(45deg); }
+.product-share__menu a, .product-share__menu button { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 50px; padding: 11px 0; border: 0; border-bottom: 1px solid #eee7df; background: transparent; color: inherit; font: inherit; font-size: 14px; text-align: left; text-decoration: none; cursor: pointer; }
+.product-share__menu a:last-of-type { border-bottom: 0; }
+.product-share__menu svg { color: #e85c09; }
+.product-share__menu a:hover, .product-share__menu button:hover { color: #c64e00; }
+.product-share__toggle:focus-visible, .product-share__menu a:focus-visible, .product-share__menu button:focus-visible { outline: 2px solid #ff6801; outline-offset: 3px; }
+.product-share__status { margin: 0; padding: 0; color: #8c420c; font-size: 12px; line-height: 1.5; }
+.product-share__status:not(:empty) { padding: 5px 0 9px; }

@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="./assets/css/site.css">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-EH31YBR01M"></script>
-    <script src="./build/js/google-sheet-catalog.js?v=4"></script>
+    <script src="./build/js/google-sheet-catalog.js?v=7"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -83,15 +83,6 @@
             <a class="tile" href="./personal-builder.html"><span class="tile__sym" aria-hidden="true">＋</span><span><strong>Өзүң чогулт</strong><small>Соберите свой состав</small></span></a>
         </nav>
 
-        <section class="section">
-            <div class="container">
-                <div class="section-head"><h2 class="section-title">Истории</h2>
-                    <div class="arrows"><button class="icon-btn" type="button" data-scroll="-1" aria-label="Назад">‹</button><button class="icon-btn" type="button" data-scroll="1" aria-label="Вперёд">›</button></div>
-                </div>
-                <div class="stories" id="stories"></div>
-            </div>
-        </section>
-
         <section class="section" id="section-popular">
             <div class="container">
                 <h2 class="section-title">Часто заказывают</h2>
@@ -102,12 +93,12 @@
                         <div class="card__foot"><span class="price">4 790 сом</span><button class="btn btn--primary btn--sm" type="button" data-add data-name="Куда Себет S" data-price="4790">Добавить</button></div>
                     </article>
                     <article class="card" data-pop data-name="Куда Себет M">
-                        <a href="product.html?item=sebet-m"><div class="card__img"><img src="assets/img/cards/kuda_sebet_m.jpg" alt="Куда Себет M" loading="lazy"></div></a>
+                        <a href="product.html?item=sebet-m"><div class="card__img"><img src="assets/img/cards/kuda_sebet_s.jpg" alt="Куда Себет M" loading="lazy"></div></a>
                         <h3><a href="product.html?item=sebet-m">Куда Себет M</a></h3>
                         <div class="card__foot"><span class="price">6 990 сом</span><button class="btn btn--primary btn--sm" type="button" data-add data-name="Куда Себет M" data-price="6990">Добавить</button></div>
                     </article>
                     <article class="card" data-pop data-name="Куда Себет Vip">
-                        <a href="product.html?item=sebet-vip"><div class="card__img"><img src="assets/img/cards/kuda_sebet_vip.jpg" alt="Куда Себет Vip" loading="lazy"></div></a>
+                        <a href="product.html?item=sebet-vip"><div class="card__img"><img src="assets/img/cards/kuda_sebet_s.jpg" alt="Куда Себет Vip" loading="lazy"></div></a>
                         <h3><a href="product.html?item=sebet-vip">Куда Себет Vip</a></h3>
                         <div class="card__foot"><span class="price">13 790 сом</span><button class="btn btn--primary btn--sm" type="button" data-add data-name="Куда Себет Vip" data-price="13790">Добавить</button></div>
                     </article>
@@ -188,21 +179,6 @@
             </div>
         </div>
     </footer>
-
-    <div class="overlay story" id="story" hidden>
-        <div class="story__frame" id="storyFrame" role="dialog" aria-modal="true" aria-label="История">
-            <div class="story__shade"></div>
-            <div class="story__timer"><div class="story__fill" id="storyFill"></div></div>
-            <button class="story__ctl story__pause" type="button" id="storyPause" aria-label="Пауза истории">||</button>
-            <button class="story__ctl story__close" type="button" id="storyClose" aria-label="Закрыть историю">×</button>
-            <button class="story__ctl story__prev" type="button" id="storyPrev" aria-label="Предыдущая история">‹</button>
-            <button class="story__ctl story__next" type="button" id="storyNext" aria-label="Следующая история">›</button>
-            <div class="story__content" id="storyContent">
-                <div class="story__text" id="storyText"></div>
-                <a class="btn btn--primary" id="storyCta" href="#section-sebetter">Перейти</a>
-            </div>
-        </div>
-    </div>
 
     <script src="./assets/js/site.js"></script>
     <script src="./assets/js/home.js"></script>

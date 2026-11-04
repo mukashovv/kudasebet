@@ -25,7 +25,7 @@
   ];
   BASE.forEach((p) => { p.category = "Себеттер"; });
   const ACTIVE = new Set(BASE.map((p) => p.name));
-  let products = BASE.map((p) => ({ ...p }));
+  let products = BASE.map((p) => ({ ...p, img: window.KudaSebetSheetCatalog.DEFAULT_PHOTO, images: window.KudaSebetSheetCatalog.defaultPhotos(), available: false }));
   const IMG = Object.fromEntries(BASE.map((p) => [p.name, p.img]));
   const slugify = (s) => String(s || "").trim().toLocaleLowerCase("ru").replace(/[^a-zа-я0-9]+/gi, "-").replace(/^-+|-+$/g, "") || "item";
 
@@ -98,7 +98,7 @@
         <div class="pcard__img"><img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy"></div>
         <div class="pcard__body"><div class="pcard__name">${esc(p.name)}</div><div class="pcard__price">${fmt(p.price)}</div></div>
       </button>
-      ${ACTIVE.has(p.name) ? `<button class="pcard__add" type="button" data-quick="${esc(p.id)}" aria-label="Добавить ${esc(p.name)} в корзину">+</button>` : `<span class="pcard__soon">Скоро</span>`}</article>`).join("");
+      ${(p.available ?? ACTIVE.has(p.name)) ? `<button class="pcard__add" type="button" data-quick="${esc(p.id)}" aria-label="Добавить ${esc(p.name)} в корзину">+</button>` : `<span class="pcard__soon">Скоро</span>`}</article>`).join("");
     $("#noResults").hidden = list.length > 0;
   }
   $("#search").addEventListener("input", (e) => { query = e.target.value; renderGrid(); });
@@ -109,7 +109,7 @@
   $("#grid").addEventListener("click", (e) => {
     const q = e.target.closest("[data-quick]");
     if (q) {
-      const p = products.find((x) => x.id === q.dataset.quick); if (!p) return;
+      const p = products.find((x) => x.id === q.dataset.quick); if (!p || !(p.available ?? ACTIVE.has(p.name))) return;
       addToCart(p.name, p.price);
       q.textContent = "✓"; q.classList.add("is-done");
       setTimeout(() => { q.textContent = "+"; q.classList.remove("is-done"); }, 1000);
@@ -130,12 +130,25 @@
 
   function openProduct(id) {
     const p = products.find((x) => x.id === id); if (!p) return;
-    const active = ACTIVE.has(p.name);
-    openSheet(`<div class="sheet__img"><img src="${esc(p.img)}" alt="${esc(p.name)}"></div>
+    const active = (p.available ?? ACTIVE.has(p.name));
+    const photos = p.images || [p.img];
+    openSheet(`<div class="sheet__img" id="sheetGallery"><img src="${esc(photos[0])}" alt="${esc(p.name)}"></div>
+      ${photos.length > 1 ? `<div class="chips" id="sheetPhotos">${photos.map((src, i) => `<button class="chip${i === 0 ? " is-on" : ""}" type="button" data-photo="${i}" aria-label="Фото ${i + 1}">${i + 1}</button>`).join("")}</div>` : ""}
+      <div class="product-share-slot" id="sheetShare"></div>
       <h2>${esc(p.name)}</h2><div class="sheet__price">${fmt(p.price)}</div>
       ${p.desc ? `<p>${esc(p.desc)}</p>` : ""}${p.comp ? `<p><b>Состав:</b> ${esc(p.comp)}</p>` : ""}
       <button class="btn btn--block" type="button" id="sheetAdd"${active ? "" : " disabled"}>${active ? "Добавить в корзину" : "Скоро в продаже"}</button>`);
+    window.KudaSebetShare.mount($("#sheetShare"), { slug: p.slug || window.KudaSebetSheetCatalog.slug(p.name), name: p.name });
     const add = $("#sheetAdd");
+    const showPhoto = index => {
+      $("#sheetGallery img").src = photos[index];
+      $$("#sheetPhotos [data-photo]").forEach((button, i) => button.classList.toggle("is-on", i === index));
+    };
+    const selectPhoto = window.KudaSebetSheetCatalog?.bindGallery($("#sheetGallery"), photos.length, showPhoto);
+    $("#sheetPhotos")?.addEventListener("click", event => {
+      const button = event.target.closest("[data-photo]");
+      if (button) (selectPhoto || showPhoto)(Number(button.dataset.photo));
+    });
     if (active) add.addEventListener("click", (e) => { addToCart(p.name, p.price); e.currentTarget.textContent = "✓ Добавлено"; setTimeout(closeSheet, 600); });
   }
 
@@ -301,15 +314,16 @@
     });
   }
   const CACHE_B = "kuda_sebet_sheet_baskets_v1", CACHE_I = "kuda_sebet_sheet_items_v1";
-  function applyBaskets(rows) {
+  async function applyBaskets(rows) {
     const list = sheetRows(rows); if (!list.length) return false;
     const pool = BASE.map((p) => ({ ...p })), next = [];
     list.forEach((sp) => {
       let i = pool.findIndex((c) => key(c.name) === key(sp.name));
       if (i < 0) i = pool.findIndex((c) => key(c.category) === key(sp.category) && c.price === sp.price);
       const base = i >= 0 ? pool[i] : { id: window.KudaSebetSheetCatalog.slug(sp.name), img: FALLBACK, desc: "", comp: "" };
-      next.push({ ...base, id: base.id + (window.KudaSebetSheetCatalog.isPopular(sp.category) ? "-popular" : ""), name: sp.name, price: sp.price, category: sp.category, desc: sp.desc || base.desc, comp: sp.composition || base.comp });
+      next.push({ ...base, ...sp, id: sp.slug + (window.KudaSebetSheetCatalog.isPopular(sp.category) ? "-popular" : ""), name: sp.name, price: sp.price, category: sp.category, desc: sp.desc || base.desc, comp: sp.composition || base.comp });
     });
+    await Promise.all(next.map(async (p) => { p.images = await window.KudaSebetSheetCatalog.resolvePhotos(p.photo); p.img = p.images[0]; }));
     products = next;
     products.forEach((p) => { IMG[p.name] = p.img; });
     renderGrid();
@@ -320,13 +334,13 @@
     items = list; renderBuilder(); return true;
   }
   function cached(k) { try { return JSON.parse(store.get(k) || "null"); } catch (e) { return null; } }
-  function loadSheets() {
+  async function loadSheets() {
     const cb = cached(CACHE_B), ci = cached(CACHE_I);
-    if (cb) applyBaskets(cb);
+    if (cb) await applyBaskets(cb);
     if (ci) applyItems(ci);
     const SC = window.KudaSebetSheetCatalog; if (!SC) return;
-    Promise.allSettled([SC.loadRows("Себеттер"), SC.loadRows("Товары")]).then(([a, b]) => {
-      if (a.status === "fulfilled" && applyBaskets(a.value)) store.set(CACHE_B, JSON.stringify(a.value));
+    Promise.allSettled([SC.loadRows("Себеттер"), SC.loadRows("Товары")]).then(async ([a, b]) => {
+      if (a.status === "fulfilled" && await applyBaskets(a.value)) store.set(CACHE_B, JSON.stringify(a.value));
       else if (a.status === "rejected") console.warn("Каталог себетов не обновлён.", a.reason);
       if (b.status === "fulfilled" && applyItems(b.value)) store.set(CACHE_I, JSON.stringify(b.value));
       else if (b.status === "rejected") console.warn("Каталог конструктора не обновлён.", b.reason);

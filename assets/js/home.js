@@ -48,10 +48,10 @@
   let activeNav = "";
 
   function card(p) {
-    const active = ACTIVE.has(p.name);
+    const active = p.available ?? ACTIVE.has(p.name);
     const canOpen = active || p.sheet;
     const href = "product.html?item=" + encodeURIComponent(p.slug);
-    const media = `<div class="card__img">${p.tag ? `<span class="tag">${esc(p.tag)}</span>` : ""}<img src="${esc(IMG[p.name] || FALLBACK)}" alt="${esc(p.name)}" loading="lazy"></div>`;
+    const media = `<div class="card__img">${p.tag ? `<span class="tag">${esc(p.tag)}</span>` : ""}<img src="${esc(p.img || window.KudaSebetSheetCatalog.DEFAULT_PHOTO)}" alt="${esc(p.name)}" loading="lazy"></div>`;
     const cost = active || p.sheet ? fmt(p.price) : "Скоро";
     return `<article class="card${active ? "" : " card--soon"}">
       ${canOpen ? `<a href="${href}">${media}</a>` : media}
@@ -109,24 +109,25 @@
       return category && name && cost !== null ? [{ category, name, price: cost }] : [];
     });
   }
-  function applyBaskets(rows) {
+  async function applyBaskets(rows) {
     const items = sheetProducts(rows); if (!items.length) return;
     const pool = [...catalog], next = [];
     items.forEach((sp) => {
       let i = pool.findIndex((c) => key(c.name) === key(sp.name));
       if (i < 0) i = pool.findIndex((c) => key(c.category) === key(sp.category) && c.price === sp.price);
       const base = i >= 0 ? pool[i] : { tag: "", desc: "" };
-      const slug = ACTIVE.has(sp.name) ? base.slug : window.KudaSebetSheetCatalog.slug(sp.name);
+      const slug = sp.slug;
       next.push({ ...base, ...sp, slug, desc: sp.desc || base.desc, sheet: true, tag: base.tag || sp.category.slice(0, 1) });
     });
+    await Promise.all(next.map(async (p) => { p.img = await window.KudaSebetSheetCatalog.resolvePhoto(p.photo); IMG[p.name] = p.img; }));
     catalog = next;
     renderCatalog(); renderNav();
     const popular = catalog.filter((p) => window.KudaSebetSheetCatalog.isPopular(p.category));
     const note = $("popular").querySelector(".card--note");
     $("popular").innerHTML = popular.map((p) => {
-      const active = ACTIVE.has(p.name), href = "product.html?item=" + encodeURIComponent(p.slug);
+      const active = p.available ?? ACTIVE.has(p.name), href = "product.html?item=" + encodeURIComponent(p.slug);
       return `<article class="card" data-pop data-name="${esc(p.name)}">
-        <a href="${href}"><div class="card__img"><img src="${esc(IMG[p.name] || FALLBACK)}" alt="${esc(p.name)}" loading="lazy"></div></a>
+        <a href="${href}"><div class="card__img"><img src="${esc(p.img || IMG[p.name] || FALLBACK)}" alt="${esc(p.name)}" loading="lazy"></div></a>
         <h3><a href="${href}">${esc(p.name)}</a></h3>
         <div class="card__foot"><span class="price">${fmt(p.price)}</span>${active ? `<button class="btn btn--primary btn--sm" type="button" data-add data-name="${esc(p.name)}" data-price="${p.price}">Добавить</button>` : `<button class="btn btn--sm" type="button" disabled>Скоро</button>`}</div></article>`;
     }).join("");
@@ -181,86 +182,6 @@
     bItems = items; renderBuilder();
   }
 
-  /* ---------- Сториз ---------- */
-  const STORIES = [
-    { title: "О нас", text: "Собираем стильные подарочные корзины в Бишкеке и доставляем с заботой.", target: "#section-sebetter", img: "story-about.webp" },
-    { title: "Установить приложение", action: "app", cta: "Открыть приложение", target: "#section-app", img: "story-app-preview.jpg", modalImg: "story-app-instruction.webp", ctaOnly: true, right: true },
-    { title: "Не носите тяжелые пакеты", text: "Не носите тяжелые пакеты - закажите подарочные корзины прямо к двери.", target: "#section-info", cta: "Подробнее", img: "story-heavy-bags.webp" },
-    { title: "23 февраля!", text: "Готовые подарки к 23 февраля для пап, друзей и коллег.", target: "#section-mayramdar", img: "story-feb23.webp" },
-    { title: "Подарки на 8 марта!", text: "Нежные наборы к 8 марта для мам, любимых и коллег.", target: "#section-mayramdar", img: "story-mar8.webp" },
-    { title: "Куда Себет Комбо", text: "Комбо-наборы с фруктами и сладостями в выгодном формате.", target: "#section-tematik-box", img: "story-combo.webp" },
-    { title: "Себет Хит!", text: "Хиты продаж, которые чаще всего выбирают для подарка.", target: "#section-popular", gradient: "linear-gradient(138deg,#ff5432,#ff7139 46%,#ff8f43)" },
-    { title: "Кыргыз бокс", text: "Кыргыз бокс с национальным акцентом и щедрым наполнением.", target: "#section-kyrgyz-box", img: "story-kyrgyz.webp" },
-    { title: "Өзүн чогулт!", text: "Соберите корзину под свой вкус: только то, что нравится вам.", target: "#section-ozun-chogult", img: "story-ozunchogult.webp" },
-    { title: "Доставка", text: "Условия доставки, оплаты и безопасности заказа в одном разделе.", target: "#section-info", img: "story-delivery-preview.webp", modalImg: "story-delivery.webp", ctaOnly: true }
-  ];
-  const bgOf = (s, modal) => s.gradient || `url('assets/img/stories/${modal && s.modalImg ? s.modalImg : s.img}')`;
-  const viewed = new Set();
-  function renderStories() {
-    $("stories").innerHTML = STORIES.map((s, i) => `<button class="story-card${viewed.has(i) ? " is-viewed" : ""}" type="button" data-story="${i}" style="background-image:${s.gradient || `linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),${bgOf(s)}`}"><span>${esc(s.title)}</span></button>`).join("");
-  }
-  $("stories").addEventListener("click", (e) => { const b = e.target.closest("[data-story]"); if (b) openStory(Number(b.dataset.story)); });
-  document.querySelectorAll("[data-scroll]").forEach((b) => b.addEventListener("click", () => {
-    const row = $("stories"); row.scrollBy({ left: Number(b.dataset.scroll) * row.clientWidth * 0.7 });
-  }));
-
-  const story = $("story"), frame = $("storyFrame"), fill = $("storyFill"), content = $("storyContent"), cta = $("storyCta");
-  let si = -1, raf = 0, t0 = 0, paused = false, pausedAt = 0, pausedTotal = 0;
-  const DURATION = 5000;
-  const stop = () => { cancelAnimationFrame(raf); raf = 0; };
-  function tick(now) {
-    if (paused) return;
-    const p = Math.min((now - t0 - pausedTotal) / DURATION, 1);
-    fill.style.width = p * 100 + "%";
-    if (p >= 1) { openStory(si + 1); return; }
-    raf = requestAnimationFrame(tick);
-  }
-  function setPaused(v) {
-    if (story.hidden || v === paused) return;
-    paused = v;
-    if (v) { pausedAt = performance.now(); stop(); }
-    else { pausedTotal += performance.now() - pausedAt; raf = requestAnimationFrame(tick); }
-    $("storyPause").textContent = v ? "▶" : "||";
-    $("storyPause").setAttribute("aria-label", v ? "Продолжить историю" : "Пауза истории");
-  }
-  function closeStory() {
-    stop(); si = -1; story.hidden = true; document.body.style.overflow = "";
-  }
-  function openStory(i) {
-    if (i < 0 || i >= STORIES.length) { closeStory(); return; }
-    const s = STORIES[i]; si = i; viewed.add(i);
-    const card = document.querySelector(`[data-story="${i}"]`); if (card) card.classList.add("is-viewed");
-    frame.style.backgroundImage = bgOf(s, true);
-    content.classList.toggle("is-cta-only", !!s.ctaOnly);
-    content.classList.toggle("is-cta-right", !!s.right);
-    $("storyText").textContent = s.ctaOnly ? "" : s.text || "";
-    cta.textContent = s.cta || "Перейти"; cta.dataset.target = s.target; cta.dataset.action = s.action || ""; cta.setAttribute("href", s.target);
-    story.hidden = false; document.body.style.overflow = "hidden";
-    paused = false; pausedTotal = 0; t0 = performance.now(); fill.style.width = "0%";
-    $("storyPause").textContent = "||"; stop(); raf = requestAnimationFrame(tick);
-  }
-  $("storyClose").addEventListener("click", closeStory);
-  $("storyPrev").addEventListener("click", () => openStory(Math.max(0, si - 1)));
-  $("storyNext").addEventListener("click", () => openStory(si + 1));
-  $("storyPause").addEventListener("click", () => setPaused(!paused));
-  story.addEventListener("click", (e) => { if (e.target === story) closeStory(); });
-  frame.addEventListener("touchstart", () => setPaused(true), { passive: true });
-  frame.addEventListener("touchend", () => setPaused(false), { passive: true });
-  frame.addEventListener("touchcancel", () => setPaused(false), { passive: true });
-  document.addEventListener("keydown", (e) => {
-    if (story.hidden) return;
-    if (e.key === "Escape") closeStory();
-    if (e.key === "ArrowRight") openStory(si + 1);
-    if (e.key === "ArrowLeft") openStory(Math.max(0, si - 1));
-  });
-  cta.addEventListener("click", (e) => {
-    e.preventDefault();
-    const action = cta.dataset.action, target = cta.dataset.target;
-    closeStory();
-    if (action === "app") { location.href = "app.html"; return; }
-    const el = target && document.querySelector(target); if (el) el.scrollIntoView({ block: "start" });
-  });
-
   /* ---------- Информация ---------- */
   const INFO = {
     delivery: ["Способы доставки", "<p>Доставка курьером по городу, самовывоз из пункта выдачи или точечная доставка ко времени.</p><p>В день отправки присылаем фото готовой корзины перед выездом.</p>"],
@@ -273,7 +194,12 @@
   }));
 
   /* ---------- Старт ---------- */
-  renderStories(); renderCatalog(); renderNav(); renderBuilder();
+  // Wait for the table before allowing purchases from the built-in catalog.
+  if (window.KudaSebetSheetCatalog) {
+    catalog.forEach(p => { p.available = false; });
+    $("popular").querySelectorAll("[data-add]").forEach(button => { button.disabled = true; });
+  }
+  renderCatalog(); renderNav(); renderBuilder();
   const SC = window.KudaSebetSheetCatalog;
   if (SC) {
     Promise.allSettled([SC.loadRows("Себеттер"), SC.loadRows("Товары")]).then(([a, b]) => {
