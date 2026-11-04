@@ -314,8 +314,10 @@
     });
   }
   const CACHE_B = "kuda_sebet_sheet_baskets_v1", CACHE_I = "kuda_sebet_sheet_items_v1";
+  let basketGeneration = 0;
   async function applyBaskets(rows) {
     const list = sheetRows(rows); if (!list.length) return false;
+    const current = ++basketGeneration;
     const pool = BASE.map((p) => ({ ...p })), next = [];
     list.forEach((sp) => {
       let i = pool.findIndex((c) => key(c.name) === key(sp.name));
@@ -324,6 +326,7 @@
       next.push({ ...base, ...sp, id: sp.slug + (window.KudaSebetSheetCatalog.isPopular(sp.category) ? "-popular" : ""), name: sp.name, price: sp.price, category: sp.category, desc: sp.desc || base.desc, comp: sp.composition || base.comp });
     });
     await Promise.all(next.map(async (p) => { p.images = await window.KudaSebetSheetCatalog.resolvePhotos(p.photo); p.img = p.images[0]; }));
+    if (current !== basketGeneration) return false;
     products = next;
     products.forEach((p) => { IMG[p.name] = p.img; });
     renderGrid();
@@ -336,15 +339,13 @@
   function cached(k) { try { return JSON.parse(store.get(k) || "null"); } catch (e) { return null; } }
   async function loadSheets() {
     const cb = cached(CACHE_B), ci = cached(CACHE_I);
-    if (cb) await applyBaskets(cb);
-    if (ci) applyItems(ci);
     const SC = window.KudaSebetSheetCatalog; if (!SC) return;
-    Promise.allSettled([SC.loadRows("Себеттер"), SC.loadRows("Товары")]).then(async ([a, b]) => {
-      if (a.status === "fulfilled" && await applyBaskets(a.value)) store.set(CACHE_B, JSON.stringify(a.value));
-      else if (a.status === "rejected") console.warn("Каталог себетов не обновлён.", a.reason);
-      if (b.status === "fulfilled" && applyItems(b.value)) store.set(CACHE_I, JSON.stringify(b.value));
-      else if (b.status === "rejected") console.warn("Каталог конструктора не обновлён.", b.reason);
-    });
+    // Start network refreshes before resolving any cached photo galleries.
+    const freshBaskets = SC.loadRows("Себеттер"), freshItems = SC.loadRows("Товары");
+    if (cb) applyBaskets(cb).catch(error => console.warn("Сохранённый каталог не загружен.", error));
+    if (ci) applyItems(ci);
+    freshBaskets.then(async rows => { if (await applyBaskets(rows)) store.set(CACHE_B, JSON.stringify(rows)); }).catch(error => console.warn("Каталог себетов не обновлён.", error));
+    freshItems.then(rows => { if (applyItems(rows)) store.set(CACHE_I, JSON.stringify(rows)); }).catch(error => console.warn("Каталог конструктора не обновлён.", error));
   }
 
   /* ---------- Старт ---------- */

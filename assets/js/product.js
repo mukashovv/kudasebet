@@ -33,6 +33,8 @@
   // Do not paint a guessed image while the table's photos are loading.
   let images = [];
   let selectPhoto;
+  let gallerySignature = "";
+  let displayedPhoto = null;
 
   function renderProduct() {
     document.title = product.name + " — Куда Себет";
@@ -47,10 +49,19 @@
     $("addBtn").textContent = active ? "В корзину" : "Скоро";
 
     /* Галерея */
+    const signature = JSON.stringify(images);
+    if (signature === gallerySignature) return;
+    gallerySignature = signature;
+    const previousSrc = $("gImg")?.getAttribute("src");
+    const previousIndex = Number($("gThumbs").querySelector(".is-active")?.dataset.i || 0);
     $("gMain").setAttribute("aria-busy", String(!images.length));
-    $("gMain").innerHTML = images.length ? `<img id="gImg" src="${esc(images[0])}" alt="${esc(product.name)}">` : "";
+    $("gMain").innerHTML = images.length ? `<img id="gImg" src="${esc(images[0])}" alt="${esc(product.name)}" fetchpriority="high">` : "";
     $("gThumbs").innerHTML = images.map((src, i) => `<button class="thumb${i === 0 ? " is-active" : ""}" type="button" data-i="${i}" aria-label="Фото ${i + 1}"><img src="${esc(src)}" alt=""></button>`).join("");
     selectPhoto = SC.bindGallery($("gMain"), images.length, showPhoto);
+    if (images.length) {
+      const index = images[previousIndex] === previousSrc ? previousIndex : Math.max(0, images.indexOf(previousSrc));
+      (selectPhoto || showPhoto)(index);
+    }
   }
   renderProduct();
   function showPhoto(index) {
@@ -108,7 +119,12 @@
     body.querySelector("#qbSubmit").addEventListener("click", submit);
     input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); submit(); } });
   });
-  if (SC) SC.loadRows("Себеттер").then(async (rows) => {
+  let rowsSignature = "", generation = 0;
+  async function applyRows(rows) {
+    const signature = JSON.stringify(rows);
+    if (signature === rowsSignature) return;
+    rowsSignature = signature;
+    const current = ++generation;
     const list = SC.parseRows(rows);
     const base = products[slug];
     // Keep old bookmarks working while new links use the table code or name.
@@ -117,10 +133,21 @@
     const found = main.find(p => p.slug === slug) || main.find(match) || list.find(match);
     if (found) {
       product = { ...found, desc: found.desc || base?.desc || "", composition: found.composition || base?.composition || "" };
-      images = await SC.resolvePhotos(found.photo);
-      window.KS.IMG[found.name] = images[0];
+      // Text and buying controls do not need to wait for image downloads.
       renderProduct();
       window.KudaSebetShare.mount($("productShare"), { slug: found.slug, name: found.name });
+      const cover = await SC.resolvePhoto(found.photo);
+      if (current !== generation) return;
+      if (!images.length || displayedPhoto !== found.photo) images = found.photo ? [cover] : SC.defaultPhotos();
+      displayedPhoto = found.photo;
+      window.KS.IMG[found.name] = images[0];
+      renderProduct();
+      // Add the remaining slides after the cover is visible.
+      SC.resolvePhotos(found.photo).then(photos => {
+        if (current !== generation) return;
+        images = photos;
+        renderProduct();
+      }).catch(error => console.warn("Галерея себета не обновлена.", error));
     } else {
       product = { name: "Себет не найден", price: 0, desc: "", composition: "" };
       images = SC.defaultPhotos();
@@ -132,13 +159,18 @@
       const active = item.available ?? ACTIVE.has(item.name);
       const href = "product.html?item=" + encodeURIComponent(item.slug);
       const img = await SC.resolvePhoto(item.photo);
+      if (current !== generation) return;
       card.classList.toggle("card--soon", !active);
       card.innerHTML = `<a href="${esc(href)}"><div class="card__img"><img src="${esc(img)}" alt="${esc(item.name)}" loading="lazy"></div></a>
         <h3><a href="${esc(href)}">${esc(item.name)}</a></h3><p class="card__desc">${esc(item.desc)}</p>
         <div class="card__foot"><span class="price">${active ? fmt(item.price) : "Скоро"}</span>${active ? `<button class="btn btn--primary btn--sm" type="button" data-add data-name="${esc(item.name)}" data-price="${item.price}">В корзину</button>` : `<button class="btn btn--sm" type="button" disabled>Скоро</button>`}</div>`;
     }));
-  }).catch((error) => {
+  }
+  const savedRows = SC.cachedRows("Себеттер");
+  if (savedRows) applyRows(savedRows).catch(error => console.warn("Сохранённый себет не загружен.", error));
+  SC.loadRows("Себеттер").then(applyRows).catch((error) => {
     console.warn("Карточка себета не обновлена.", error);
+    if (savedRows) return;
     images = SC.defaultPhotos();
     if (!products[slug]) {
       product = { name: "Не удалось загрузить себет", price: 0, desc: "Попробуйте обновить страницу.", composition: "" };

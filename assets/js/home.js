@@ -202,9 +202,7 @@
   renderCatalog(); renderNav(); renderBuilder();
   const SC = window.KudaSebetSheetCatalog;
   if (SC) {
-    Promise.allSettled([SC.loadRows("Себеттер"), SC.loadRows("Товары")]).then(([a, b]) => {
-      if (a.status === "fulfilled") applyBaskets(a.value); else console.warn("Каталог себетов не обновлён.", a.reason);
-      if (b.status === "fulfilled") applyBuilder(b.value); else console.warn("Каталог конструктора не обновлён.", b.reason);
-    });
+    SC.loadRows("Себеттер").then(applyBaskets).catch(error => console.warn("Каталог себетов не обновлён.", error));
+    SC.loadRows("Товары").then(applyBuilder).catch(error => console.warn("Каталог конструктора не обновлён.", error));
   }
 })();

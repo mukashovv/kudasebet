@@ -2,6 +2,21 @@
     const SPREADSHEET_ID = "1_MtkToKftXgZsrl6SAvC5LJBujP4PvGmnq9lVH5MI-g";
     const ENDPOINT = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq`;
     let requestSequence = 0;
+    const memory = new Map();
+    const readCache = (key, maxAge) => {
+        try {
+            const entry = memory.get(key) || JSON.parse(sessionStorage.getItem(key) || "null");
+            return entry && Date.now() - entry.at < maxAge ? entry.value : null;
+        } catch (_) { return null; }
+    };
+    const writeCache = (key, value) => {
+        const entry = { at: Date.now(), value };
+        memory.set(key, entry);
+        try { sessionStorage.setItem(key, JSON.stringify(entry)); } catch (_) { /* Private mode or full storage. */ }
+    };
+    const rowsKey = sheet => `kuda_sheet_rows_v2:${sheet}`;
+    const cachedRows = sheet => readCache(rowsKey(sheet), 5 * 60 * 1000);
+    const rowRequests = new Map();
 
     const rowsFromResponse = (response) => {
         if (!response || response.status !== "ok" || !response.table) {
@@ -19,7 +34,7 @@
         );
     };
 
-    const loadRows = (sheetName) => new Promise((resolve, reject) => {
+    const requestRows = (sheetName) => new Promise((resolve, reject) => {
         const callbackName = `__kudaSebetSheetCallback${Date.now()}_${requestSequence++}`;
         const script = document.createElement("script");
         const url = new URL(ENDPOINT);
@@ -44,7 +59,9 @@
 
         window[callbackName] = (response) => {
             try {
-                finish(resolve, rowsFromResponse(response));
+                const rows = rowsFromResponse(response);
+                writeCache(rowsKey(sheetName), rows);
+                finish(resolve, rows);
             } catch (error) {
                 finish(reject, error);
             }
@@ -58,6 +75,12 @@
         script.onerror = () => finish(reject, new Error(`Unable to load Google Sheets tab: ${sheetName}`));
         document.head.append(script);
     });
+    const loadRows = sheetName => {
+        const recent = readCache(rowsKey(sheetName), 30000);
+        if (recent) return Promise.resolve(recent);
+        if (!rowRequests.has(sheetName)) rowRequests.set(sheetName, requestRows(sheetName).finally(() => rowRequests.delete(sheetName)));
+        return rowRequests.get(sheetName);
+    };
 
     const key = (value) => String(value ?? "").replace(/\s+/g, " ").trim().toLocaleLowerCase("ru");
     const slug = (name) => "sheet-" + key(name).replace(/[^a-zа-яёөүң0-9]+/gi, "-").replace(/^-+|-+$/g, "");
@@ -98,19 +121,34 @@
         const path = /^(https?:\/\/|\/|\.\/|assets\/)/i.test(photo) ? photo : "assets/img/products/" + photo;
         const candidates = /\.[a-z0-9]+(?:[?#].*)?$/i.test(path) ? [path] : ["jpg", "jpeg", "png", "webp", "avif", "JPG", "JPEG", "PNG", "WEBP", "AVIF"].map(ext => `${path}.${ext}`);
         const cacheKey = JSON.stringify(candidates);
+        const storedKey = "kuda_photo_path_v2:" + cacheKey;
+        const stored = readCache(storedKey, 5 * 60 * 1000);
+        if (stored) return Promise.resolve(stored);
         if (!photoRequests.has(cacheKey)) photoRequests.set(cacheKey, (async () => {
-            for (const src of candidates) {
-                const loaded = await new Promise(resolve => {
-                    const img = new Image();
-                    const finish = (value) => { clearTimeout(timer); img.onload = img.onerror = null; resolve(value); };
-                    const timer = setTimeout(() => finish(false), 5000);
-                    img.onload = () => finish(true);
-                    img.onerror = () => finish(false);
-                    img.src = src;
+            // Probe extensions together instead of accumulating ten timeouts.
+            const src = await new Promise(resolve => {
+                const results = candidates.map(() => null);
+                candidates.forEach((candidate, index) => {
+                    const probe = new Promise(done => {
+                        const img = new Image();
+                        const finish = (value) => { clearTimeout(timer); img.onload = img.onerror = null; done(value); };
+                        const timer = setTimeout(() => finish(false), 5000);
+                        img.onload = () => finish(true);
+                        img.onerror = () => finish(false);
+                        img.src = candidate;
+                    });
+                    probe.then(loaded => {
+                        results[index] = loaded;
+                        for (let i = 0; i < results.length; i++) {
+                            if (results[i] === null) return;
+                            if (results[i]) { resolve(candidates[i]); return; }
+                        }
+                        resolve(null);
+                    });
                 });
-                if (loaded) return src;
-            }
-            return null;
+            });
+            if (src) writeCache(storedKey, src);
+            return src;
         })());
         return photoRequests.get(cacheKey).then(src => src || fallback);
     };
@@ -128,8 +166,13 @@
         const images = [...new Set(resolved.filter(Boolean))];
         return images.length ? images : [fallback];
     };
+    const galleryBindings = new WeakMap();
     const bindGallery = (element, count, select) => {
+        galleryBindings.get(element)?.abort();
         if (count < 2) return;
+        const controller = new AbortController();
+        galleryBindings.set(element, controller);
+        const signal = controller.signal;
         let index = 0, start = null;
         const show = (next) => { index = (next + count) % count; select(index); };
         element.tabIndex = 0;
@@ -138,19 +181,19 @@
             if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
             event.preventDefault();
             show(index + (event.key === "ArrowRight" ? 1 : -1));
-        });
+        }, { signal });
         element.addEventListener("touchstart", event => {
             start = event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : null;
-        }, { passive: true });
+        }, { passive: true, signal });
         element.addEventListener("touchend", event => {
             if (!start || !event.changedTouches.length) return;
             const dx = event.changedTouches[0].clientX - start.x, dy = event.changedTouches[0].clientY - start.y;
             start = null;
             if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(index + (dx < 0 ? 1 : -1));
-        }, { passive: true });
-        element.addEventListener("touchcancel", () => { start = null; });
+        }, { passive: true, signal });
+        element.addEventListener("touchcancel", () => { start = null; }, { signal });
         return show;
     };
 
-    window.KudaSebetSheetCatalog = { loadRows, parseRows, key, slug, isPopular, resolvePhoto, resolvePhotos, bindGallery, DEFAULT_PHOTO, defaultPhotos };
+    window.KudaSebetSheetCatalog = { loadRows, cachedRows, parseRows, key, slug, isPopular, resolvePhoto, resolvePhotos, bindGallery, DEFAULT_PHOTO, defaultPhotos };
 })();
