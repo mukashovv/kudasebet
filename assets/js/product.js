@@ -32,20 +32,26 @@
     ["sebet-vip", "Майрам Box Special", 15990, "Для крупных мероприятий."]
   ];
 
-  const slug = new URLSearchParams(location.search).get("item");
-  const product = products[slug] || products["sebet-s"];
-  const images = IMGS[products[slug] ? slug : "sebet-s"];
+  const slug = new URLSearchParams(location.search).get("item") || "sebet-s";
+  let product = products[slug] || { name: "Загрузка…", price: 0, desc: "", composition: "" };
+  let images = IMGS[slug] || [FALLBACK];
 
-  document.title = product.name + " — Куда Себет";
-  $("crumb").textContent = product.name;
-  $("pName").textContent = product.name;
-  $("pDesc").textContent = product.desc;
-  $("pComp").textContent = product.composition;
-  $("pPrice").textContent = fmt(product.price);
+  function renderProduct() {
+    document.title = product.name + " — Куда Себет";
+    $("crumb").textContent = product.name;
+    $("pName").textContent = product.name;
+    $("pDesc").textContent = product.desc;
+    $("pComp").textContent = product.composition;
+    $("pPrice").textContent = product.name === "Загрузка…" ? "" : fmt(product.price);
+    const active = ACTIVE.has(product.name);
+    $("addBtn").disabled = !active;
+    $("buyBtn").disabled = !active;
 
-  /* Галерея */
-  $("gMain").innerHTML = `<img id="gImg" src="${esc(images[0])}" alt="${esc(product.name)}">`;
-  $("gThumbs").innerHTML = images.map((src, i) => `<button class="thumb${i === 0 ? " is-active" : ""}" type="button" data-i="${i}" aria-label="Фото ${i + 1}"><img src="${esc(src)}" alt=""></button>`).join("");
+    /* Галерея */
+    $("gMain").innerHTML = `<img id="gImg" src="${esc(images[0])}" alt="${esc(product.name)}">`;
+    $("gThumbs").innerHTML = images.map((src, i) => `<button class="thumb${i === 0 ? " is-active" : ""}" type="button" data-i="${i}" aria-label="Фото ${i + 1}"><img src="${esc(src)}" alt=""></button>`).join("");
+  }
+  renderProduct();
   $("gThumbs").addEventListener("click", (e) => {
     const t = e.target.closest(".thumb"); if (!t) return;
     $("gImg").src = images[Number(t.dataset.i)];
@@ -67,7 +73,7 @@
 
   /* Добавление в корзину */
   function flash(btn, text) { const prev = btn.textContent; btn.textContent = text; setTimeout(() => { btn.textContent = prev; }, 1000); }
-  $("addBtn").addEventListener("click", (e) => { add(product.name, product.price); flash(e.currentTarget, "✓ Добавлено"); });
+  $("addBtn").addEventListener("click", (e) => { if (!ACTIVE.has(product.name)) return; add(product.name, product.price); flash(e.currentTarget, "✓ Добавлено"); });
   $("recommend").addEventListener("click", (e) => {
     const b = e.target.closest("[data-add]"); if (!b) return;
     add(b.dataset.name, Number(b.dataset.price)); flash(b, "✓ Добавлено");
@@ -75,6 +81,7 @@
 
   /* Купить сейчас */
   $("buyBtn").addEventListener("click", () => {
+    if (!ACTIVE.has(product.name)) return;
     const body = modal("Купить сейчас", `
       <p class="muted">${esc(product.name)} • ${fmt(product.price)}</p>
       <label class="field-label" for="qbAddr">Укажите точный адрес</label>
@@ -96,5 +103,26 @@
     };
     body.querySelector("#qbSubmit").addEventListener("click", submit);
     input.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); submit(); } });
+  });
+  const SC = window.KudaSebetSheetCatalog;
+  if (SC) SC.loadRows("Себеттер").then((rows) => {
+    const list = SC.parseRows(rows);
+    const base = products[slug];
+    const match = (p) => base ? SC.key(p.name) === SC.key(base.name) : SC.slug(p.name) === slug;
+    const found = list.find((p) => match(p) && !SC.isPopular(p.category)) || list.find(match);
+    if (found) {
+      product = { ...found, desc: found.desc || base?.desc || "", composition: found.composition || base?.composition || "" };
+      images = IMGS[slug] || [window.KS.IMG[found.name] || FALLBACK];
+      renderProduct();
+    } else if (!base) {
+      product = { name: "Себет не найден", price: 0, desc: "", composition: "" };
+      renderProduct();
+    }
+  }).catch((error) => {
+    console.warn("Карточка себета не обновлена.", error);
+    if (!products[slug]) {
+      product = { name: "Не удалось загрузить себет", price: 0, desc: "Попробуйте обновить страницу.", composition: "" };
+      renderProduct();
+    }
   });
 })();

@@ -291,6 +291,7 @@
   /* ---------- Google Sheets (необязательно) ---------- */
   const price = (v) => { const s = String(v ?? "").trim(), n = Number(s.replace(/\s+/g, "").replace(",", ".")); return s && Number.isFinite(n) && n >= 0 ? n : null; };
   function sheetRows(rows) {
+    if (window.KudaSebetSheetCatalog) return window.KudaSebetSheetCatalog.parseRows(rows);
     if (!Array.isArray(rows) || rows.length < 2) return [];
     const h = rows[0].map((c) => String(c || "").trim().toLocaleLowerCase("ru"));
     const ci = Math.max(0, h.findIndex((x) => /катег/.test(x))), ni = Math.max(1, h.findIndex((x) => /себет|корзин|товар|наимен/.test(x))), pi = Math.max(2, h.findIndex((x) => /цен|price|стоим/.test(x)));
@@ -306,8 +307,8 @@
     list.forEach((sp) => {
       let i = pool.findIndex((c) => key(c.name) === key(sp.name));
       if (i < 0) i = pool.findIndex((c) => key(c.category) === key(sp.category) && c.price === sp.price);
-      const base = i >= 0 ? pool.splice(i, 1)[0] : { id: "sheet-" + slugify(sp.name), img: FALLBACK, desc: "", comp: "" };
-      next.push({ ...base, name: sp.name, price: sp.price, category: sp.category });
+      const base = i >= 0 ? pool[i] : { id: window.KudaSebetSheetCatalog.slug(sp.name), img: FALLBACK, desc: "", comp: "" };
+      next.push({ ...base, id: base.id + (window.KudaSebetSheetCatalog.isPopular(sp.category) ? "-popular" : ""), name: sp.name, price: sp.price, category: sp.category, desc: sp.desc || base.desc, comp: sp.composition || base.comp });
     });
     products = next;
     products.forEach((p) => { IMG[p.name] = p.img; });

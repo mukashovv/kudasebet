@@ -49,13 +49,14 @@
 
   function card(p) {
     const active = ACTIVE.has(p.name);
+    const canOpen = active || p.sheet;
     const href = "product.html?item=" + encodeURIComponent(p.slug);
     const media = `<div class="card__img">${p.tag ? `<span class="tag">${esc(p.tag)}</span>` : ""}<img src="${esc(IMG[p.name] || FALLBACK)}" alt="${esc(p.name)}" loading="lazy"></div>`;
     const cost = active || p.sheet ? fmt(p.price) : "Скоро";
     return `<article class="card${active ? "" : " card--soon"}">
-      ${active ? `<a href="${href}">${media}</a>` : media}
+      ${canOpen ? `<a href="${href}">${media}</a>` : media}
       <div class="card__cat">${esc(p.category)}</div>
-      <h3>${active ? `<a href="${href}">${esc(p.name)}</a>` : esc(p.name)}</h3>
+      <h3>${canOpen ? `<a href="${href}">${esc(p.name)}</a>` : esc(p.name)}</h3>
       <p class="card__desc">${esc(p.desc)}</p>
       <div class="card__foot"><span class="price">${cost}</span>
         ${active ? `<button class="btn btn--primary btn--sm" type="button" data-add data-name="${esc(p.name)}" data-price="${p.price}">В корзину</button>` : `<button class="btn btn--sm" type="button" disabled>Скоро</button>`}
@@ -64,7 +65,7 @@
 
   function groups() {
     const map = new Map();
-    catalog.forEach((p) => {
+    catalog.filter((p) => !window.KudaSebetSheetCatalog?.isPopular(p.category)).forEach((p) => {
       const id = sectionId(p.category);
       if (!map.has(id)) map.set(id, { id, title: p.category, items: [] });
       map.get(id).items.push(p);
@@ -97,6 +98,7 @@
 
   /* ---------- Google Sheets ---------- */
   function sheetProducts(rows) {
+    if (window.KudaSebetSheetCatalog) return window.KudaSebetSheetCatalog.parseRows(rows);
     if (!Array.isArray(rows) || rows.length < 2) return [];
     const h = rows[0].map((c) => String(c || "").trim().toLocaleLowerCase("ru"));
     const ci = Math.max(0, h.findIndex((x) => /катег/.test(x)));
@@ -113,17 +115,22 @@
     items.forEach((sp) => {
       let i = pool.findIndex((c) => key(c.name) === key(sp.name));
       if (i < 0) i = pool.findIndex((c) => key(c.category) === key(sp.category) && c.price === sp.price);
-      const base = i >= 0 ? pool.splice(i, 1)[0] : { slug: "sheet-" + slugify(sp.name), tag: "", desc: "" };
-      next.push({ ...base, name: sp.name, price: sp.price, category: sp.category, sheet: true, tag: base.tag || sp.category.slice(0, 1) });
+      const base = i >= 0 ? pool[i] : { tag: "", desc: "" };
+      const slug = ACTIVE.has(sp.name) ? base.slug : window.KudaSebetSheetCatalog.slug(sp.name);
+      next.push({ ...base, ...sp, slug, desc: sp.desc || base.desc, sheet: true, tag: base.tag || sp.category.slice(0, 1) });
     });
     catalog = next;
     renderCatalog(); renderNav();
-    const byName = new Map(items.map((x) => [key(x.name), x]));
-    document.querySelectorAll("#popular [data-pop]").forEach((c) => {
-      const sp = byName.get(key(c.dataset.name)); if (!sp) return;
-      c.querySelector(".price").textContent = fmt(sp.price);
-      const btn = c.querySelector("[data-add]"); if (btn) btn.dataset.price = String(sp.price);
-    });
+    const popular = catalog.filter((p) => window.KudaSebetSheetCatalog.isPopular(p.category));
+    const note = $("popular").querySelector(".card--note");
+    $("popular").innerHTML = popular.map((p) => {
+      const active = ACTIVE.has(p.name), href = "product.html?item=" + encodeURIComponent(p.slug);
+      return `<article class="card" data-pop data-name="${esc(p.name)}">
+        <a href="${href}"><div class="card__img"><img src="${esc(IMG[p.name] || FALLBACK)}" alt="${esc(p.name)}" loading="lazy"></div></a>
+        <h3><a href="${href}">${esc(p.name)}</a></h3>
+        <div class="card__foot"><span class="price">${fmt(p.price)}</span>${active ? `<button class="btn btn--primary btn--sm" type="button" data-add data-name="${esc(p.name)}" data-price="${p.price}">Добавить</button>` : `<button class="btn btn--sm" type="button" disabled>Скоро</button>`}</div></article>`;
+    }).join("");
+    if (note) $("popular").append(note);
   }
 
   /* ---------- Конструктор ---------- */
