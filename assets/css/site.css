@@ -434,3 +434,55 @@ button, input, select { font: inherit; color: inherit; }
 .desktop-profile-drawer__support a { padding: 7px 0; border-top: 1px solid #f4f0ec; font-size: 13px; font-weight: 500; }
 @media (max-width: 899px) { .desktop-profile-backdrop, .desktop-profile-drawer { display: none !important; } }
 @media (prefers-reduced-motion: reduce) { .desktop-profile-backdrop, .desktop-profile-drawer { transition: none; } }
+
+/* Спокойный, просторный профиль */
+.desktop-profile-drawer { width: min(560px, 100vw); padding: 28px 30px 24px; background: #fff; box-shadow: -16px 0 46px rgba(29,29,31,.12); }
+.desktop-profile-drawer__close { border-color: transparent; border-radius: 12px; background: #f5f5f4; color: #3b3936; }
+.desktop-profile-drawer__close:hover { background: #eeeeec; }
+.desktop-profile-user { gap: 14px; margin: 0 0 22px; padding: 0 0 20px; border: 0; border-bottom: 1px solid #eceae7; border-radius: 0; background: #fff; }
+.desktop-profile-user__avatar { width: 48px; height: 48px; border: 0; background: #fff0e7; color: var(--accent-d); box-shadow: none; }
+.desktop-profile-links { gap: 0; }
+.desktop-profile-links button { min-height: 58px; padding: 8px 2px; border: 0; border-bottom: 1px solid #f0efed; border-radius: 0; background: #fff; font-weight: 500; }
+.desktop-profile-links button:hover { border-color: #f0efed; background: #faf9f8; transform: none; box-shadow: none; }
+.desktop-profile-links__icon { width: 34px; height: 34px; border-radius: 9px; background: #fff; color: var(--accent-d); }
+.desktop-profile-links__icon svg { width: 23px; height: 23px; }
+.desktop-profile-signout { min-height: 44px; margin-top: 20px; border: 1px solid var(--accent); border-radius: 11px; background: var(--accent); box-shadow: none; }
+.desktop-profile-signout:hover { background: var(--accent-d); box-shadow: none; transform: none; }
+.desktop-profile-drawer__support { gap: 2px; margin-top: 26px; padding: 0; border: 0; border-radius: 0; background: #fff; }
+.desktop-profile-drawer__support strong { margin: 0; padding: 0 0 8px; border: 0; color: #77736e; }
+.desktop-profile-drawer__support a { padding: 9px 0; border-top: 1px solid #f0efed; }
+.desktop-profile-page { gap: 16px; animation: profile-page-in .18s ease both; }
+.desktop-profile-page .cloud-muted { margin-bottom: 2px; }
+.desktop-profile-subtitle { margin: 5px 0 -5px; font-size: 16px; }
+.desktop-profile-page .cloud-favorite-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.desktop-profile-page .cloud-favorite-row { position: relative; display: block; min-width: 0; padding: 0; overflow: hidden; border: 1px solid #eceae7; border-radius: 15px; background: #fff; }
+.desktop-profile-page .cloud-favorite-link { display: grid; gap: 0; color: inherit; text-decoration: none; }
+.desktop-profile-page .cloud-favorite-row img { display: block; width: 100%; height: auto; aspect-ratio: 1.18 / 1; border-radius: 0; object-fit: cover; background: #f5f3ef; }
+.desktop-profile-page .cloud-favorite-link > span { display: grid; gap: 4px; padding: 10px 11px 12px; }
+.desktop-profile-page .cloud-favorite-row strong { font-size: 13px; line-height: 1.35; }
+.desktop-profile-page .cloud-favorite-row small { margin: 0; font-size: 12px; }
+.desktop-profile-page .cloud-favorite-row > button { position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; border: 0; border-radius: 50%; background: rgba(255,255,255,.96); box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+.desktop-profile-page .cloud-date-form { gap: 12px; padding: 16px; border: 1px solid #eceae7; border-radius: 16px; background: #fff; }
+.desktop-profile-page .cloud-date-form label { gap: 6px; color: #625e59; font-size: 12px; font-weight: 600; }
+.desktop-profile-page .cloud-date-form input, .desktop-profile-page .cloud-date-form select { height: 46px; padding: 0 12px; border: 1px solid #e4e1dd; border-radius: 11px; background: #fff; font-size: 14px; transition: border-color .15s ease, box-shadow .15s ease; }
+.desktop-profile-page .cloud-date-form input:focus, .desktop-profile-page .cloud-date-form select:focus { border-color: var(--accent); outline: 0; box-shadow: 0 0 0 3px rgba(255,104,1,.12); }
+.desktop-profile-page .cloud-date-fields { gap: 10px; }
+.desktop-profile-page .cloud-date-form .btn { min-height: 44px; border-radius: 11px; }
+.desktop-profile-page .cloud-reminder-permission { min-height: 42px; border: 1px solid #e4e1dd; border-radius: 11px; background: #fff; }
+.desktop-profile-page .cloud-date-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.desktop-profile-page .cloud-date-row { display: grid; grid-template-columns: 38px minmax(0, 1fr) 30px; align-items: start; gap: 9px; min-height: 112px; padding: 13px; border: 1px solid #eceae7; border-radius: 15px; background: #fff; }
+.desktop-profile-page .cloud-date-icon { width: 36px; height: 36px; background: #fff0e7; }
+.desktop-profile-page .cloud-date-copy strong { font-size: 14px; }
+.desktop-profile-page .cloud-date-copy small { font-size: 11px; }
+.desktop-profile-page .cloud-date-row button { width: 28px; height: 28px; background: #f5f5f4; color: #6f6b66; font-size: 18px; }
+.desktop-profile-page .cloud-favorite-row, .desktop-profile-page .cloud-date-row { transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
+.desktop-profile-page .cloud-favorite-row:hover, .desktop-profile-page .cloud-date-row:hover { border-color: #dedbd7; box-shadow: 0 7px 20px rgba(30,27,24,.07); transform: translateY(-2px); }
+.desktop-profile-page .cloud-favorite-link:focus-visible, .desktop-profile-page .cloud-favorite-row > button:focus-visible, .desktop-profile-page .cloud-date-row button:focus-visible, .desktop-profile-drawer button:focus-visible { outline: 3px solid rgba(255,104,1,.28); outline-offset: 2px; }
+.desktop-profile-page .cloud-date-form .btn { transition: background-color .18s ease, transform .18s ease, box-shadow .18s ease; }
+.desktop-profile-page .cloud-date-form .btn:hover { box-shadow: 0 5px 14px rgba(255,104,1,.14); transform: translateY(-1px); }
+@keyframes profile-page-in { from { opacity: .6; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 560px) {
+  .desktop-profile-drawer { padding: 22px 18px; }
+  .desktop-profile-page .cloud-date-list { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .desktop-profile-page { animation: none; } }
