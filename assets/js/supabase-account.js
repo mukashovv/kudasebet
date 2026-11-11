@@ -34,9 +34,16 @@
   }
   function emit() {
     saveFavoritesCache();
+    renderHeaderAccount();
     paintFavoriteButtons();
     renderProfilePanels();
     window.dispatchEvent(new CustomEvent("kuda-account:updated", { detail: snapshot() }));
+  }
+  function renderHeaderAccount() {
+    document.querySelectorAll(".account-menu__login").forEach(function (button) {
+      button.textContent = state.user ? "Открыть профиль" : "Войти через Google";
+      button.setAttribute("aria-label", state.user ? "Открыть профиль" : "Войти через Google");
+    });
   }
   function saveFavoritesCache() {
     try {
@@ -113,9 +120,12 @@
     const datesBody = state.user
       ? '<form class="cloud-date-form" id="importantDateForm"><label>Кого или что поздравить<input name="name" type="text" maxlength="80" placeholder="Имя или повод" required></label><div class="cloud-date-fields"><label>Дата<input name="birthday" type="date" required></label><label>Напомнить<select name="reminderDays"><option value="3">За 3 дня</option><option value="1">За 1 день</option><option value="0">В день</option><option value="7">За неделю</option></select></label></div><button class="btn btn--block" type="submit">Добавить напоминание</button><button class="cloud-reminder-permission" type="button" data-reminder-permission>Включить уведомления браузера</button><p class="cloud-muted">Веб-версия проверяет дату при открытии профиля. В Android-приложении работают локальные напоминания.</p></form>' + importantDateListMarkup()
       : importantDateListMarkup();
-    wrapper.innerHTML = '<section class="cloud-profile-section"><h2>Аккаунт</h2><div class="cloud-panel">' + accountBody + '</div></section>' +
-      '<section class="cloud-profile-section"><h2>Избранные себеты</h2><div class="cloud-panel">' + favoriteListMarkup() + '</div></section>' +
-      '<section class="cloud-profile-section"><h2>Дни рождения и важные даты</h2><div class="cloud-panel">' + datesBody + '</div></section>';
+    wrapper.innerHTML = '<nav class="cloud-profile-nav" aria-label="Разделы профиля"><a href="#profile-favorites">Избранные</a><a href="#profile-dates">Дни рождения</a><a href="#profile-date-form">События</a></nav>' +
+      '<div class="cloud-profile-content">' +
+      '<section class="cloud-profile-section" id="profile-account"><h2>Аккаунт</h2><div class="cloud-panel">' + accountBody + '</div></section>' +
+      '<section class="cloud-profile-section" id="profile-favorites"><h2>Избранные себеты</h2><div class="cloud-panel">' + favoriteListMarkup() + '</div></section>' +
+      '<section class="cloud-profile-section" id="profile-dates"><h2>Дни рождения и события</h2><div class="cloud-panel" id="profile-date-form">' + datesBody + '</div></section>' +
+      '</div>';
   }
   function announce(message) {
     let toast = document.getElementById("cloudToast");
@@ -436,7 +446,11 @@
       renderProfilePanels();
       connectSupabase();
     }
-    if (event.target.closest("[data-account-google]")) { signInWithGoogle(); return; }
+    if (event.target.closest("[data-account-google]")) {
+      if (state.user) window.location.href = profileUrl();
+      else signInWithGoogle();
+      return;
+    }
     if (event.target.closest("[data-account-signout]")) { signOut(); return; }
     if (event.target.closest("[data-reminder-permission]")) { requestNotificationPermission(); return; }
     const removeDate = event.target.closest("[data-birthday-delete]");
@@ -462,6 +476,7 @@
 
   ensureProfilePanels();
   renderProfilePanels();
+  renderHeaderAccount();
   paintFavoriteButtons();
   if (/\/app\.html$/.test(window.location.pathname) && window.location.hash === "#profile") connectSupabase();
 })();

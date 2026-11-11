@@ -258,6 +258,23 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
   background: #fff; color: var(--tint-d); font-size: 13px; font-weight: 600;
 }
 .cloud-date-form .cloud-muted { font-size: 12px; }
+
+/* Профиль: боковая навигация на широком экране, компактные вкладки на телефоне */
+.cloud-profile-nav { display: flex; gap: 8px; overflow-x: auto; margin: 10px 0 20px; padding: 2px 0 8px; scrollbar-width: none; }
+.cloud-profile-nav::-webkit-scrollbar { display: none; }
+.cloud-profile-nav a { flex: 0 0 auto; padding: 9px 13px; border: 1px solid var(--sep); border-radius: 999px; background: var(--card); color: var(--label); font-size: 13px; font-weight: 600; text-decoration: none; }
+.cloud-profile-nav a:hover { border-color: var(--tint); color: var(--tint-d); }
+.cloud-profile-content { min-width: 0; }
+@media (min-width: 900px) {
+  .app:has(#page-profile:not([hidden])) { max-width: 1120px; padding-right: 34px; padding-left: 34px; }
+  #page-profile:has(#cloudProfileFeatures) #cloudProfileFeatures { display: grid; grid-template-columns: 220px minmax(0, 1fr); align-items: start; gap: 30px; }
+  #cloudProfileFeatures .cloud-profile-nav { position: sticky; top: 28px; display: grid; gap: 7px; overflow: visible; margin: 5px 0 0; padding: 0; }
+  #cloudProfileFeatures .cloud-profile-nav a { border-color: transparent; border-radius: 12px; background: transparent; }
+  #cloudProfileFeatures .cloud-profile-nav a:hover { border-color: var(--sep); background: var(--card); }
+  #cloudProfileFeatures .cloud-profile-section { margin-top: 0; margin-bottom: 24px; scroll-margin-top: 22px; }
+  #cloudProfileFeatures .cloud-profile-section h2 { margin-left: 2px; font-size: 14px; }
+  #cloudProfileFeatures .cloud-profile-content { display: grid; gap: 4px; }
+}
 @media (max-width: 370px) { .cloud-date-fields { grid-template-columns: 1fr; } }
 .cloud-toast {
   position: fixed; z-index: 100; left: 50%; bottom: calc(65px + var(--sa-b)); max-width: calc(100vw - 32px);
