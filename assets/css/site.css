@@ -444,7 +444,9 @@ button, input, select { font: inherit; color: inherit; }
 .desktop-profile-drawer__support a { padding: 7px 0; border-top: 1px solid #f4f0ec; font-size: 13px; font-weight: 500; }
 @media (max-width: 899px) {
   .desktop-profile-backdrop { display: block; }
-  .desktop-profile-drawer { display: flex; width: min(560px, 100vw); padding: calc(22px + env(safe-area-inset-top)) 20px calc(22px + env(safe-area-inset-bottom)); }
+  .desktop-profile-drawer { display: block; width: min(560px, 100vw); padding: calc(22px + env(safe-area-inset-top)) 20px calc(24px + env(safe-area-inset-bottom)); }
+  .desktop-profile-drawer__body { min-height: auto; }
+  .desktop-profile-drawer__support { margin-top: 28px; padding: 18px 0 12px; border-top: 1px solid #eceae7; }
   body.profile-drawer-open { overflow: hidden; }
 }
 @media (prefers-reduced-motion: reduce) { .desktop-profile-backdrop, .desktop-profile-drawer { transition: none; } }
