@@ -212,7 +212,7 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 
 /* Shared Supabase account, favorites, and date reminders */
 .pcard__favorite { top: 9px; right: 9px; width: 36px; height: 36px; }
-.pcard__favorite.is-favorite { background: var(--tint-d); color: #fff; }
+.pcard__favorite.is-favorite { border-color: rgba(232,79,47,.2); background: #fff; color: var(--tint-d); }
 .sheet-favorite {
   width: 100%; min-height: 42px; margin: 0 0 12px; padding: 0 14px;
   border: 1px solid var(--sep); border-radius: 13px; background: var(--card);
