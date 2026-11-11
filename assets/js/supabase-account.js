@@ -139,10 +139,26 @@
   function importantDateListMarkup() {
     if (!state.user) return '<div class="cloud-muted">Войдите через Google, чтобы сохранять дни рождения и важные даты.</div>';
     if (!state.birthdays.length) return '<div class="cloud-muted">Добавьте важный день, чтобы увидеть напоминание здесь.</div>';
+    const reminderOptions = [
+      { value: 7, label: "За неделю" },
+      { value: 3, label: "За 3 дня" },
+      { value: 1, label: "За 1 день" },
+      { value: 0, label: "В день события" }
+    ];
+    const celebrationEmojis = ["🎁", "🎂", "🎈", "🎉", "💐", "🍰", "🎊", "🧁", "💝", "✨"];
     return '<div class="cloud-date-list">' + state.birthdays.map(function (item) {
       const days = dueDays(item.birthday);
       const when = days === null ? "" : reminderLabel(days);
-      return '<div class="cloud-date-row"><span class="cloud-date-icon">🎁</span><span class="cloud-date-copy"><strong>' + escapeHtml(item.name) + '</strong><small>' + escapeHtml(formattedDate(item.birthday)) + (when ? ' · ' + escapeHtml(when) : '') + ' · напомнить за ' + Number(item.reminder_days_before || 0) + ' дн.</small></span><button type="button" data-birthday-delete="' + escapeHtml(item.id) + '" aria-label="Удалить дату">×</button></div>';
+      const seed = String(item.id || item.name + item.birthday);
+      let hash = 0;
+      for (let i = 0; i < seed.length; i += 1) hash = ((hash << 5) - hash + seed.charCodeAt(i)) | 0;
+      const emoji = celebrationEmojis[(hash >>> 0) % celebrationEmojis.length];
+      const id = escapeHtml(item.id);
+      const selectedReminder = Number(item.reminder_days_before || 0);
+      const options = reminderOptions.map(function (option) {
+        return '<option value="' + option.value + '"' + (option.value === selectedReminder ? ' selected' : '') + '>' + option.label + '</option>';
+      }).join("");
+      return '<div class="cloud-date-row"><span class="cloud-date-icon" aria-hidden="true">' + emoji + '</span><span class="cloud-date-copy"><strong>' + escapeHtml(item.name) + '</strong><small>' + escapeHtml(formattedDate(item.birthday)) + (when ? ' · ' + escapeHtml(when) : '') + ' · напомнить за ' + selectedReminder + ' дн.</small></span><span class="cloud-date-actions"><button type="button" data-birthday-edit="' + id + '" aria-label="Изменить напоминание ' + escapeHtml(item.name) + '" aria-expanded="false" title="Изменить">✎</button><button type="button" data-birthday-delete="' + id + '" aria-label="Удалить дату">×</button></span><form class="cloud-date-edit-form" data-birthday-edit-form="' + id + '" hidden><label>Имя или повод<input name="name" type="text" maxlength="80" value="' + escapeHtml(item.name) + '" required></label><div class="cloud-date-fields"><label>Дата<input name="birthday" type="date" value="' + escapeHtml(String(item.birthday || "").slice(0, 10)) + '" required></label><label>Напомнить<select name="reminderDays">' + options + '</select></label></div><div class="cloud-date-edit-actions"><button class="btn btn--primary" type="submit">Сохранить</button><button class="btn" type="button" data-birthday-cancel>Отмена</button></div></form></div>';
     }).join("") + '</div>';
   }
   function ensureProfilePanels() {
@@ -384,8 +400,7 @@
     busyFavorites.delete(id);
     if (saved) announce(shouldAdd ? "Себет сохранён в избранное." : "Себет удалён из избранного.");
   }
-  async function saveBirthday(name, birthday, reminderDays) {
-    if (!client || !state.user) { requestLogin(); return false; }
+  function cleanBirthdayFields(name, birthday, reminderDays) {
     const cleanName = String(name || "").trim();
     const cleanDate = String(birthday || "").slice(0, 10);
     const days = Number(reminderDays);
@@ -394,9 +409,15 @@
     const validDate = date && date.getFullYear() === dateParts[0] && date.getMonth() === dateParts[1] - 1 && date.getDate() === dateParts[2];
     if (!cleanName || cleanName.length > 80 || !/^\d{4}-\d{2}-\d{2}$/.test(cleanDate) || !validDate || !Number.isInteger(days) || days < 0 || days > 30) {
       announce("Проверьте имя, дату и срок напоминания.");
-      return false;
+      return null;
     }
-    const { data, error } = await client.from("birthdays").insert({ user_id: state.user.id, name: cleanName, birthday: cleanDate, reminder_days_before: days, enabled: true }).select("id,name,birthday,reminder_days_before,enabled").single();
+    return { name: cleanName, birthday: cleanDate, reminder_days_before: days };
+  }
+  async function saveBirthday(name, birthday, reminderDays) {
+    if (!client || !state.user) { requestLogin(); return false; }
+    const fields = cleanBirthdayFields(name, birthday, reminderDays);
+    if (!fields) return false;
+    const { data, error } = await client.from("birthdays").insert({ user_id: state.user.id, name: fields.name, birthday: fields.birthday, reminder_days_before: fields.reminder_days_before, enabled: true }).select("id,name,birthday,reminder_days_before,enabled").single();
     if (error) {
       state.error = "Не удалось сохранить дату. Попробуйте ещё раз.";
       console.warn("Supabase important date save failed.", error);
@@ -407,6 +428,24 @@
     state.error = "";
     emit();
     emitDueReminders();
+    return true;
+  }
+  async function updateBirthday(id, name, birthday, reminderDays) {
+    if (!client || !state.user) { requestLogin(); return false; }
+    const fields = cleanBirthdayFields(name, birthday, reminderDays);
+    if (!fields) return false;
+    const { data, error } = await client.from("birthdays").update(fields).eq("user_id", state.user.id).eq("id", String(id)).select("id,name,birthday,reminder_days_before,enabled").single();
+    if (error) {
+      state.error = "Не удалось обновить напоминание. Попробуйте ещё раз.";
+      console.warn("Supabase important date update failed.", error);
+      emit();
+      return false;
+    }
+    state.birthdays = state.birthdays.map(function (item) { return String(item.id) === String(id) ? data : item; }).sort(function (a, b) { return String(a.birthday).localeCompare(String(b.birthday)); });
+    state.error = "";
+    emit();
+    emitDueReminders();
+    announce("Напоминание обновлено.");
     return true;
   }
   async function deleteBirthday(id) {
@@ -540,6 +579,7 @@
     signInWithGoogle: signInWithGoogle,
     signOut: signOut,
     saveBirthday: saveBirthday,
+    updateBirthday: updateBirthday,
     deleteBirthday: deleteBirthday,
     requestNotificationPermission: requestNotificationPermission,
     catalogChanged: catalogChanged,
@@ -615,6 +655,31 @@
     if (event.target.closest("#desktopProfileBack")) { desktopDrawerPage = "menu"; renderDesktopDrawerContent(); return; }
     const profileView = event.target.closest("[data-profile-view]");
     if (profileView) { event.preventDefault(); desktopDrawerPage = profileView.getAttribute("data-profile-view"); setDesktopDrawer(true); return; }
+    const editBirthday = event.target.closest("[data-birthday-edit]");
+    if (editBirthday) {
+      const row = editBirthday.closest(".cloud-date-row");
+      const form = row && row.querySelector("[data-birthday-edit-form]");
+      if (form) {
+        const shouldOpen = form.hidden;
+        document.querySelectorAll("[data-birthday-edit-form]").forEach(function (otherForm) {
+          otherForm.hidden = true;
+          const button = otherForm.closest(".cloud-date-row") && otherForm.closest(".cloud-date-row").querySelector("[data-birthday-edit]");
+          if (button) button.setAttribute("aria-expanded", "false");
+        });
+        form.hidden = !shouldOpen;
+        editBirthday.setAttribute("aria-expanded", String(shouldOpen));
+        if (shouldOpen) form.querySelector('input[name="name"]').focus();
+      }
+      return;
+    }
+    const cancelBirthdayEdit = event.target.closest("[data-birthday-cancel]");
+    if (cancelBirthdayEdit) {
+      const form = cancelBirthdayEdit.closest("[data-birthday-edit-form]");
+      if (form) form.hidden = true;
+      const editButton = form && form.closest(".cloud-date-row").querySelector("[data-birthday-edit]");
+      if (editButton) editButton.setAttribute("aria-expanded", "false");
+      return;
+    }
     const favorite = event.target.closest("[data-favorite-id]");
     if (favorite) {
       event.preventDefault();
@@ -652,11 +717,19 @@
   });
   document.addEventListener("keydown", function (event) { if (event.key === "Escape") setDesktopDrawer(false); });
   document.addEventListener("submit", function (event) {
-    if (!event.target || event.target.id !== "importantDateForm") return;
-    event.preventDefault();
+    if (!event.target) return;
     const form = event.target;
+    const isBirthdayEdit = form.matches("[data-birthday-edit-form]");
+    if (!isBirthdayEdit && form.id !== "importantDateForm") return;
+    event.preventDefault();
     const button = form.querySelector('button[type="submit"]');
     if (button) { button.disabled = true; button.textContent = "Сохраняем…"; }
+    if (isBirthdayEdit) {
+      updateBirthday(form.getAttribute("data-birthday-edit-form"), form.elements.name.value, form.elements.birthday.value, form.elements.reminderDays.value).then(function () {
+        if (button && button.isConnected) { button.disabled = false; button.textContent = "Сохранить"; }
+      });
+      return;
+    }
     saveBirthday(form.elements.name.value, form.elements.birthday.value, form.elements.reminderDays.value).then(function (saved) {
       if (saved) form.reset();
       if (button && button.isConnected) { button.disabled = false; button.textContent = "Добавить напоминание"; }

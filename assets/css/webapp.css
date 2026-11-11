@@ -232,26 +232,38 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 .cloud-error { margin-top: 10px; color: #c23b2c; font-size: 13px; line-height: 1.4; }
 .cloud-favorite-list, .cloud-date-list { display: grid; gap: 8px; }
 .cloud-favorite-row, .cloud-date-row { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 8px; border: 1px solid var(--sep); border-radius: 13px; background: #fff; }
+.cloud-date-list { gap: 12px; }
+.cloud-date-row { display: grid; grid-template-columns: 42px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 14px; border-radius: 16px; }
 .cloud-favorite-link { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; color: inherit; text-decoration: none; }
 .cloud-favorite-row img { width: 54px; height: 54px; flex: 0 0 auto; border-radius: 10px; object-fit: cover; background: var(--sand-a); }
 .cloud-favorite-link > span, .cloud-date-copy { flex: 1; min-width: 0; }
 .cloud-favorite-row strong, .cloud-favorite-row small, .cloud-date-copy strong, .cloud-date-copy small { display: block; overflow-wrap: anywhere; }
 .cloud-favorite-row strong, .cloud-date-copy strong { font-size: 14px; line-height: 1.25; }
 .cloud-favorite-row small, .cloud-date-copy small { margin-top: 4px; color: var(--label2); font-size: 12px; line-height: 1.35; }
-.cloud-favorite-row button, .cloud-date-row button {
+.cloud-favorite-row button, .cloud-date-actions button {
   display: grid; width: 34px; height: 34px; flex: 0 0 auto; place-items: center;
   border: 0; border-radius: 50%; background: var(--tint-soft); color: var(--tint-d);
   font-size: 20px; line-height: 1;
 }
-.cloud-date-icon { display: grid; width: 34px; height: 34px; flex: 0 0 auto; place-items: center; border-radius: 10px; background: var(--tint-soft); }
+.cloud-date-icon { display: grid; width: 42px; height: 42px; flex: 0 0 auto; place-items: center; border-radius: 12px; background: var(--tint-soft); font-size: 21px; }
+.cloud-date-actions { display: flex; align-items: center; gap: 6px; }
+.cloud-date-actions button { width: 34px; height: 34px; border: 1px solid var(--sep); background: #f8f7f5; color: var(--label2); font-size: 17px; cursor: pointer; }
 .cloud-date-form { display: grid; gap: 10px; margin-bottom: 14px; }
-.cloud-date-form label { display: grid; gap: 5px; color: var(--label2); font-size: 12px; }
+.cloud-date-form label { display: grid; gap: 5px; min-width: 0; color: var(--label2); font-size: 12px; }
 .cloud-date-form input, .cloud-date-form select {
   width: 100%; min-width: 0; height: 42px; padding: 0 11px;
   border: 1px solid var(--sep); border-radius: 11px; background: #fff;
   color: var(--label); font-size: 15px;
 }
-.cloud-date-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.cloud-date-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.cloud-date-fields > label { min-width: 0; }
+.cloud-date-fields input, .cloud-date-fields select { max-width: 100%; }
+.cloud-date-edit-form { grid-column: 1 / -1; display: grid; gap: 12px; min-width: 0; margin-top: 2px; padding-top: 14px; border-top: 1px solid var(--sep); }
+.cloud-date-edit-form[hidden] { display: none; }
+.cloud-date-edit-form label { display: grid; gap: 5px; min-width: 0; color: var(--label2); font-size: 12px; }
+.cloud-date-edit-form input, .cloud-date-edit-form select { width: 100%; min-width: 0; max-width: 100%; height: 42px; padding: 0 11px; border: 1px solid var(--sep); border-radius: 11px; background: #fff; color: var(--label); font-size: 15px; }
+.cloud-date-edit-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.cloud-date-edit-actions .btn { display: inline-flex; width: auto; min-width: 100px; height: 40px; padding: 0 12px; border-radius: 10px; }
 .cloud-date-form .btn { height: 44px; }
 .cloud-reminder-permission {
   min-height: 40px; border: 1px solid var(--sep); border-radius: 12px;
@@ -275,7 +287,7 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
   #cloudProfileFeatures .cloud-profile-section h2 { margin-left: 2px; font-size: 14px; }
   #cloudProfileFeatures .cloud-profile-content { display: grid; gap: 4px; }
 }
-@media (max-width: 370px) { .cloud-date-fields { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .cloud-date-fields { grid-template-columns: minmax(0, 1fr); } }
 .cloud-toast {
   position: fixed; z-index: 100; left: 50%; bottom: calc(65px + var(--sa-b)); max-width: calc(100vw - 32px);
   padding: 10px 15px; border-radius: 999px; background: var(--label); color: #fff;
