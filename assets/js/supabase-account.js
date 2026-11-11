@@ -21,6 +21,7 @@
   let sdkPromise = null;
   let ownedDataPromise = null;
   let ownedDataUserId = null;
+  let desktopDrawerPage = "menu";
 
   function sessionGet(key) { try { return sessionStorage.getItem(key); } catch (error) { return null; } }
   function sessionSet(key, value) { try { sessionStorage.setItem(key, value); } catch (error) { /* storage may be disabled */ } }
@@ -38,10 +39,14 @@
     paintFavoriteButtons();
     renderProfilePanels();
     window.dispatchEvent(new CustomEvent("kuda-account:updated", { detail: snapshot() }));
+    if (window.location.hash === "#profile" && window.matchMedia("(min-width: 900px)").matches && state.ready) {
+      if (state.user) setDesktopDrawer(true);
+      else { const menu = document.querySelector(".account-menu"); if (menu) menu.open = true; }
+    }
   }
   function renderHeaderAccount() {
     document.querySelectorAll(".account-menu__login").forEach(function (button) {
-      button.textContent = state.user ? "Открыть профиль" : "Войти через Google";
+      button.textContent = state.user ? "Мой профиль" : "Войти через Google";
       button.setAttribute("aria-label", state.user ? "Открыть профиль" : "Войти через Google");
     });
   }
@@ -106,7 +111,34 @@
     else profile.insertBefore(wrapper, profile.firstChild);
     return wrapper;
   }
+  function renderDesktopDrawerContent() {
+    const content = document.getElementById("desktopProfileContent");
+    if (!content) return;
+    const title = document.getElementById("desktopProfileTitle");
+    const back = document.getElementById("desktopProfileBack");
+    const titles = { menu: "Профиль", favorites: "Избранные", birthdays: "Дни рождения", events: "События" };
+    if (title) title.textContent = titles[desktopDrawerPage] || "Профиль";
+    if (back) back.hidden = desktopDrawerPage === "menu";
+    if (!state.user) {
+      desktopDrawerPage = "menu";
+      content.innerHTML = '<p class="cloud-muted">Войдите через Google, чтобы открыть профиль.</p><button type="button" class="account-menu__login" data-account-google>Войти через Google</button>';
+      return;
+    }
+    if (desktopDrawerPage === "menu") {
+      content.innerHTML = '<div class="desktop-profile-user"><span class="desktop-profile-user__avatar">' + escapeHtml(profileName(state.user).slice(0, 1).toUpperCase()) + '</span><span><strong>' + escapeHtml(profileName(state.user)) + '</strong><small>' + escapeHtml(state.user.email || "Аккаунт Google") + '</small></span></div>' +
+        '<nav class="desktop-profile-links" aria-label="Разделы профиля"><button type="button" data-profile-view="favorites"><span>♡</span><span>Избранные</span><b>›</b></button><button type="button" data-profile-view="birthdays"><span>▦</span><span>Дни рождения</span><b>›</b></button><button type="button" data-profile-view="events"><span>✳</span><span>События</span><b>›</b></button></nav>' +
+        '<button type="button" class="cloud-secondary desktop-profile-signout" data-account-signout>Выйти из аккаунта</button>';
+    } else if (desktopDrawerPage === "favorites") {
+      content.innerHTML = '<section class="desktop-profile-page">' + favoriteListMarkup() + '</section>';
+    } else if (desktopDrawerPage === "birthdays") {
+      content.innerHTML = '<section class="desktop-profile-page"><p class="cloud-muted">Сохранённые дни рождения и памятные даты.</p>' + importantDateListMarkup() + '<button type="button" class="btn btn--block desktop-profile-add" data-profile-view="events">Добавить событие</button></section>';
+    } else {
+      content.innerHTML = '<section class="desktop-profile-page"><p class="cloud-muted">Добавьте повод и дату — они сохранятся в вашем аккаунте.</p><form class="cloud-date-form" id="importantDateForm"><label>Кого или что поздравить<input name="name" type="text" maxlength="80" placeholder="Имя или повод" required></label><div class="cloud-date-fields"><label>Дата<input name="birthday" type="date" required></label><label>Напомнить<select name="reminderDays"><option value="3">За 3 дня</option><option value="1">За 1 день</option><option value="0">В день</option><option value="7">За неделю</option></select></label></div><button class="btn btn--block" type="submit">Добавить напоминание</button><button class="cloud-reminder-permission" type="button" data-reminder-permission>Включить уведомления браузера</button></form>' + importantDateListMarkup() + '</section>';
+    }
+    if (state.error) content.insertAdjacentHTML("afterbegin", '<p class="cloud-error" role="status">' + escapeHtml(state.error) + '</p>');
+  }
   function renderProfilePanels() {
+    renderDesktopDrawerContent();
     const wrapper = ensureProfilePanels();
     if (!wrapper) return;
     let accountBody;
@@ -143,13 +175,15 @@
     announce.timer = setTimeout(function () { toast.classList.remove("is-visible"); }, 2600);
   }
   function profileUrl() {
-    const url = new URL("./app.html", window.location.href);
+    const isDesktopHome = window.matchMedia("(min-width: 900px)").matches && (window.location.pathname.endsWith("/index.html") || window.location.pathname.endsWith("/"));
+    const url = new URL(isDesktopHome ? "./index.html" : "./app.html", window.location.href);
     url.hash = "profile";
     return url.href;
   }
   function requestLogin(productId) {
     if (productId) sessionSet(PENDING_FAVORITE_KEY, normalizedId(productId));
-    if (!window.location.pathname.endsWith("/app.html")) sessionSet(RETURN_KEY, window.location.href);
+    const isDesktopHome = window.matchMedia("(min-width: 900px)").matches && (window.location.pathname.endsWith("/index.html") || window.location.pathname.endsWith("/"));
+    if (!window.location.pathname.endsWith("/app.html") && !isDesktopHome) sessionSet(RETURN_KEY, window.location.href);
     if (window.location.pathname.endsWith("/app.html")) window.location.hash = "profile";
     else window.location.href = profileUrl();
   }
@@ -434,7 +468,53 @@
     refresh: loadOwnedData
   };
 
+  function setDesktopDrawer(open) {
+    const drawer = document.getElementById("desktopProfileDrawer");
+    const backdrop = document.getElementById("desktopProfileBackdrop");
+    if (!drawer || !backdrop || !window.matchMedia("(min-width: 900px)").matches) return;
+    if (open) {
+      renderProfilePanels();
+      const accountMenu = document.querySelector(".account-menu");
+      if (accountMenu) accountMenu.open = false;
+      drawer.inert = false;
+      drawer.setAttribute("aria-hidden", "false");
+      backdrop.hidden = false;
+      requestAnimationFrame(function () { drawer.classList.add("is-open"); backdrop.classList.add("is-open"); });
+      connectSupabase();
+    } else {
+      drawer.classList.remove("is-open");
+      backdrop.classList.remove("is-open");
+      drawer.inert = true;
+      drawer.setAttribute("aria-hidden", "true");
+      window.setTimeout(function () { if (!drawer.classList.contains("is-open")) backdrop.hidden = true; }, 280);
+      if (window.location.hash === "#profile") history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+  }
+
   document.addEventListener("click", function (event) {
+    const profileSummary = event.target.closest(".account-menu__trigger");
+    if (profileSummary && state.user && window.matchMedia("(min-width: 900px)").matches) {
+      event.preventDefault();
+      const menu = profileSummary.closest(".account-menu");
+      if (menu) menu.open = false;
+      desktopDrawerPage = "menu";
+      setDesktopDrawer(true);
+      return;
+    }
+    if (profileSummary && !state.ready && window.matchMedia("(min-width: 900px)").matches) {
+      connectSupabase().then(function () {
+        if (state.user) {
+          const menu = profileSummary.closest(".account-menu");
+          if (menu) menu.open = false;
+          desktopDrawerPage = "menu";
+          setDesktopDrawer(true);
+        }
+      });
+    }
+    if (event.target.closest("#desktopProfileClose, #desktopProfileBackdrop")) { setDesktopDrawer(false); return; }
+    if (event.target.closest("#desktopProfileBack")) { desktopDrawerPage = "menu"; renderDesktopDrawerContent(); return; }
+    const profileView = event.target.closest("[data-profile-view]");
+    if (profileView) { desktopDrawerPage = profileView.getAttribute("data-profile-view"); renderDesktopDrawerContent(); return; }
     const favorite = event.target.closest("[data-favorite-id]");
     if (favorite) {
       event.preventDefault();
@@ -462,6 +542,7 @@
       connectSupabase();
     }
   });
+  document.addEventListener("keydown", function (event) { if (event.key === "Escape") setDesktopDrawer(false); });
   document.addEventListener("submit", function (event) {
     if (!event.target || event.target.id !== "importantDateForm") return;
     event.preventDefault();
@@ -479,4 +560,10 @@
   renderHeaderAccount();
   paintFavoriteButtons();
   if (/\/app\.html$/.test(window.location.pathname) && window.location.hash === "#profile") connectSupabase();
+  if (document.getElementById("desktopProfileDrawer") && window.matchMedia("(min-width: 900px)").matches && window.location.hash === "#profile") {
+    connectSupabase().then(function () {
+      if (state.user) setDesktopDrawer(true);
+      else { const menu = document.querySelector(".account-menu"); if (menu) menu.open = true; }
+    });
+  }
 })();

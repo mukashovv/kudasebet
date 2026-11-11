@@ -204,6 +204,8 @@
     document.querySelectorAll(".support-dropdown[open]").forEach((menu) => {
       if (!menu.contains(e.target)) menu.removeAttribute("open");
     });
+    const accountMenu = document.querySelector(".account-menu[open]");
+    if (accountMenu && !accountMenu.contains(e.target)) accountMenu.open = false;
   });
 
   loadCart(); renderCart();

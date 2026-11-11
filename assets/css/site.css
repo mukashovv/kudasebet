@@ -354,3 +354,56 @@ button, input, select { font: inherit; color: inherit; }
 .account-menu__login { min-height: 44px; border: 0; border-radius: 11px; background: var(--accent); color: #fff; font-weight: 700; cursor: pointer; }
 .account-menu__login:hover { background: var(--accent-d); }
 .account-menu__caption { margin: 8px 10px 0; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+
+/* Десктопный профиль выезжает поверх магазина */
+.desktop-profile-backdrop { position: fixed; inset: 0; z-index: 110; background: rgba(24,20,17,.34); opacity: 0; transition: opacity .24s ease; }
+.desktop-profile-backdrop.is-open { opacity: 1; }
+.desktop-profile-drawer { position: fixed; z-index: 111; inset: 0 0 0 auto; display: flex; flex-direction: column; width: min(460px, 100vw); padding: 28px 30px 22px; overflow-y: auto; background: var(--surface); box-shadow: -18px 0 54px rgba(30,24,19,.18); transform: translateX(102%); transition: transform .3s cubic-bezier(.2,.75,.25,1); }
+.desktop-profile-drawer.is-open { transform: translateX(0); }
+.desktop-profile-drawer__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+.desktop-profile-drawer__head h2 { margin: 0; font-size: 32px; letter-spacing: -.04em; }
+.desktop-profile-drawer__back { order: -1; width: 38px; height: 38px; margin-right: 8px; border: 0; border-radius: 50%; background: var(--soft); color: var(--ink); font-size: 28px; line-height: 1; cursor: pointer; }
+.desktop-profile-drawer__head:has(.desktop-profile-drawer__back[hidden]) h2 { margin-right: auto; }
+.desktop-profile-drawer__close { width: 42px; height: 42px; border: 0; border-radius: 50%; background: transparent; font-size: 34px; line-height: 1; cursor: pointer; }
+.desktop-profile-drawer__body { min-height: 120px; }
+.desktop-profile-drawer__body .cloud-profile-nav { display: grid; gap: 4px; overflow: visible; margin: 0 0 18px; padding: 0; }
+.desktop-profile-drawer__body .cloud-profile-nav a { border-color: transparent; border-radius: 12px; background: transparent; }
+.desktop-profile-drawer__body .cloud-profile-nav a:hover { border-color: var(--line); background: var(--soft); }
+.desktop-profile-drawer__body .cloud-profile-content { display: grid; gap: 18px; }
+.desktop-profile-drawer__body .cloud-profile-nav { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 10px; }
+.desktop-profile-drawer__body .cloud-profile-nav a { padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); font-size: 13px; text-decoration: none; }
+.desktop-profile-drawer__body .cloud-profile-section { margin: 0; scroll-margin-top: 12px; }
+.desktop-profile-drawer__body .cloud-profile-section h2 { margin: 0 0 8px; color: var(--ink); font-size: 16px; letter-spacing: 0; text-transform: none; }
+.desktop-profile-drawer__body .cloud-panel { padding: 14px; border: 1px solid var(--line); background: #fff; }
+.desktop-profile-drawer__body .cloud-muted { color: var(--muted); font-size: 13px; line-height: 1.5; }
+.desktop-profile-drawer__body .cloud-user { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.desktop-profile-drawer__body .cloud-user strong, .desktop-profile-drawer__body .cloud-user small { display: block; overflow-wrap: anywhere; }
+.desktop-profile-drawer__body .cloud-user small { margin-top: 4px; color: var(--muted); }
+.desktop-profile-drawer__body .cloud-favorite-list, .desktop-profile-drawer__body .cloud-date-list, .desktop-profile-drawer__body .cloud-date-form { display: grid; gap: 9px; }
+.desktop-profile-drawer__body .cloud-favorite-row, .desktop-profile-drawer__body .cloud-date-row { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 8px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+.desktop-profile-drawer__body .cloud-favorite-link { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; color: inherit; text-decoration: none; }
+.desktop-profile-drawer__body .cloud-favorite-row img { width: 50px; height: 50px; flex: 0 0 auto; border-radius: 9px; object-fit: cover; }
+.desktop-profile-drawer__body .cloud-favorite-row strong, .desktop-profile-drawer__body .cloud-favorite-row small, .desktop-profile-drawer__body .cloud-date-copy strong, .desktop-profile-drawer__body .cloud-date-copy small { display: block; overflow-wrap: anywhere; }
+.desktop-profile-drawer__body .cloud-date-copy { flex: 1; min-width: 0; }
+.desktop-profile-drawer__body .cloud-date-copy small, .desktop-profile-drawer__body .cloud-favorite-row small { margin-top: 4px; color: var(--muted); font-size: 12px; }
+.desktop-profile-drawer__body .cloud-favorite-row button, .desktop-profile-drawer__body .cloud-date-row button { width: 34px; height: 34px; flex: 0 0 auto; border: 0; border-radius: 50%; background: var(--soft); color: var(--accent-d); cursor: pointer; }
+.desktop-profile-drawer__body .cloud-date-form label { display: grid; gap: 5px; color: var(--muted); font-size: 12px; }
+.desktop-profile-drawer__body .cloud-date-form input, .desktop-profile-drawer__body .cloud-date-form select { width: 100%; min-width: 0; height: 40px; padding: 0 10px; border: 1px solid var(--line); border-radius: 9px; background: #fff; }
+.desktop-profile-drawer__body .cloud-date-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.desktop-profile-user { display: flex; align-items: center; gap: 13px; margin: 2px 0 24px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+.desktop-profile-user__avatar { display: grid; width: 48px; height: 48px; flex: 0 0 auto; place-items: center; border-radius: 50%; background: #fff0e8; color: var(--accent-d); font-size: 19px; font-weight: 700; }
+.desktop-profile-user strong, .desktop-profile-user small { display: block; overflow-wrap: anywhere; }
+.desktop-profile-user small { margin-top: 4px; color: var(--muted); font-size: 12px; }
+.desktop-profile-links { display: grid; gap: 7px; }
+.desktop-profile-links button { display: flex; min-height: 58px; align-items: center; gap: 14px; padding: 8px 4px; border: 0; border-radius: 10px; background: transparent; text-align: left; font-size: 17px; cursor: pointer; }
+.desktop-profile-links button:hover { background: var(--soft); }
+.desktop-profile-links button > span:first-child { display: grid; width: 32px; height: 32px; place-items: center; color: var(--ink); font-size: 25px; }
+.desktop-profile-links button b { margin-left: auto; color: var(--muted); font-size: 22px; font-weight: 400; }
+.desktop-profile-signout { width: 100%; margin-top: 24px; }
+.desktop-profile-page { display: grid; gap: 13px; }
+.desktop-profile-add { width: 100%; }
+.desktop-profile-drawer__support { display: grid; gap: 7px; margin-top: auto; padding-top: 22px; }
+.desktop-profile-drawer__support strong { padding-bottom: 7px; border-bottom: 1px solid var(--line); }
+.desktop-profile-drawer__support a { padding: 5px 0; font-size: 14px; }
+@media (max-width: 899px) { .desktop-profile-backdrop, .desktop-profile-drawer { display: none !important; } }
+@media (prefers-reduced-motion: reduce) { .desktop-profile-backdrop, .desktop-profile-drawer { transition: none; } }
