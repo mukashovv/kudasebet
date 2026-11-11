@@ -142,9 +142,15 @@
   function openCart() {
     loadCart(); renderCart();
     addrInput.value = getAddr(); renderMap();
-    cartOv.hidden = false; document.body.style.overflow = "hidden";
+    cartOv.hidden = false;
+    requestAnimationFrame(() => cartOv.classList.add("is-open"));
+    document.body.style.overflow = "hidden";
   }
-  function closeAll() { cartOv.hidden = true; modalOv.hidden = true; document.body.style.overflow = ""; }
+  function closeCart() {
+    cartOv.classList.remove("is-open");
+    window.setTimeout(() => { if (!cartOv.classList.contains("is-open")) cartOv.hidden = true; }, 260);
+  }
+  function closeAll() { closeCart(); modalOv.hidden = true; document.body.style.overflow = ""; }
   function modal(title, html) {
     $("ksModalTitle").textContent = title;
     const body = $("ksModalBody"); body.innerHTML = html;

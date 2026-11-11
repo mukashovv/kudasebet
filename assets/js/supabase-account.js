@@ -45,6 +45,10 @@
     }
   }
   function renderHeaderAccount() {
+    document.querySelectorAll(".account-menu").forEach(function (menu) {
+      menu.classList.toggle("is-authenticated", !!state.user);
+      if (state.user) menu.open = false;
+    });
     document.querySelectorAll(".account-menu__login").forEach(function (button) {
       button.textContent = state.user ? "Мой профиль" : "Войти через Google";
       button.setAttribute("aria-label", state.user ? "Открыть профиль" : "Войти через Google");
@@ -137,6 +141,21 @@
     }
     if (state.error) content.insertAdjacentHTML("afterbegin", '<p class="cloud-error" role="status">' + escapeHtml(state.error) + '</p>');
   }
+  function ensureDesktopDrawerShell() {
+    if (document.getElementById("desktopProfileDrawer")) return;
+    const backdrop = document.createElement("div");
+    backdrop.className = "desktop-profile-backdrop";
+    backdrop.id = "desktopProfileBackdrop";
+    backdrop.hidden = true;
+    const drawer = document.createElement("aside");
+    drawer.className = "desktop-profile-drawer";
+    drawer.id = "desktopProfileDrawer";
+    drawer.setAttribute("aria-label", "Профиль");
+    drawer.setAttribute("aria-hidden", "true");
+    drawer.inert = true;
+    drawer.innerHTML = '<div class="desktop-profile-drawer__head"><button class="desktop-profile-drawer__back" type="button" id="desktopProfileBack" aria-label="Назад к профилю" hidden>‹</button><h2 id="desktopProfileTitle">Профиль</h2><button class="desktop-profile-drawer__close" type="button" id="desktopProfileClose" aria-label="Закрыть профиль">×</button></div><div class="desktop-profile-drawer__body" id="desktopProfileContent"></div><div class="desktop-profile-drawer__support"><strong>Поддержка</strong><a href="tel:+996509130090">Позвонить: +996 509 130 090</a><a href="https://wa.me/996509130090" target="_blank" rel="noopener">Написать в WhatsApp</a><a href="https://instagram.com/kudasebet" target="_blank" rel="noopener">Instagram: @kudasebet</a></div>';
+    document.body.append(backdrop, drawer);
+  }
   function renderProfilePanels() {
     renderDesktopDrawerContent();
     const wrapper = ensureProfilePanels();
@@ -175,15 +194,15 @@
     announce.timer = setTimeout(function () { toast.classList.remove("is-visible"); }, 2600);
   }
   function profileUrl() {
-    const isDesktopHome = window.matchMedia("(min-width: 900px)").matches && (window.location.pathname.endsWith("/index.html") || window.location.pathname.endsWith("/"));
-    const url = new URL(isDesktopHome ? "./index.html" : "./app.html", window.location.href);
+    const isDesktopSite = window.matchMedia("(min-width: 900px)").matches && !window.location.pathname.endsWith("/app.html");
+    const url = new URL(isDesktopSite ? "./index.html" : "./app.html", window.location.href);
     url.hash = "profile";
     return url.href;
   }
   function requestLogin(productId) {
     if (productId) sessionSet(PENDING_FAVORITE_KEY, normalizedId(productId));
-    const isDesktopHome = window.matchMedia("(min-width: 900px)").matches && (window.location.pathname.endsWith("/index.html") || window.location.pathname.endsWith("/"));
-    if (!window.location.pathname.endsWith("/app.html") && !isDesktopHome) sessionSet(RETURN_KEY, window.location.href);
+    const isDesktopSite = window.matchMedia("(min-width: 900px)").matches && !window.location.pathname.endsWith("/app.html");
+    if (!window.location.pathname.endsWith("/app.html") && !isDesktopSite) sessionSet(RETURN_KEY, window.location.href);
     if (window.location.pathname.endsWith("/app.html")) window.location.hash = "profile";
     else window.location.href = profileUrl();
   }
@@ -443,6 +462,12 @@
     state.birthdays = [];
     state.ready = true;
     emit();
+    if (window.matchMedia("(min-width: 900px)").matches && !/\/app\.html$/.test(window.location.pathname)) {
+      sessionSet("kuda-account-flash-v1", "Вы вышли из аккаунта");
+      window.location.assign(new URL("./index.html", window.location.href).href);
+      return;
+    }
+    announce("Вы вышли из аккаунта");
   }
   async function requestNotificationPermission() {
     if (!("Notification" in window)) { announce("Уведомления не поддерживаются в этом браузере."); return; }
@@ -467,6 +492,25 @@
     catalogChanged: catalogChanged,
     refresh: loadOwnedData
   };
+
+  ensureDesktopDrawerShell();
+  if (!window.KS) {
+    const menuButton = document.getElementById("menuBtn");
+    const compactMenu = document.getElementById("compactMenu");
+    if (menuButton && compactMenu) menuButton.addEventListener("click", function (event) {
+      event.stopPropagation();
+      compactMenu.hidden = !compactMenu.hidden;
+      menuButton.setAttribute("aria-expanded", String(!compactMenu.hidden));
+    });
+    document.addEventListener("click", function (event) {
+      if (compactMenu && !compactMenu.hidden && !compactMenu.contains(event.target) && !menuButton.contains(event.target)) {
+        compactMenu.hidden = true;
+        menuButton.setAttribute("aria-expanded", "false");
+      }
+      const accountMenu = document.querySelector(".account-menu[open]");
+      if (accountMenu && !accountMenu.contains(event.target)) accountMenu.open = false;
+    });
+  }
 
   function setDesktopDrawer(open) {
     const drawer = document.getElementById("desktopProfileDrawer");
@@ -495,6 +539,7 @@
     const profileSummary = event.target.closest(".account-menu__trigger");
     if (profileSummary && state.user && window.matchMedia("(min-width: 900px)").matches) {
       event.preventDefault();
+      event.stopPropagation();
       const menu = profileSummary.closest(".account-menu");
       if (menu) menu.open = false;
       desktopDrawerPage = "menu";
@@ -560,6 +605,11 @@
   renderHeaderAccount();
   paintFavoriteButtons();
   if (/\/app\.html$/.test(window.location.pathname) && window.location.hash === "#profile") connectSupabase();
+  const accountFlash = sessionGet("kuda-account-flash-v1");
+  if (accountFlash) {
+    sessionDelete("kuda-account-flash-v1");
+    window.setTimeout(function () { announce(accountFlash); }, 120);
+  }
   if (document.getElementById("desktopProfileDrawer") && window.matchMedia("(min-width: 900px)").matches && window.location.hash === "#profile") {
     connectSupabase().then(function () {
       if (state.user) setDesktopDrawer(true);

@@ -1,6 +1,6 @@
 /* Куда Себет — единый стиль. Системные шрифты Apple, без анимаций и «плавающих» элементов. */
 :root {
-  --bg: #f5f3ef;
+  --bg: #ffffff;
   --surface: #ffffff;
   --ink: #1d1d1f;
   --muted: #6e6e73;
@@ -82,7 +82,7 @@ button, input, select { font: inherit; color: inherit; }
 .hero__caption small { color: var(--accent-d); font-weight: 700; font-size: 14px; }
 
 .tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; padding-bottom: 12px; }
-.tile { display: flex; align-items: center; gap: 12px; min-height: 76px; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.tile { display: flex; align-items: center; gap: 12px; min-height: 76px; padding: 14px 16px; border: 1px solid #f0eeeb; border-radius: var(--radius); background: var(--surface); box-shadow: 0 2px 12px rgba(29, 29, 31, .045); transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease; }
 .tile:hover { border-color: #f0b98f; }
 .tile__sym { display: grid; place-items: center; flex: 0 0 40px; height: 40px; border-radius: 12px; background: var(--soft); color: var(--accent-d); font-size: 18px; }
 .tile strong { display: block; font-size: 14px; }
@@ -99,19 +99,23 @@ button, input, select { font: inherit; color: inherit; }
 /* Карточки товаров */
 .grid { display: grid; gap: 16px; }
 .grid--products { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.card { display: flex; flex-direction: column; gap: 8px; padding: 10px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); min-width: 0; }
-.card__img { position: relative; aspect-ratio: 1 / 1; border-radius: 12px; background: var(--soft); overflow: hidden; }
-.card__img img { width: 100%; height: 100%; object-fit: contain; }
+.card { position: relative; display: flex; flex-direction: column; gap: 0; padding: 0; border: 0; border-radius: 20px; background: var(--surface); min-width: 0; overflow: hidden; box-shadow: 0 3px 16px rgba(29, 29, 31, .055); transition: box-shadow .2s ease, transform .2s ease; }
+.card__img { position: relative; aspect-ratio: 1 / 1; border-radius: 0; background: #f5f3ef; overflow: hidden; }
+.card__img img { width: 100%; height: 100%; object-fit: cover; }
 .card--soon .card__img img { opacity: 0.55; }
 .card .tag { position: absolute; top: 8px; left: 8px; z-index: 1; min-width: 26px; height: 26px; padding: 0 8px; display: grid; place-items: center; border-radius: 8px; background: rgba(255, 255, 255, 0.92); color: var(--accent-d); font-size: 12px; font-weight: 700; }
-.card__cat { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-d); padding: 0 4px; }
-.card h3 { font-size: 17px; line-height: 1.25; font-weight: 600; letter-spacing: -0.01em; min-height: 2.5em; padding: 0 4px; }
+.card__cat { margin-top: 12px; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-d); padding: 0 14px; }
+.card h3 { margin-top: 6px; font-size: 16px; line-height: 1.3; font-weight: 600; letter-spacing: -0.01em; min-height: 2.5em; padding: 0 14px; }
 .card h3 a:hover { color: var(--accent-d); }
-.card__desc { font-size: 13px; line-height: 1.45; color: var(--muted); height: 2.9em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; padding: 0 4px; }
-.card__foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding: 4px 4px 2px; }
+.card__desc { margin-top: 5px; font-size: 13px; line-height: 1.45; color: var(--muted); height: 2.9em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; padding: 0 14px; }
+.card__foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding: 12px 14px 14px; }
 .price { font-weight: 700; font-size: 16px; color: var(--accent-d); white-space: nowrap; }
-.card--note { background: var(--soft); border-color: #f1d3bc; padding: 16px; gap: 12px; justify-content: flex-start; }
+.card--note { background: var(--soft); border: 1px solid #f1d3bc; padding: 16px; gap: 12px; justify-content: flex-start; }
 .card--note h3 { min-height: 0; padding: 0; font-size: 18px; }
+@media (hover: hover) and (pointer: fine) {
+  .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(29, 29, 31, .11); }
+  .tile:hover { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(29, 29, 31, .085); }
+}
 .note-list { list-style: none; display: grid; gap: 8px; }
 .note-list li { display: flex; justify-content: space-between; gap: 8px; padding: 10px 12px; border-radius: 10px; background: #fff; font-size: 13px; }
 .note-list strong { color: var(--accent-d); }
@@ -169,12 +173,14 @@ button, input, select { font: inherit; color: inherit; }
 /* Окна */
 .overlay { position: fixed; inset: 0; z-index: 100; background: rgba(0, 0, 0, 0.4); }
 .overlay--center { display: grid; place-items: center; padding: 16px; }
-.overlay--right { display: flex; justify-content: flex-end; }
+.overlay--right { display: flex; justify-content: flex-end; opacity: 0; transition: opacity .24s ease; }
+.overlay--right.is-open { opacity: 1; }
 .modal { position: relative; width: min(560px, 100%); max-height: 88vh; overflow: auto; padding: 24px; border-radius: 20px; background: var(--surface); }
 .modal h2 { font-size: 22px; margin-bottom: 12px; padding-right: 40px; }
 .modal__close { position: absolute; top: 14px; right: 14px; }
 .modal__body { display: grid; gap: 10px; font-size: 14px; color: #4a4a4f; }
-.drawer { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; width: min(440px, 100%); height: 100%; background: var(--surface); }
+.drawer { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; width: min(440px, 100%); height: 100%; background: var(--surface); transform: translateX(100%); transition: transform .28s cubic-bezier(.2,.75,.25,1); }
+.overlay--right.is-open .drawer { transform: translateX(0); }
 .drawer__head { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid var(--line); }
 .drawer__head h2 { font-size: 20px; }
 .drawer__list { display: grid; align-content: start; gap: 12px; padding: 16px 20px; overflow: auto; }
@@ -274,7 +280,6 @@ button, input, select { font: inherit; color: inherit; }
 }
 @media (max-width: 520px) {
   .container { width: calc(100% - 28px); }
-  .card { padding: 8px; }
   .card h3 { font-size: 15px; }
   .card__desc { font-size: 12px; }
   .card__foot { flex-direction: column; align-items: stretch; }
@@ -285,6 +290,23 @@ button, input, select { font: inherit; color: inherit; }
   .b-item .qty { grid-row: 1 / span 2; grid-column: 2; width: 104px; }
   .details { padding: 18px; }
   .details__actions .btn { flex: 1 1 100%; }
+}
+
+/* Компактный фотобаннер для мобильного первого экрана */
+@media (max-width: 760px) {
+  .hero { padding: 18px 0 20px; }
+  .hero__grid { position: relative; display: block; min-height: 176px; padding: 15px 14px; overflow: hidden; border-radius: 20px; background: #fff2eb; }
+  .hero__grid > div:first-child { position: relative; z-index: 2; width: 63%; }
+  .hero .eyebrow { margin-bottom: 5px; font-size: 9px; }
+  .hero h1 { font-size: clamp(28px, 8vw, 34px); line-height: .98; }
+  .hero__lead { display: none; }
+  .hero__delivery { display: none; }
+  .hero__actions { display: grid; justify-items: start; gap: 7px; margin-top: 11px; }
+  .hero__actions .btn--lg { height: 35px; padding: 0 12px; font-size: 12px; }
+  .hero__link { font-size: 11px; }
+  .hero__visual { position: absolute; z-index: 1; top: 0; right: 0; width: 42%; height: 100%; max-height: none; aspect-ratio: auto; border-radius: 0; background: transparent; }
+  .hero__visual::after { position: absolute; inset: 0; content: ""; background: linear-gradient(90deg, #fff2eb 0%, rgba(255,242,235,.72) 15%, rgba(255,242,235,0) 60%); pointer-events: none; }
+  .hero__visual img { object-position: 55% center; }
 }
 
 
@@ -354,6 +376,9 @@ button, input, select { font: inherit; color: inherit; }
 .account-menu__login { min-height: 44px; border: 0; border-radius: 11px; background: var(--accent); color: #fff; font-weight: 700; cursor: pointer; }
 .account-menu__login:hover { background: var(--accent-d); }
 .account-menu__caption { margin: 8px 10px 0; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+@media (min-width: 900px) { .account-menu.is-authenticated > .account-menu__panel { display: none !important; } }
+.card-favorite, .pcard__favorite, .product-favorite, [data-favorite-id] { cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .overlay--right, .drawer { transition: none; } }
 
 /* Десктопный профиль выезжает поверх магазина */
 .desktop-profile-backdrop { position: fixed; inset: 0; z-index: 110; background: rgba(24,20,17,.34); opacity: 0; transition: opacity .24s ease; }
