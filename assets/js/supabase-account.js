@@ -668,7 +668,7 @@
         });
         form.hidden = !shouldOpen;
         editBirthday.setAttribute("aria-expanded", String(shouldOpen));
-        if (shouldOpen) form.querySelector('input[name="name"]').focus();
+        if (shouldOpen) window.requestAnimationFrame(function () { form.scrollIntoView({ behavior: "smooth", block: "nearest" }); });
       }
       return;
     }

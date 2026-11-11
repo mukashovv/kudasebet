@@ -248,6 +248,7 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 .cloud-date-icon { display: grid; width: 42px; height: 42px; flex: 0 0 auto; place-items: center; border-radius: 12px; background: var(--tint-soft); font-size: 21px; }
 .cloud-date-actions { display: flex; align-items: center; gap: 6px; }
 .cloud-date-actions button { width: 34px; height: 34px; border: 1px solid var(--sep); background: #f8f7f5; color: var(--label2); font-size: 17px; cursor: pointer; }
+.cloud-date-actions [data-birthday-edit] { transform: scaleX(-1); }
 .cloud-date-form { display: grid; gap: 10px; margin-bottom: 14px; }
 .cloud-date-form label { display: grid; gap: 5px; min-width: 0; color: var(--label2); font-size: 12px; }
 .cloud-date-form input, .cloud-date-form select {
@@ -255,7 +256,10 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
   border: 1px solid var(--sep); border-radius: 11px; background: #fff;
   color: var(--label); font-size: 15px;
 }
+.cloud-date-form, .cloud-date-fields, .cloud-date-form label, .cloud-date-fields > label { width: 100%; min-width: 0; }
+.cloud-date-form input[type="date"], .cloud-date-edit-form input[type="date"] { display: block; width: 100% !important; min-width: 0 !important; max-width: 100% !important; min-inline-size: 0; max-inline-size: 100%; box-sizing: border-box; -webkit-appearance: none; appearance: none; }
 .cloud-date-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.cloud-date-fields { width: 100%; min-width: 0; }
 .cloud-date-fields > label { min-width: 0; }
 .cloud-date-fields input, .cloud-date-fields select { max-width: 100%; }
 .cloud-date-edit-form { grid-column: 1 / -1; display: grid; gap: 12px; min-width: 0; margin-top: 2px; padding-top: 14px; border-top: 1px solid var(--sep); }

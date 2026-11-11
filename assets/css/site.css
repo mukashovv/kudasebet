@@ -485,16 +485,20 @@ button, input, select { font: inherit; color: inherit; }
 .desktop-profile-page .cloud-date-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .desktop-profile-page .cloud-date-fields > label { min-width: 0; }
 .desktop-profile-page .cloud-date-fields input, .desktop-profile-page .cloud-date-fields select { width: 100%; min-width: 0; max-width: 100%; }
+.desktop-profile-page .cloud-date-form, .desktop-profile-page .cloud-date-form label, .desktop-profile-page .cloud-date-fields { width: 100%; min-width: 0; }
+.desktop-profile-page .cloud-date-form input[type="date"], .desktop-profile-page .cloud-date-edit-form input[type="date"] { display: block; width: 100% !important; min-width: 0 !important; max-width: 100% !important; min-inline-size: 0; max-inline-size: 100%; box-sizing: border-box; -webkit-appearance: none; appearance: none; }
 .desktop-profile-page .cloud-date-form .btn { min-height: 44px; border-radius: 11px; }
 .desktop-profile-page .cloud-reminder-permission { min-height: 42px; border: 1px solid #e4e1dd; border-radius: 11px; background: #fff; }
 .desktop-profile-page .cloud-date-list { grid-template-columns: minmax(0, 1fr); gap: 12px; }
 .desktop-profile-page .cloud-date-row { display: grid; grid-template-columns: 42px minmax(0, 1fr) auto; align-items: center; gap: 12px; min-height: 0; padding: 14px; border: 1px solid #eceae7; border-radius: 16px; background: #fff; }
+.desktop-profile-page .cloud-date-row { scroll-margin-block: 18px; }
 .desktop-profile-page .cloud-date-icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 12px; background: #fff0e7; font-size: 21px; }
 .desktop-profile-page .cloud-date-copy { min-width: 0; }
 .desktop-profile-page .cloud-date-copy strong { font-size: 14px; }
 .desktop-profile-page .cloud-date-copy small { font-size: 12px; line-height: 1.45; }
 .desktop-profile-page .cloud-date-actions { display: flex; align-items: center; gap: 6px; }
 .desktop-profile-page .cloud-date-actions button { display: grid; width: 34px; height: 34px; place-items: center; border: 1px solid #f0eeeb; background: #faf9f7; color: #6f6b66; font-size: 17px; }
+.desktop-profile-page .cloud-date-actions [data-birthday-edit] { transform: scaleX(-1); }
 .desktop-profile-page .cloud-date-edit-form { grid-column: 1 / -1; display: grid; gap: 12px; min-width: 0; margin-top: 3px; padding-top: 14px; border-top: 1px solid #f0eeeb; }
 .desktop-profile-page .cloud-date-edit-form[hidden] { display: none; }
 .desktop-profile-page .cloud-date-edit-form label { display: grid; gap: 6px; min-width: 0; color: #625e59; font-size: 12px; font-weight: 600; }
