@@ -1,4 +1,4 @@
-const CACHE_NAME = "kuda-sebet-app-v19";
+const CACHE_NAME = "kuda-sebet-app-v20";
 const APP_SHELL = [
   "./index.html",
   "./personal-builder.html",
@@ -15,6 +15,7 @@ const APP_SHELL = [
   "./assets/css/site.css",
   "./assets/css/product-share.css",
   "./assets/js/product-share.js",
+  "./assets/js/supabase-account.js?v=1",
   "./assets/css/webapp.css",
   "./assets/js/app.js",
   "./assets/js/home.js",
@@ -46,6 +47,14 @@ self.addEventListener("install", event => {
 });
 self.addEventListener("activate", event => {
   event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith("kuda-sebet-app-") && key !== CACHE_NAME).map(key => caches.delete(key)))).then(() => self.clients.claim()));
+});
+self.addEventListener("notificationclick", event => {
+  event.notification.close();
+  event.waitUntil(self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(clients => {
+    const existing = clients.find(client => "focus" in client);
+    if (existing) return existing.focus();
+    return self.clients.openWindow("./app.html#profile");
+  }));
 });
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;

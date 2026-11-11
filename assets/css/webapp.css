@@ -208,3 +208,60 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
   .hero h1 { font-size: 26px; }
   .large-title { font-size: 30px; }
 }
+
+
+/* Shared Supabase account, favorites, and date reminders */
+.pcard__favorite { top: 9px; right: 9px; width: 36px; height: 36px; }
+.pcard__favorite.is-favorite { background: var(--tint-d); color: #fff; }
+.sheet-favorite {
+  width: 100%; min-height: 42px; margin: 0 0 12px; padding: 0 14px;
+  border: 1px solid var(--sep); border-radius: 13px; background: var(--card);
+  color: var(--tint-d); font-size: 15px; font-weight: 600;
+}
+.sheet-favorite.is-favorite { background: var(--tint-soft); border-color: var(--tint-d); }
+.cloud-profile-section { margin-top: 22px; }
+.cloud-profile-section h2 { margin: 0 16px 7px; color: var(--label2); font-size: 13px; font-weight: 600; letter-spacing: .02em; text-transform: uppercase; }
+.cloud-panel { padding: 14px; border-radius: 16px; background: var(--card); }
+.cloud-muted { color: var(--label2); font-size: 13px; line-height: 1.45; }
+.cloud-user { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cloud-user strong, .cloud-user small { display: block; overflow-wrap: anywhere; }
+.cloud-user strong { font-size: 16px; font-weight: 600; }
+.cloud-user small { margin-top: 3px; color: var(--label2); font-size: 13px; }
+.cloud-secondary { flex: 0 0 auto; min-height: 36px; padding: 0 12px; border: 1px solid var(--sep); border-radius: 12px; background: white; color: var(--label2); font-size: 13px; }
+.cloud-google { margin-top: 12px; background: var(--tint-d); }
+.cloud-error { margin-top: 10px; color: #c23b2c; font-size: 13px; line-height: 1.4; }
+.cloud-favorite-list, .cloud-date-list { display: grid; gap: 8px; }
+.cloud-favorite-row, .cloud-date-row { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 8px; border: 1px solid var(--sep); border-radius: 13px; background: #fff; }
+.cloud-favorite-row img { width: 54px; height: 54px; flex: 0 0 auto; border-radius: 10px; object-fit: cover; background: var(--sand-a); }
+.cloud-favorite-row > span, .cloud-date-copy { flex: 1; min-width: 0; }
+.cloud-favorite-row strong, .cloud-favorite-row small, .cloud-date-copy strong, .cloud-date-copy small { display: block; overflow-wrap: anywhere; }
+.cloud-favorite-row strong, .cloud-date-copy strong { font-size: 14px; line-height: 1.25; }
+.cloud-favorite-row small, .cloud-date-copy small { margin-top: 4px; color: var(--label2); font-size: 12px; line-height: 1.35; }
+.cloud-favorite-row button, .cloud-date-row button {
+  display: grid; width: 34px; height: 34px; flex: 0 0 auto; place-items: center;
+  border: 0; border-radius: 50%; background: var(--tint-soft); color: var(--tint-d);
+  font-size: 20px; line-height: 1;
+}
+.cloud-date-icon { display: grid; width: 34px; height: 34px; flex: 0 0 auto; place-items: center; border-radius: 10px; background: var(--tint-soft); }
+.cloud-date-form { display: grid; gap: 10px; margin-bottom: 14px; }
+.cloud-date-form label { display: grid; gap: 5px; color: var(--label2); font-size: 12px; }
+.cloud-date-form input, .cloud-date-form select {
+  width: 100%; min-width: 0; height: 42px; padding: 0 11px;
+  border: 1px solid var(--sep); border-radius: 11px; background: #fff;
+  color: var(--label); font-size: 15px;
+}
+.cloud-date-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.cloud-date-form .btn { height: 44px; }
+.cloud-reminder-permission {
+  min-height: 40px; border: 1px solid var(--sep); border-radius: 12px;
+  background: #fff; color: var(--tint-d); font-size: 13px; font-weight: 600;
+}
+.cloud-date-form .cloud-muted { font-size: 12px; }
+@media (max-width: 370px) { .cloud-date-fields { grid-template-columns: 1fr; } }
+.cloud-toast {
+  position: fixed; z-index: 100; left: 50%; bottom: calc(65px + var(--sa-b)); max-width: calc(100vw - 32px);
+  padding: 10px 15px; border-radius: 999px; background: var(--label); color: #fff;
+  font-size: 13px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,.2);
+  opacity: 0; pointer-events: none; transform: translate(-50%, 8px); transition: .2s ease;
+}
+.cloud-toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
