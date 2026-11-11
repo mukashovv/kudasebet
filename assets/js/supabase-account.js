@@ -7,6 +7,7 @@
   const SDK_URL = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
   const RETURN_KEY = "kuda-sebet-account-return-v1";
   const PENDING_FAVORITE_KEY = "kuda-sebet-pending-favorite-v1";
+  const LOGIN_PENDING_KEY = "kuda-sebet-login-pending-v1";
   const FAVORITES_CACHE_KEY = "kuda-sebet-account-favorites-v1";
   function cachedFavorites() {
     try {
@@ -22,10 +23,12 @@
   let ownedDataPromise = null;
   let ownedDataUserId = null;
   let desktopDrawerPage = "menu";
+  const homeTileOriginals = new WeakMap();
 
   function sessionGet(key) { try { return sessionStorage.getItem(key); } catch (error) { return null; } }
   function sessionSet(key, value) { try { sessionStorage.setItem(key, value); } catch (error) { /* storage may be disabled */ } }
   function sessionDelete(key) { try { sessionStorage.removeItem(key); } catch (error) { /* storage may be disabled */ } }
+  function hasStoredAuthSession() { try { return Boolean(localStorage.getItem("kudasebet-web-auth-v1")); } catch (error) { return false; } }
   function normalizedId(value) { return String(value || "").trim().replace(/-popular$/, ""); }
   function escapeHtml(value) {
     return String(value == null ? "" : value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
@@ -36,10 +39,17 @@
   function emit() {
     saveFavoritesCache();
     renderHeaderAccount();
+    renderHomeTiles();
     paintFavoriteButtons();
     renderProfilePanels();
     window.dispatchEvent(new CustomEvent("kuda-account:updated", { detail: snapshot() }));
-    if (window.location.hash === "#profile" && window.matchMedia("(min-width: 900px)").matches && state.ready) {
+    if (window.location.hash === "#auth" && state.ready) {
+      const loginPending = sessionGet(LOGIN_PENDING_KEY);
+      sessionDelete(LOGIN_PENDING_KEY);
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+      if (state.user && loginPending) announce("Вы успешно вошли в аккаунт");
+    }
+    if (window.location.hash === "#profile" && state.ready) {
       if (state.user) setDesktopDrawer(true);
       else { const menu = document.querySelector(".account-menu"); if (menu) menu.open = true; }
     }
@@ -52,6 +62,38 @@
     document.querySelectorAll(".account-menu__login").forEach(function (button) {
       button.textContent = state.user ? "Мой профиль" : "Войти через Google";
       button.setAttribute("aria-label", state.user ? "Открыть профиль" : "Войти через Google");
+    });
+  }
+  function renderHomeTiles() {
+    const configurations = {
+      profile: { title: "Мой профиль", subtitle: "Ваш аккаунт", view: "menu", icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c.6-3.6 3.2-5.4 7.5-5.4s6.9 1.8 7.5 5.4"/></svg>' },
+      favorites: { title: "Избранные", subtitle: "Сохранённые себеты", view: "favorites", icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.9c0 5.2-8.8 10.1-8.8 10.1S3.2 14.1 3.2 8.9A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.8Z"/></svg>' },
+      events: { title: "События", subtitle: "Дни рождения и поводы", view: "dates", icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="15" rx="3"/><path d="M7.5 3.5v4M16.5 3.5v4M3.5 10h17M8 14h.01M12 14h.01M16 14h.01"/></svg>' }
+    };
+    const homeNav = document.getElementById("homeCategoryTiles");
+    if (homeNav) homeNav.setAttribute("aria-label", state.user ? "Разделы профиля" : "Категории подарков");
+    document.querySelectorAll("[data-home-tile]").forEach(function (tile) {
+      const icon = tile.querySelector(".tile__sym");
+      const title = tile.querySelector("strong");
+      const subtitle = tile.querySelector("small");
+      if (!icon || !title || !subtitle) return;
+      if (!homeTileOriginals.has(tile)) homeTileOriginals.set(tile, { href: tile.getAttribute("href"), icon: icon.innerHTML, title: title.textContent, subtitle: subtitle.textContent });
+      if (state.user) {
+        const config = configurations[tile.getAttribute("data-home-tile")];
+        if (!config) return;
+        tile.setAttribute("href", "#profile");
+        tile.setAttribute("data-profile-view", config.view);
+        icon.innerHTML = config.icon;
+        title.textContent = config.title;
+        subtitle.textContent = config.subtitle;
+      } else {
+        const original = homeTileOriginals.get(tile);
+        tile.setAttribute("href", original.href);
+        tile.removeAttribute("data-profile-view");
+        icon.innerHTML = original.icon;
+        title.textContent = original.title;
+        subtitle.textContent = original.subtitle;
+      }
     });
   }
   function saveFavoritesCache() {
@@ -193,16 +235,23 @@
   }
   function profileUrl() {
     const isDesktopSite = window.matchMedia("(min-width: 900px)").matches && !window.location.pathname.endsWith("/app.html");
-    const url = new URL(isDesktopSite ? "./index.html" : "./app.html", window.location.href);
+    const url = new URL(isDesktopSite ? "./index.html" : window.location.href, window.location.href);
     url.hash = "profile";
+    return url.href;
+  }
+  function authReturnUrl() {
+    const url = new URL("./index.html", window.location.href);
+    url.hash = "auth";
     return url.href;
   }
   function requestLogin(productId) {
     if (productId) sessionSet(PENDING_FAVORITE_KEY, normalizedId(productId));
     const isDesktopSite = window.matchMedia("(min-width: 900px)").matches && !window.location.pathname.endsWith("/app.html");
-    if (!window.location.pathname.endsWith("/app.html") && !isDesktopSite) sessionSet(RETURN_KEY, window.location.href);
-    if (window.location.pathname.endsWith("/app.html")) window.location.hash = "profile";
-    else window.location.href = profileUrl();
+    if (isDesktopSite) { window.location.href = profileUrl(); return; }
+    sessionDelete(RETURN_KEY);
+    if (window.location.pathname.endsWith("/app.html")) { window.location.hash = "profile"; connectSupabase(); return; }
+    const menu = document.querySelector(".account-menu");
+    if (menu) menu.open = true;
   }
   function profileName(user) {
     const metadata = user && user.user_metadata ? user.user_metadata : {};
@@ -440,8 +489,10 @@
     const authClient = await connectSupabase();
     if (!authClient) return;
     if (state.user) { announce("Вы уже вошли в профиль."); return; }
-    const { error } = await authClient.auth.signInWithOAuth({ provider: "google", options: { redirectTo: profileUrl() } });
+    sessionSet(LOGIN_PENDING_KEY, "1");
+    const { error } = await authClient.auth.signInWithOAuth({ provider: "google", options: { redirectTo: authReturnUrl() } });
     if (error) {
+      sessionDelete(LOGIN_PENDING_KEY);
       state.error = "Вход Google не выполнен. Проверьте OAuth и адрес возврата в Supabase.";
       emit();
       console.warn("Supabase Google sign-in failed.", error);
@@ -449,6 +500,9 @@
   }
   async function signOut() {
     if (!client) return;
+    if (window.location.hash === "#profile") history.replaceState(null, "", window.location.pathname + window.location.search);
+    const accountMenu = document.querySelector(".account-menu");
+    if (accountMenu) accountMenu.open = false;
     const { error } = await client.auth.signOut();
     if (error) {
       state.error = "Не удалось выйти из аккаунта.";
@@ -459,8 +513,9 @@
     state.favorites.clear();
     state.birthdays = [];
     state.ready = true;
+    setDesktopDrawer(false);
     emit();
-    if (window.matchMedia("(min-width: 900px)").matches && !/\/app\.html$/.test(window.location.pathname)) {
+    if (!/\/(?:index\.html)?$/.test(window.location.pathname)) {
       sessionSet("kuda-account-flash-v1", "Вы вышли из аккаунта");
       window.location.assign(new URL("./index.html", window.location.href).href);
       return;
@@ -513,13 +568,14 @@
   function setDesktopDrawer(open) {
     const drawer = document.getElementById("desktopProfileDrawer");
     const backdrop = document.getElementById("desktopProfileBackdrop");
-    if (!drawer || !backdrop || !window.matchMedia("(min-width: 900px)").matches) return;
+    if (!drawer || !backdrop) return;
     if (open) {
       renderProfilePanels();
       const accountMenu = document.querySelector(".account-menu");
       if (accountMenu) accountMenu.open = false;
       drawer.inert = false;
       drawer.setAttribute("aria-hidden", "false");
+      document.body.classList.add("profile-drawer-open");
       backdrop.hidden = false;
       requestAnimationFrame(function () { drawer.classList.add("is-open"); backdrop.classList.add("is-open"); });
       connectSupabase();
@@ -528,6 +584,7 @@
       backdrop.classList.remove("is-open");
       drawer.inert = true;
       drawer.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("profile-drawer-open");
       window.setTimeout(function () { if (!drawer.classList.contains("is-open")) backdrop.hidden = true; }, 280);
       if (window.location.hash === "#profile") history.replaceState(null, "", window.location.pathname + window.location.search);
     }
@@ -557,7 +614,7 @@
     if (event.target.closest("#desktopProfileClose, #desktopProfileBackdrop")) { setDesktopDrawer(false); return; }
     if (event.target.closest("#desktopProfileBack")) { desktopDrawerPage = "menu"; renderDesktopDrawerContent(); return; }
     const profileView = event.target.closest("[data-profile-view]");
-    if (profileView) { desktopDrawerPage = profileView.getAttribute("data-profile-view"); renderDesktopDrawerContent(); return; }
+    if (profileView) { event.preventDefault(); desktopDrawerPage = profileView.getAttribute("data-profile-view"); setDesktopDrawer(true); return; }
     const favorite = event.target.closest("[data-favorite-id]");
     if (favorite) {
       event.preventDefault();
@@ -570,7 +627,12 @@
       connectSupabase();
     }
     if (event.target.closest("[data-account-google]")) {
-      if (state.user) window.location.href = profileUrl();
+      if (state.user) {
+        const menu = event.target.closest(".account-menu");
+        if (menu) menu.open = false;
+        desktopDrawerPage = "menu";
+        setDesktopDrawer(true);
+      }
       else signInWithGoogle();
       return;
     }
@@ -582,7 +644,10 @@
   window.addEventListener("hashchange", function () {
     if (window.location.hash === "#profile") {
       renderProfilePanels();
-      connectSupabase();
+      connectSupabase().then(function () {
+        if (state.user) { desktopDrawerPage = "menu"; setDesktopDrawer(true); }
+        else if (state.ready) { const menu = document.querySelector(".account-menu"); if (menu) menu.open = true; }
+      });
     }
   });
   document.addEventListener("keydown", function (event) { if (event.key === "Escape") setDesktopDrawer(false); });
@@ -601,17 +666,12 @@
   ensureProfilePanels();
   renderProfilePanels();
   renderHeaderAccount();
+  renderHomeTiles();
   paintFavoriteButtons();
-  if (/\/app\.html$/.test(window.location.pathname) && window.location.hash === "#profile") connectSupabase();
   const accountFlash = sessionGet("kuda-account-flash-v1");
   if (accountFlash) {
     sessionDelete("kuda-account-flash-v1");
     window.setTimeout(function () { announce(accountFlash); }, 120);
   }
-  if (document.getElementById("desktopProfileDrawer") && window.matchMedia("(min-width: 900px)").matches && window.location.hash === "#profile") {
-    connectSupabase().then(function () {
-      if (state.user) setDesktopDrawer(true);
-      else { const menu = document.querySelector(".account-menu"); if (menu) menu.open = true; }
-    });
-  }
+  if (window.location.hash === "#profile" || window.location.hash === "#auth" || hasStoredAuthSession()) connectSupabase();
 })();
