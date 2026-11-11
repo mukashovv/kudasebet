@@ -26,6 +26,7 @@
   BASE.forEach((p) => { p.category = "Себеттер"; });
   const ACTIVE = new Set(BASE.map((p) => p.name));
   let products = BASE.map((p) => ({ ...p, img: window.KudaSebetSheetCatalog.DEFAULT_PHOTO, images: window.KudaSebetSheetCatalog.defaultPhotos(), available: false }));
+  let publishedProducts = null;
   const IMG = Object.fromEntries(BASE.map((p) => [p.name, p.img]));
   const slugify = (s) => String(s || "").trim().toLocaleLowerCase("ru").replace(/[^a-zа-я0-9]+/gi, "-").replace(/^-+|-+$/g, "") || "item";
 
@@ -98,8 +99,20 @@
         <div class="pcard__img"><img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy"></div>
         <div class="pcard__body"><div class="pcard__name">${esc(p.name)}</div><div class="pcard__price">${fmt(p.price)}</div></div>
       </button>
+      <button class="pcard__favorite" type="button" data-favorite-id="${esc(p.id)}" aria-label="Сохранить в избранное">♡</button>
       ${(p.available ?? ACTIVE.has(p.name)) ? `<button class="pcard__add" type="button" data-quick="${esc(p.id)}" aria-label="Добавить ${esc(p.name)} в корзину">+</button>` : `<span class="pcard__soon">Скоро</span>`}</article>`).join("");
     $("#noResults").hidden = list.length > 0;
+    if (publishedProducts !== products) {
+      const registry = {};
+      products.forEach((p) => {
+        const id = String(p.id || "").replace(/-popular$/, "");
+        const slug = p.slug || id;
+        registry[id] = { slug, name: p.name, price: p.price, priceText: fmt(p.price), image: p.img || window.KudaSebetSheetCatalog.DEFAULT_PHOTO, href: "./product.html?item=" + encodeURIComponent(slug) };
+      });
+      window.KudaSebetProducts = Object.assign(window.KudaSebetProducts || {}, registry);
+      publishedProducts = products;
+    }
+    if (window.KudaSebetAccount) window.KudaSebetAccount.catalogChanged();
   }
   $("#search").addEventListener("input", (e) => { query = e.target.value; renderGrid(); });
   $("#filters").addEventListener("click", (e) => {

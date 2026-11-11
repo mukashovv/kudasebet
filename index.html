@@ -33,9 +33,15 @@
                 <a href="tel:+996509130090">+996 509 130 090</a>
             </div>
             <div class="header-actions">
-                <button class="btn desktop-only" type="button" data-support>Поддержка</button>
-                <a class="btn desktop-only" href="https://wa.me/996509130090" target="_blank" rel="noopener">WhatsApp</a>
-                <a class="btn desktop-only" href="https://instagram.com/kudasebet" target="_blank" rel="noopener">Instagram</a>
+                <details class="support-dropdown desktop-only">
+                    <summary class="btn">Поддержка</summary>
+                    <div class="support-dropdown__panel">
+                        <a href="tel:+996509130090">Позвонить · +996 509 130 090</a>
+                        <a href="https://wa.me/996509130090" target="_blank" rel="noopener">Написать в WhatsApp</a>
+                        <a href="https://instagram.com/kudasebet" target="_blank" rel="noopener">Instagram · @kudasebet</a>
+                    </div>
+                </details>
+                <a class="btn desktop-only account-link header-login" href="./app.html#profile" aria-label="Войти или открыть профиль">Войти</a>
                 <button class="btn btn--primary" type="button" data-open-cart>Корзина <span class="badge" data-cart-count hidden>0</span></button>
                 <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-label="Меню" aria-controls="compactMenu" aria-expanded="false">☰</button>
             </div>
@@ -46,9 +52,15 @@
                 <div><b>Доставка по Бишкеку</b><div class="muted">вт–вс, 10:00–20:00</div></div>
                 <a href="tel:+996509130090"><b>+996 509 130 090</b></a>
                 <div class="compact-menu__actions">
-                    <button class="btn" type="button" data-support>Поддержка</button>
-                    <a class="btn" href="https://wa.me/996509130090" target="_blank" rel="noopener">WhatsApp</a>
-                    <a class="btn" href="https://instagram.com/kudasebet" target="_blank" rel="noopener">Instagram</a>
+                    <details class="support-dropdown support-dropdown--compact">
+                        <summary class="btn">Поддержка</summary>
+                        <div class="support-dropdown__panel">
+                            <a href="tel:+996509130090">Позвонить · +996 509 130 090</a>
+                            <a href="https://wa.me/996509130090" target="_blank" rel="noopener">Написать в WhatsApp</a>
+                            <a href="https://instagram.com/kudasebet" target="_blank" rel="noopener">Instagram · @kudasebet</a>
+                        </div>
+                    </details>
+                    <a class="btn account-link-mobile" href="./app.html#profile">Войти · профиль и избранное</a>
                 </div>
             </div>
         </div>
@@ -89,16 +101,19 @@
                 <div class="grid grid--products" id="popular">
                     <article class="card" data-pop data-name="Куда Себет S">
                         <a href="product.html?item=sebet-s"><div class="card__img"><img src="assets/img/cards/kuda_sebet_s.jpg" alt="Куда Себет S" loading="lazy"></div></a>
+                        <button class="card-favorite" type="button" data-favorite-id="sebet-s" aria-label="Сохранить в избранное">♡</button>
                         <h3><a href="product.html?item=sebet-s">Куда Себет S</a></h3>
                         <div class="card__foot"><span class="price">4 790 сом</span><button class="btn btn--primary btn--sm" type="button" data-add data-name="Куда Себет S" data-price="4790">Добавить</button></div>
                     </article>
                     <article class="card" data-pop data-name="Куда Себет M">
                         <a href="product.html?item=sebet-m"><div class="card__img"><img src="assets/img/cards/kuda_sebet_s.jpg" alt="Куда Себет M" loading="lazy"></div></a>
+                        <button class="card-favorite" type="button" data-favorite-id="sebet-m" aria-label="Сохранить в избранное">♡</button>
                         <h3><a href="product.html?item=sebet-m">Куда Себет M</a></h3>
                         <div class="card__foot"><span class="price">6 990 сом</span><button class="btn btn--primary btn--sm" type="button" data-add data-name="Куда Себет M" data-price="6990">Добавить</button></div>
                     </article>
                     <article class="card" data-pop data-name="Куда Себет Vip">
                         <a href="product.html?item=sebet-vip"><div class="card__img"><img src="assets/img/cards/kuda_sebet_s.jpg" alt="Куда Себет Vip" loading="lazy"></div></a>
+                        <button class="card-favorite" type="button" data-favorite-id="sebet-vip" aria-label="Сохранить в избранное">♡</button>
                         <h3><a href="product.html?item=sebet-vip">Куда Себет Vip</a></h3>
                         <div class="card__foot"><span class="price">13 790 сом</span><button class="btn btn--primary btn--sm" type="button" data-add data-name="Куда Себет Vip" data-price="13790">Добавить</button></div>
                     </article>
@@ -181,8 +196,7 @@
     </footer>
 
     <script src="./assets/js/site.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./assets/js/supabase-account.js?v=1"></script>
     <script src="./assets/js/home.js"></script>
+    <script src="./assets/js/supabase-account.js?v=3"></script>
 </body>
 </html>

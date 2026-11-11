@@ -201,11 +201,9 @@
     document.addEventListener("click", () => { compact.hidden = true; menuBtn.setAttribute("aria-expanded", "false"); });
   }
   document.addEventListener("click", (e) => {
-    if (!e.target.closest("[data-support]")) return;
-    if (compact) compact.hidden = true;
-    modal("Поддержка", `<p>Свяжитесь с поддержкой:</p>
-      <p><a class="link-btn" href="tel:+${WA}">+996 509 130 090</a></p>
-      <p><a class="link-btn" href="https://wa.me/${WA}" target="_blank" rel="noopener">Написать в WhatsApp</a></p>`);
+    document.querySelectorAll(".support-dropdown[open]").forEach((menu) => {
+      if (!menu.contains(e.target)) menu.removeAttribute("open");
+    });
   });
 
   loadCart(); renderCart();

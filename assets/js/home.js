@@ -51,10 +51,12 @@
     const active = p.available ?? ACTIVE.has(p.name);
     const canOpen = active || p.sheet;
     const href = "product.html?item=" + encodeURIComponent(p.slug);
+    const favoriteId = p.slug || window.KudaSebetSheetCatalog.slug(p.name);
     const media = `<div class="card__img">${p.tag ? `<span class="tag">${esc(p.tag)}</span>` : ""}<img src="${esc(p.img || window.KudaSebetSheetCatalog.DEFAULT_PHOTO)}" alt="${esc(p.name)}" loading="lazy"></div>`;
     const cost = active || p.sheet ? fmt(p.price) : "Скоро";
     return `<article class="card${active ? "" : " card--soon"}">
       ${canOpen ? `<a href="${href}">${media}</a>` : media}
+      ${canOpen ? `<button class="card-favorite" type="button" data-favorite-id="${esc(favoriteId)}" aria-label="Сохранить в избранное">♡</button>` : ""}
       <div class="card__cat">${esc(p.category)}</div>
       <h3>${canOpen ? `<a href="${href}">${esc(p.name)}</a>` : esc(p.name)}</h3>
       <p class="card__desc">${esc(p.desc)}</p>
@@ -76,6 +78,17 @@
   function renderCatalog() {
     $("catalog").innerHTML = groups().map((g) => `<section class="section" id="${g.id}"><div class="container">
       <h2 class="section-title">${esc(g.title)}</h2><div class="grid grid--products">${g.items.map(card).join("")}</div></div></section>`).join("");
+    updateAccountCatalog();
+  }
+
+  function updateAccountCatalog() {
+    const products = {};
+    catalog.forEach((p) => {
+      const slug = p.slug || window.KudaSebetSheetCatalog.slug(p.name);
+      products[slug] = { slug, name: p.name, price: p.price, priceText: fmt(p.price), image: p.img || window.KudaSebetSheetCatalog.DEFAULT_PHOTO, href: "./product.html?item=" + encodeURIComponent(slug) };
+    });
+    window.KudaSebetProducts = Object.assign(window.KudaSebetProducts || {}, products);
+    if (window.KudaSebetAccount) window.KudaSebetAccount.catalogChanged();
   }
 
   function renderNav() {
@@ -128,10 +141,12 @@
       const active = p.available ?? ACTIVE.has(p.name), href = "product.html?item=" + encodeURIComponent(p.slug);
       return `<article class="card" data-pop data-name="${esc(p.name)}">
         <a href="${href}"><div class="card__img"><img src="${esc(p.img || IMG[p.name] || FALLBACK)}" alt="${esc(p.name)}" loading="lazy"></div></a>
+        <button class="card-favorite" type="button" data-favorite-id="${esc(p.slug)}" aria-label="Сохранить в избранное">♡</button>
         <h3><a href="${href}">${esc(p.name)}</a></h3>
         <div class="card__foot"><span class="price">${fmt(p.price)}</span>${active ? `<button class="btn btn--primary btn--sm" type="button" data-add data-name="${esc(p.name)}" data-price="${p.price}">Добавить</button>` : `<button class="btn btn--sm" type="button" disabled>Скоро</button>`}</div></article>`;
     }).join("");
     if (note) $("popular").append(note);
+    updateAccountCatalog();
   }
 
   /* ---------- Конструктор ---------- */

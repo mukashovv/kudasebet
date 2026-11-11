@@ -232,8 +232,9 @@ svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-widt
 .cloud-error { margin-top: 10px; color: #c23b2c; font-size: 13px; line-height: 1.4; }
 .cloud-favorite-list, .cloud-date-list { display: grid; gap: 8px; }
 .cloud-favorite-row, .cloud-date-row { display: flex; align-items: center; gap: 10px; min-width: 0; padding: 8px; border: 1px solid var(--sep); border-radius: 13px; background: #fff; }
+.cloud-favorite-link { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; color: inherit; text-decoration: none; }
 .cloud-favorite-row img { width: 54px; height: 54px; flex: 0 0 auto; border-radius: 10px; object-fit: cover; background: var(--sand-a); }
-.cloud-favorite-row > span, .cloud-date-copy { flex: 1; min-width: 0; }
+.cloud-favorite-link > span, .cloud-date-copy { flex: 1; min-width: 0; }
 .cloud-favorite-row strong, .cloud-favorite-row small, .cloud-date-copy strong, .cloud-date-copy small { display: block; overflow-wrap: anywhere; }
 .cloud-favorite-row strong, .cloud-date-copy strong { font-size: 14px; line-height: 1.25; }
 .cloud-favorite-row small, .cloud-date-copy small { margin-top: 4px; color: var(--label2); font-size: 12px; line-height: 1.35; }

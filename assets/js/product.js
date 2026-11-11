@@ -47,6 +47,8 @@
     $("addBtn").disabled = !active;
     $("buyBtn").disabled = !active;
     $("addBtn").textContent = active ? "В корзину" : "Скоро";
+    $("favoriteProductButton").setAttribute("data-favorite-id", product.slug || SC.slug(product.name) || slug);
+    if (window.KudaSebetAccount) window.KudaSebetAccount.catalogChanged();
 
     /* Галерея */
     const signature = JSON.stringify(images);
@@ -80,6 +82,7 @@
     const media = `<div class="card__img"><img src="${esc(DEFAULT_PHOTO)}" alt="${esc(name)}" loading="lazy"></div>`;
     return `<article class="card${active ? "" : " card--soon"}" data-recommend="${esc(name)}">
       ${active ? `<a href="${href}">${media}</a>` : media}
+      ${active ? `<button class="card-favorite" type="button" data-favorite-id="${esc(s)}" aria-label="Сохранить в избранное">♡</button>` : ""}
       <h3>${active ? `<a href="${href}">${esc(name)}</a>` : esc(name)}</h3>
       <p class="card__desc">${esc(desc)}</p>
       <div class="card__foot"><span class="price">${active ? fmt(cost) : "Скоро"}</span>
@@ -162,9 +165,11 @@
       if (current !== generation) return;
       card.classList.toggle("card--soon", !active);
       card.innerHTML = `<a href="${esc(href)}"><div class="card__img"><img src="${esc(img)}" alt="${esc(item.name)}" loading="lazy"></div></a>
+        <button class="card-favorite" type="button" data-favorite-id="${esc(item.slug)}" aria-label="Сохранить в избранное">♡</button>
         <h3><a href="${esc(href)}">${esc(item.name)}</a></h3><p class="card__desc">${esc(item.desc)}</p>
         <div class="card__foot"><span class="price">${active ? fmt(item.price) : "Скоро"}</span>${active ? `<button class="btn btn--primary btn--sm" type="button" data-add data-name="${esc(item.name)}" data-price="${item.price}">В корзину</button>` : `<button class="btn btn--sm" type="button" disabled>Скоро</button>`}</div>`;
     }));
+    if (window.KudaSebetAccount) window.KudaSebetAccount.catalogChanged();
   }
   const savedRows = SC.cachedRows("Себеттер");
   if (savedRows) applyRows(savedRows).catch(error => console.warn("Сохранённый себет не загружен.", error));
